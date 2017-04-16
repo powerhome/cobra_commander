@@ -9,9 +9,9 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ben Langfeld"]
   spec.email         = ["blangfeld@powerhrg.com"]
 
-  spec.summary       = %q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = %q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = %q{Tools for working with Component Based Rails Apps}
+  spec.description   = %q{Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/). Includes tools for graphing the components of an app and their relationships, as well as selectively testing components based on changes made.}
+  spec.homepage      = "http://tech.powerhrg.com/cbra/"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
