@@ -4,7 +4,11 @@ RSpec.describe "cli", type: :aruba do
   let(:file) { "file.txt" }
   let(:content) { "Hello World" }
 
-  before(:each) { write_file file, content }
+  describe "checking the version" do
+    it "reports the current version" do
+      run_simple("cbra version", fail_on_error: true)
 
-  it { expect(read(file)).to eq [content] }
+      expect(last_command_started).to have_output Cbra::VERSION
+    end
+  end
 end
