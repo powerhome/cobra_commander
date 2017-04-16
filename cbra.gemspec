@@ -1,7 +1,9 @@
 # coding: utf-8
-lib = File.expand_path('../lib', __FILE__)
+# frozen_string_literal: true
+
+lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'cbra/version'
+require "cbra/version"
 
 Gem::Specification.new do |spec|
   spec.name          = "cbra"
@@ -9,8 +11,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ben Langfeld"]
   spec.email         = ["blangfeld@powerhrg.com"]
 
-  spec.summary       = %q{Tools for working with Component Based Rails Apps}
-  spec.description   = %q{Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/). Includes tools for graphing the components of an app and their relationships, as well as selectively testing components based on changes made.}
+  spec.summary       = "Tools for working with Component Based Rails Apps"
+  spec.description   = <<~DESCRIPTION
+    Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/).
+    Includes tools for graphing the components of an app and their relationships, as well as selectively
+    testing components based on changes made.
+DESCRIPTION
   spec.homepage      = "http://tech.powerhrg.com/cbra/"
   spec.license       = "MIT"
 
@@ -24,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "minitest", "~> 5.0"
+  spec.add_development_dependency "rubocop", "0.48.1"
 end
