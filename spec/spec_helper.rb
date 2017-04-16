@@ -44,3 +44,5 @@ RSpec.configure do |config|
 end
 
 require "aruba/rspec"
+
+require "cbra"

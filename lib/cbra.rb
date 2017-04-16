@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "cbra/cli"
+require "cbra/component_tree"
 require "cbra/version"
 
 # Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/).
