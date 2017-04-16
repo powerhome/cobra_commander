@@ -1,5 +1,11 @@
 # cbra
 
+[![Gem](https://img.shields.io/gem/dv/cbra/stable.svg)]()
+[![Gem](https://img.shields.io/gem/v/cbra.svg)]()
+[![Travis](https://img.shields.io/travis/powerhome/cbra.svg)]()
+[![Code Climate](https://img.shields.io/codeclimate/github/powerhome/cbra.svg)]()
+[![Gemnasium](https://img.shields.io/gemnasium/powerhome/cbra.svg)]()
+
 Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/). Includes tools for graphing the components of an app and their relationships, as well as selectively testing components based on changes made.
 
 ## Installation
