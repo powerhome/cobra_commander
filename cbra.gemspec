@@ -35,4 +35,5 @@ DESCRIPTION
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "aruba", "~> 0.14.2"
   spec.add_development_dependency "rubocop", "0.48.1"
+  spec.add_development_dependency "pry"
 end
