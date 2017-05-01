@@ -2,3 +2,5 @@
 # frozen_string_literal: true
 
 require "cbra"
+
+Cbra::CLI.start
