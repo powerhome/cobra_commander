@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "spec_helper"
 
 RSpec.describe "cli", type: :aruba do
@@ -19,9 +20,9 @@ RSpec.describe "cli", type: :aruba do
 
       expect(last_command_started).to have_output <<~OUTPUT
         App
-        ├─┬ a
-        │ ├── b
-        │ └── c
+        ├── a
+        │   ├── b
+        │   └── c
         └── d
       OUTPUT
     end
