@@ -3,7 +3,7 @@
 require "spec_helper"
 
 RSpec.describe "cli", type: :aruba do
-  let(:app_root) { "../.." }
+  let(:fixture_app_path) { "../../spec/fixtures/app" }
 
   describe "checking the version" do
     it "reports the current version" do
@@ -15,7 +15,7 @@ RSpec.describe "cli", type: :aruba do
 
   describe "listing components in the tree" do
     it "outputs the tree of components" do
-      run_simple("cbra ls #{app_root}/spec/fixtures/app", fail_on_error: true)
+      run_simple("cbra ls #{fixture_app_path}", fail_on_error: true)
 
       expect(last_command_started).to have_output <<~OUTPUT
         App
@@ -32,9 +32,10 @@ RSpec.describe "cli", type: :aruba do
   end
 
   describe "generating a graph" do
-    subject {
-      run_simple("cbra graph #{app_root}", fail_on_error: true)
-    }
+    subject do
+      run_simple("cbra graph #{fixture_app_path}", fail_on_error: true)
+    end
+
     it "outputs explanation" do
       subject
       expect(last_command_started).to have_output "Graph generated in root directory"

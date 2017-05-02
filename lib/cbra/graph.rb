@@ -2,7 +2,6 @@
 
 require "graphviz"
 require "cbra/component_tree"
-require "pry"
 
 module Cbra
   # Generates graphs of components
