@@ -32,16 +32,36 @@ RSpec.describe "cli", type: :aruba do
   end
 
   describe "generating a graph" do
-    before do
-      run_simple("cbra graph #{fixture_app_path}", fail_on_error: true)
+    context "with default format" do
+      before do
+        run_simple("cbra graph #{fixture_app_path}", fail_on_error: true)
+      end
+
+      it "outputs explanation" do
+        expect(last_command_started.output).to include("Graph generated at #{`pwd`.chomp}")
+      end
+
+      it "creates file" do
+        expect(exist?("./graph.png")).to be true
+      end
     end
 
-    it "outputs explanation" do
-      expect(last_command_started.output).to include("Graph generated at #{`pwd`.chomp}")
-    end
+    context "with specified format" do
+      it "accepts 'png'" do
+        run_simple("cbra graph #{fixture_app_path} png", fail_on_error: true)
+        expect(last_command_started.output).to include("Graph generated")
+      end
 
-    it "creates file" do
-      expect(exist?("./graph.png")).to be true
+      it "accepts 'dot'" do
+        run_simple("cbra graph #{fixture_app_path} dot", fail_on_error: true)
+        expect(last_command_started.output).to include("Graph generated")
+      end
+
+      it "rejects everything else" do
+        run_simple("cbra graph #{fixture_app_path} pdf", fail_on_error: true)
+        expect(last_command_started.output).to_not include("Graph generated")
+        expect(last_command_started).to have_output "FORMAT must be 'png' or 'dot'"
+      end
     end
   end
 end
