@@ -7,8 +7,8 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 Gem::Specification.new do |spec|
   spec.name          = "a"
   spec.version       = "0.0.1"
-  spec.authors       = ["Stephan Hagemann"]
-  spec.email         = ["stephan.hagemann@gmail.com"]
+  spec.authors       = ["Ben Langfeld"]
+  spec.email         = ["ben@email.com"]
   spec.summary       = "Some Summary"
   spec.description   = "A longer description"
   spec.homepage      = ""
