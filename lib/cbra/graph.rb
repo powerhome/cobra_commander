@@ -6,24 +6,22 @@ require "cbra/component_tree"
 module Cbra
   # Generates graphs of components
   class Graph
-    def initialize(app_path)
+    def initialize(app_path, format)
+      @format = format
       @tree = ComponentTree.new(app_path).to_h
     end
 
-    def png
-      generate_graph
-    end
+    def generate!
+      return if !valid_format?
 
-  private
-
-    def generate_graph
       g = GraphViz.new(:G, type: :digraph, concentrate: true)
 
       app_node = g.add_nodes(@tree[:name])
       map_nodes(g, app_node, @tree)
-
-      g.output(png: "graph.png")
+      output(g)
     end
+
+  private
 
     def map_nodes(g, parent_node, tree)
       tree[:dependencies].each do |dep|
@@ -31,6 +29,17 @@ module Cbra
         g.add_edges(parent_node, node)
         map_nodes(g, node, dep)
       end
+    end
+
+    def output(g)
+      g.output(@format => "graph.#{@format}")
+      puts "Graph generated at #{`pwd`.chomp}/graph.#{@format}"
+    end
+
+    def valid_format?
+      return true if @format == "png" || @format == "dot"
+      puts "FORMAT must be 'png' or 'dot'"
+      false
     end
   end
 end

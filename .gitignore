@@ -1,10 +1,11 @@
 /.bundle/
+/.DS_store
 /.yardoc
 /Gemfile.lock
 /_yardoc/
 /coverage/
 /doc/
-/graph.png
+/graph.*
 /pkg/
 /spec/examples.txt
 /spec/reports/
