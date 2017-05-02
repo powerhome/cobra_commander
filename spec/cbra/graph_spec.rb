@@ -13,7 +13,7 @@ RSpec.describe Cbra::Graph do
 
     let(:root) do
       File.expand_path(
-        "../../../cbra",
+        "../..",
         File.dirname(__FILE__)
       )
     end

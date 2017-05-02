@@ -32,8 +32,9 @@ module Cbra
     end
 
     def output(g)
-      g.output(@format => "graph.#{@format}")
-      puts "Graph generated at #{`pwd`.chomp}/graph.#{@format}"
+      graph = "graph.#{@format}"
+      g.output(@format => graph)
+      puts "Graph generated at #{`pwd`.chomp}/#{graph}"
     end
 
     def valid_format?
