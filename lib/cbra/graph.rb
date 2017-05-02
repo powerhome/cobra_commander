@@ -12,7 +12,7 @@ module Cbra
     end
 
     def generate!
-      return if !valid_format?
+      return unless valid_format?
 
       g = GraphViz.new(:G, type: :digraph, concentrate: true)
 

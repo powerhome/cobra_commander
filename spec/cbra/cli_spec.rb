@@ -37,7 +37,7 @@ RSpec.describe "cli", type: :aruba do
     end
 
     it "outputs explanation" do
-      expect(last_command_started).to have_output "Graph generated in root directory"
+      expect(last_command_started.output).to include("Graph generated at #{`pwd`.chomp}")
     end
 
     it "creates file" do

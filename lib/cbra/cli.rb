@@ -16,7 +16,7 @@ module Cbra
     end
 
     desc "graph APP_PATH [FORMAT]", "Output graph in desired FORMAT (png or dot), defaults to png"
-    def graph(app_path, format="png")
+    def graph(app_path, format = "png")
       Graph.new(app_path, format).generate!
     end
   end
