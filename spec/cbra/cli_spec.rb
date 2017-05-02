@@ -24,7 +24,9 @@ RSpec.describe "cli", type: :aruba do
         │   └── c
         │       └── b
         └── d
-            └── b
+            ├── b
+            └── c
+                └── b
       OUTPUT
     end
   end
