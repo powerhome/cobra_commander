@@ -6,7 +6,9 @@ PATH
       c
     b (0.0.1)
     c (0.0.1)
+      b
     d (0.0.1)
+      b
 
 GEM
   remote: https://rubygems.org/
