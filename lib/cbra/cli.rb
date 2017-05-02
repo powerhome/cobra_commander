@@ -14,5 +14,11 @@ module Cbra
     def version
       puts Cbra::VERSION
     end
+
+    desc "graph APP_PATH", "Outputs graph.png to the current directory"
+    def graph(app_path)
+      Graph.new(app_path).png
+      puts "Graph generated in root directory"
+    end
   end
 end
