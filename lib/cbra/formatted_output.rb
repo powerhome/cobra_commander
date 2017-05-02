@@ -26,14 +26,26 @@ module Cbra
 
     def list_dependencies(deps, outdents = [])
       deps[:dependencies].each do |dep|
-        if deps[:dependencies].last != dep
-          puts line(outdents, TEE, dep[:name])
-          list_dependencies(dep, ([BAR] + outdents))
-        else
-          puts line(outdents, CORNER, dep[:name])
-          list_dependencies(dep, (outdents + [SPACE]))
-        end
+        decide_on_line(deps, dep, outdents)
       end
+    end
+
+    def decide_on_line(parent, dep, outdents)
+      if parent[:dependencies].last != dep
+        add_tee(outdents, dep)
+      else
+        add_corner(outdents, dep)
+      end
+    end
+
+    def add_tee(outdents, dep)
+      puts line(outdents, TEE, dep[:name])
+      list_dependencies(dep, ([BAR] + outdents))
+    end
+
+    def add_corner(outdents, dep)
+      puts line(outdents, CORNER, dep[:name])
+      list_dependencies(dep, (outdents + [SPACE]))
     end
 
     def line(outdents, sym, name)
