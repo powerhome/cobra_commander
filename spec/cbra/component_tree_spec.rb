@@ -31,13 +31,23 @@ RSpec.describe Cbra::ComponentTree do
                 },
                 {
                   name: "c",
-                  dependencies: [],
+                  dependencies: [
+                    {
+                      name: "b",
+                      dependencies: [],
+                    },
+                  ],
                 },
               ],
             },
             {
               name: "d",
-              dependencies: [],
+              dependencies: [
+                {
+                  name: "b",
+                  dependencies: [],
+                },
+              ],
             },
           ]
         )

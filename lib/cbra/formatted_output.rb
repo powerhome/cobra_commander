@@ -7,6 +7,7 @@ module Cbra
   class FormattedOutput
     attr_accessor :tree
 
+    SPACE  = "    "
     BAR    = "│   "
     TEE    = "├── "
     CORNER = "└── "
@@ -30,7 +31,7 @@ module Cbra
           list_dependencies(dep, ([BAR] + outdents))
         else
           puts line(outdents, CORNER, dep[:name])
-          list_dependencies(dep)
+          list_dependencies(dep, (outdents + [SPACE]))
         end
       end
     end
