@@ -32,17 +32,15 @@ RSpec.describe "cli", type: :aruba do
   end
 
   describe "generating a graph" do
-    subject do
+    before do
       run_simple("cbra graph #{fixture_app_path}", fail_on_error: true)
     end
 
     it "outputs explanation" do
-      subject
       expect(last_command_started).to have_output "Graph generated in root directory"
     end
 
     it "creates file" do
-      subject
       expect(exist?("./graph.png")).to be true
     end
   end
