@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+gem "rails"
+gem "sqlite3"
+
+path "components" do
+  gem "a"
+  gem "d"
+end

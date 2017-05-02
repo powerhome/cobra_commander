@@ -4,6 +4,11 @@ AllCops:
 Metrics/LineLength:
   Max: 120
 
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*_spec.rb
+    - cbra.gemspec
+
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 
