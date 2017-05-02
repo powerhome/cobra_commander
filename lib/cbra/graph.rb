@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'graphviz'
+require "graphviz"
 require "cbra/component_tree"
 require "pry"
 
@@ -23,7 +23,7 @@ module Cbra
       app_node = g.add_nodes(@tree[:name])
       map_nodes(g, app_node, @tree)
 
-      g.output(:png => "graph.png" )
+      g.output(png: "graph.png")
     end
 
     def map_nodes(g, parent_node, tree)
