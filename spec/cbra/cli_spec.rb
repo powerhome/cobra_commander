@@ -15,7 +15,6 @@ RSpec.describe "cli", type: :aruba do
 
   describe "listing components in the tree" do
     it "outputs the tree of components" do
-
       run_simple("cbra ls #{app_root}/spec/fixtures/app", fail_on_error: true)
 
       expect(last_command_started).to have_output <<~OUTPUT

@@ -3,10 +3,10 @@
 require "cbra/component_tree"
 
 module Cbra
+  # Formats CLI output
   class FormattedOutput
     attr_accessor :tree
 
-    SPACE  = "    "
     BAR    = "│   "
     TEE    = "├── "
     CORNER = "└── "
@@ -17,21 +17,26 @@ module Cbra
 
     def run!
       puts @tree[:name]
-      @tree[:dependencies].each do |dep|
-        if @tree[:dependencies].last != dep
-          puts TEE + dep[:name]
+      list_dependencies(@tree)
+      nil
+    end
+
+  private
+
+    def list_dependencies(deps, outdents = [])
+      deps[:dependencies].each do |dep|
+        if deps[:dependencies].last != dep
+          puts line(outdents, TEE, dep[:name])
+          list_dependencies(dep, ([BAR] + outdents))
         else
-          puts CORNER + dep[:name]
-        end
-        dep[:dependencies].each do |tep|
-          if dep[:dependencies].last != tep
-            puts BAR + TEE + tep[:name]
-          else
-            puts BAR + CORNER + tep[:name]
-          end
+          puts line(outdents, CORNER, dep[:name])
+          list_dependencies(dep)
         end
       end
-      return
+    end
+
+    def line(outdents, sym, name)
+      (outdents + [sym] + [name]).join
     end
   end
 end
