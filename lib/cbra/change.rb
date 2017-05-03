@@ -13,32 +13,30 @@ module Cbra
     end
 
     def run!
-      return unless valid?
+      return unless valid_option?
+      root_dir = `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
+      `cd "#{root_dir}"`
+      return unless valid_branch?
 
-      changes_since_last_commit
+      changes_since_last_commit(root_dir)
       directly_affected_components
     end
 
   private
 
-    def changes_since_last_commit
-      puts "<<<Changes since last commit on #{@branch}>>>"
+    def changes_since_last_commit(root_dir)
+      puts "<<< Changes since last commit on #{@branch} >>>"
       puts blank_line
-      root_dir = `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
-      @changes = `cd "#{root_dir}" && git diff --name-only #{@branch}`.split("\n").map { |f| File.join(root_dir, f) }
+      @changes = `git diff --name-only #{@branch}`.split("\n").map { |f| File.join(root_dir, f) }
       puts @changes
     end
 
     def directly_affected_components
       puts blank_line
-      puts "Directly affected components"
+      puts "<<< Directly affected components >>>"
 
       directly_affected(@tree)
       puts @directly_affected
-    end
-
-    def valid?
-      valid_option? && valid_branch?
     end
 
     def valid_option?
@@ -48,8 +46,16 @@ module Cbra
     end
 
     def valid_branch?
-      # check branch exists
-      true
+      # could git fetch --all & parse that if desired.
+      # but that fetch takes a LOT more time than git branch.
+
+      # was unable to catch shell error with ruby rescue. So I went this route.
+      branches = `git branch`.gsub("* ", "").gsub(" ","").split("\n")
+      if branches.include?(@branch)
+        return true
+      end
+      puts "Specified BRANCH does not exist locally"
+      false
     end
 
     def blank_line
