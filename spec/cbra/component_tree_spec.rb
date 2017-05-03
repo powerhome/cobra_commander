@@ -20,23 +20,28 @@ RSpec.describe Cbra::ComponentTree do
         expect(subject.to_h).to eql(
           name: "App",
           path: app_root,
+          ancestry: [],
           dependencies: [
             {
               name: "a",
               path: "#{app_root}/components/a",
+              ancestry: ["App"],
               dependencies: [
                 {
                   name: "b",
                   path: "#{app_root}/components/b",
+                  ancestry: %w(App a),
                   dependencies: [],
                 },
                 {
                   name: "c",
                   path: "#{app_root}/components/c",
+                  ancestry: %w(App a),
                   dependencies: [
                     {
                       name: "b",
                       path: "#{app_root}/components/b",
+                      ancestry: %w(App a c),
                       dependencies: [],
                     },
                   ],
@@ -46,19 +51,23 @@ RSpec.describe Cbra::ComponentTree do
             {
               name: "d",
               path: "#{app_root}/components/d",
+              ancestry: ["App"],
               dependencies: [
                 {
                   name: "b",
                   path: "#{app_root}/components/b",
+                  ancestry: %w(App d),
                   dependencies: [],
                 },
                 {
                   name: "c",
                   path: "#{app_root}/components/c",
+                  ancestry: %w(App d),
                   dependencies: [
                     {
                       name: "b",
                       path: "#{app_root}/components/b",
+                      ancestry: %w(App d c),
                       dependencies: [],
                     },
                   ],

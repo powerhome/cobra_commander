@@ -23,8 +23,8 @@ module Cbra
         {
           name: @name,
           path: @root_path,
-          dependencies: component_dependencies.map(&method(:dep_representation)),
           ancestry: @ancestry,
+          dependencies: component_dependencies.map(&method(:dep_representation)),
         }
       end
 
