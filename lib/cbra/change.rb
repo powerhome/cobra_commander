@@ -73,16 +73,20 @@ module Cbra
 
     def calculate_affected(parent_component)
       define_affected
-      parent_component[:dependencies].each do |component|
-        add_affected(component)
-        calculate_affected(component)
-      end
+      find_affected(parent_component)
       cleanup_affected
     end
 
     def define_affected
-      @transitively_affected ||= []
-      @directly_affected ||= []
+      @transitively_affected = []
+      @directly_affected = []
+    end
+
+    def find_affected(parent_component)
+      parent_component[:dependencies].each do |component|
+        add_affected(component)
+        find_affected(component)
+      end
     end
 
     def add_affected(component)
