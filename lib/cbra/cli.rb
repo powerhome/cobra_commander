@@ -15,14 +15,17 @@ module Cbra
       puts Cbra::VERSION
     end
 
-    desc "graph APP_PATH [FORMAT]", "Output graph in desired FORMAT (png or dot), defaults to png"
-    def graph(app_path, format = "png")
-      Graph.new(app_path, format).generate!
+    desc "graph APP_PATH", "Outputs graph"
+    method_option :format, default: "png", desc: "Accepts png or dot"
+    def graph(app_path)
+      Graph.new(app_path, @options[:format]).generate!
     end
 
-    desc "changes APP_PATH [OPTION] [BRANCH]", "Prints list of changed files - OPTION accepts test or full & defaults to test - BRANCH allows specified target to calculate against & defaults to master"
-    def changes(app_path, option = "test", branch = "master")
-      Change.new(app_path, option, branch).run!
+    desc "changes APP_PATH", "Prints list of changed files"
+    method_option :results, default: "test", desc: "Accepts test or full"
+    method_option :branch, default: "master", desc: "Specified target to calculate against"
+    def changes(app_path)
+      Change.new(app_path, @option[:results], @options[:branch]).run!
     end
   end
 end

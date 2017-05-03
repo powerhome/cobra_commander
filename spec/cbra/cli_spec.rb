@@ -48,17 +48,17 @@ RSpec.describe "cli", type: :aruba do
 
     context "with specified format" do
       it "accepts 'png'" do
-        run_simple("cbra graph #{fixture_app_path} png", fail_on_error: true)
+        run_simple("cbra graph #{fixture_app_path} --format=png", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "accepts 'dot'" do
-        run_simple("cbra graph #{fixture_app_path} dot", fail_on_error: true)
+        run_simple("cbra graph #{fixture_app_path} --format=dot", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "rejects everything else" do
-        run_simple("cbra graph #{fixture_app_path} pdf", fail_on_error: true)
+        run_simple("cbra graph #{fixture_app_path} --format=pdf", fail_on_error: true)
         expect(last_command_started.output).to_not include("Graph generated")
         expect(last_command_started).to have_output "FORMAT must be 'png' or 'dot'"
       end
