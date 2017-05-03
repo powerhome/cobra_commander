@@ -19,5 +19,10 @@ module Cbra
     def graph(app_path, format = "png")
       Graph.new(app_path, format).generate!
     end
+
+    desc "changes APP_PATH [OPTION] [BRANCH]", "Prints list of changed files - OPTION accepts test or full & defaults to test - BRANCH allows specified target to calculate against & defaults to master"
+    def changes(app_path, option = "test", branch = "master")
+      Change.new(app_path, option, branch).run!
+    end
   end
 end

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "thor"
-
 module Cbra
   # Representation of the tree of components and their dependencies
   class ComponentTree
