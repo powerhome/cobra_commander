@@ -15,8 +15,7 @@ module Cbra
 
     def run!
       return unless valid_option?
-      @root_dir = `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
-      `cd "#{@root_dir}"`
+      `cd "#{root_dir}"`
       return unless valid_branch?
 
       changes_since_last_commit
@@ -25,16 +24,20 @@ module Cbra
 
   private
 
-    def changes_since_last_commit
-      puts "<<< Changes since last commit on #{@branch} >>>"
-      puts blank_line
-      puts changes
+    def root_dir
+      @root_dir ||= `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
     end
 
     def changes
       @changes ||= begin
-        `git diff --name-only #{@branch}`.split("\n").map { |f| File.join(@root_dir, f) }
+        `git diff --name-only #{@branch}`.split("\n").map { |f| File.join(root_dir, f) }
       end
+    end
+
+    def changes_since_last_commit
+      puts "<<< Changes since last commit on #{@branch} >>>"
+      puts blank_line
+      puts changes
     end
 
     def directly_affected_components
