@@ -19,7 +19,9 @@ module Cbra
       return unless valid_branch?
 
       changes_since_last_commit
+      calculate_affected(@tree)
       directly_affected_components
+      transitively_affected_components
     end
 
   private
@@ -36,17 +38,23 @@ module Cbra
 
     def changes_since_last_commit
       puts "<<< Changes since last commit on #{@branch} >>>"
-      puts blank_line
       puts changes
+      puts blank_line
     end
 
     def directly_affected_components
-      puts blank_line
       puts "<<< Directly affected components >>>"
-
-      directly_affected(@tree)
       puts @directly_affected
+      puts blank_line
     end
+
+    def transitively_affected_components
+      puts "<<< Transitively affected components >>>"
+      puts @transitively_affected
+      puts blank_line
+    end
+
+    def blank_line; "" end
 
     def valid_option?
       return true if @option == "test" || @option == "full"
@@ -63,19 +71,34 @@ module Cbra
       true
     end
 
-    def blank_line
-      ""
+    def calculate_affected(parent_component)
+      define_affected
+      parent_component[:dependencies].each do |component|
+        add_affected(component)
+        calculate_affected(component)
+      end
+      cleanup_affected
     end
 
-    def directly_affected(parent_component)
+    def define_affected
+      @transitively_affected ||= []
       @directly_affected ||= []
-      parent_component[:dependencies].each do |component|
-        changes.each do |change|
-          @directly_affected << component[:name] if change.start_with?(component[:path])
+    end
+
+    def add_affected(component)
+      changes.each do |change|
+        if change.start_with?(component[:path])
+          @directly_affected << component[:name]
+          @transitively_affected << component[:ancestry]
         end
-        directly_affected(component)
       end
+    end
+
+    def cleanup_affected
       @directly_affected.uniq!
+      @transitively_affected.flatten!
+      @transitively_affected.uniq!
+      @transitively_affected.delete("App")
     end
   end
 end

@@ -13,9 +13,10 @@ module Cbra
 
     # Represents a tree of gem components with dependencies extracted via Bundler
     class GemComponentTree
-      def initialize(name, path)
+      def initialize(name, path, ancestry = [])
         @name = name
         @root_path = path
+        @ancestry = ancestry
       end
 
       def to_h
@@ -23,6 +24,7 @@ module Cbra
           name: @name,
           path: @root_path,
           dependencies: component_dependencies.map(&method(:dep_representation)),
+          ancestry: @ancestry,
         }
       end
 
@@ -42,13 +44,14 @@ module Cbra
 
       def component_dependencies
         bundler_definition.dependencies.select do |dep|
-          dep.source && dep.source.is_a_path?
+          dep.source&.is_a_path?
         end
       end
 
       def dep_representation(dep)
         path = File.expand_path(File.join(@root_path, dep.source.path, dep.name))
-        self.class.new(dep.name, path).to_h
+        ancestry = @ancestry + [@name]
+        self.class.new(dep.name, path, ancestry).to_h
       end
     end
   end
