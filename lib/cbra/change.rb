@@ -54,7 +54,9 @@ module Cbra
       puts blank_line
     end
 
-    def blank_line; "" end
+    def blank_line
+      ""
+    end
 
     def valid_option?
       return true if @option == "test" || @option == "full"
