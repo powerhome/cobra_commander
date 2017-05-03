@@ -47,6 +47,15 @@ RSpec.describe Cbra::ComponentTree do
                   name: "b",
                   dependencies: [],
                 },
+                {
+                  name: "c",
+                  dependencies: [
+                    {
+                      name: "b",
+                      dependencies: [],
+                    },
+                  ],
+                },
               ],
             },
           ]

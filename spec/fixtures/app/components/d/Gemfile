@@ -6,4 +6,5 @@ gemspec
 
 path ".." do
   gem "b"
+  gem "c"
 end
