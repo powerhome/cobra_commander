@@ -25,7 +25,7 @@ module Cbra
     method_option :results, default: "test", desc: "Accepts test or full"
     method_option :branch, default: "master", desc: "Specified target to calculate against"
     def changes(app_path)
-      Change.new(app_path, @option[:results], @options[:branch]).run!
+      Change.new(app_path, @options[:results], @options[:branch]).run!
     end
   end
 end

@@ -21,6 +21,7 @@ module Cbra
       def to_h
         {
           name: @name,
+          path: @root_path,
           dependencies: component_dependencies.map(&method(:dep_representation)),
         }
       end
