@@ -30,18 +30,18 @@ RSpec.describe Cbra::ComponentTree do
                 {
                   name: "b",
                   path: "#{app_root}/components/b",
-                  ancestry: %w(App a),
+                  ancestry: %w[App a],
                   dependencies: [],
                 },
                 {
                   name: "c",
                   path: "#{app_root}/components/c",
-                  ancestry: %w(App a),
+                  ancestry: %w[App a],
                   dependencies: [
                     {
                       name: "b",
                       path: "#{app_root}/components/b",
-                      ancestry: %w(App a c),
+                      ancestry: %w[App a c],
                       dependencies: [],
                     },
                   ],
@@ -56,18 +56,18 @@ RSpec.describe Cbra::ComponentTree do
                 {
                   name: "b",
                   path: "#{app_root}/components/b",
-                  ancestry: %w(App d),
+                  ancestry: %w[App d],
                   dependencies: [],
                 },
                 {
                   name: "c",
                   path: "#{app_root}/components/c",
-                  ancestry: %w(App d),
+                  ancestry: %w[App d],
                   dependencies: [
                     {
                       name: "b",
                       path: "#{app_root}/components/b",
-                      ancestry: %w(App d c),
+                      ancestry: %w[App d c],
                       dependencies: [],
                     },
                   ],
