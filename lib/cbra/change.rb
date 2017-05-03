@@ -15,21 +15,26 @@ module Cbra
 
     def run!
       return unless valid_option?
-      root_dir = `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
-      `cd "#{root_dir}"`
+      @root_dir = `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
+      `cd "#{@root_dir}"`
       return unless valid_branch?
 
-      changes_since_last_commit(root_dir)
+      changes_since_last_commit
       directly_affected_components
     end
 
   private
 
-    def changes_since_last_commit(root_dir)
+    def changes_since_last_commit
       puts "<<< Changes since last commit on #{@branch} >>>"
       puts blank_line
-      @changes = `git diff --name-only #{@branch}`.split("\n").map { |f| File.join(root_dir, f) }
-      puts @changes
+      puts changes
+    end
+
+    def changes
+      @changes ||= begin
+        `git diff --name-only #{@branch}`.split("\n").map { |f| File.join(@root_dir, f) }
+      end
     end
 
     def directly_affected_components
@@ -62,7 +67,7 @@ module Cbra
     def directly_affected(parent_component)
       @directly_affected ||= []
       parent_component[:dependencies].each do |component|
-        @changes.each do |change|
+        changes.each do |change|
           @directly_affected << component[:name] if change.start_with?(component[:path])
         end
         directly_affected(component)
