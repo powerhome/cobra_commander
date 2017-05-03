@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "cbra/component_tree"
+require "open3"
 
 module Cbra
   # Calculates and prints affected components & files
@@ -46,16 +47,12 @@ module Cbra
     end
 
     def valid_branch?
-      # could git fetch --all & parse that if desired.
-      # but that fetch takes a LOT more time than git branch.
-
-      # was unable to catch shell error with ruby rescue. So I went this route.
-      branches = `git branch`.gsub("* ", "").gsub(" ","").split("\n")
-      if branches.include?(@branch)
-        return true
+      _, _, result = Open3.capture3("git", "diff", "--name-only", @branch)
+      if result.exitstatus == 128
+        puts "Specified BRANCH could not be found"
+        return false
       end
-      puts "Specified BRANCH does not exist locally"
-      false
+      true
     end
 
     def blank_line
