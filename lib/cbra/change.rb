@@ -10,7 +10,7 @@ module Cbra
     InvalidSelectionError = Class.new(StandardError)
 
     def initialize(path, results, branch)
-      @path = path
+      @root_dir = Dir.chdir(path) { `git rev-parse --show-toplevel`.chomp }
       @results = results
       @branch = branch
       @tree = ComponentTree.new(path).to_h
@@ -19,7 +19,6 @@ module Cbra
 
     def run!
       assert_valid_result_choice
-      Dir.chdir root_dir
       show_full if selected_full_results?
       tests_to_run
     rescue InvalidSelectionError => e
@@ -34,17 +33,17 @@ module Cbra
       transitively_affected_components
     end
 
-    def root_dir
-      @root_dir ||= `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
-    end
-
     def changes
       @changes ||= begin
-        diff, _, result = Open3.capture3("git", "diff", "--name-only", @branch)
+        diff, _, result = Dir.chdir(@root_dir) do
+          Open3.capture3("git", "diff", "--name-only", @branch)
+        end
+
         if result.exitstatus == 128
           raise InvalidSelectionError, "Specified --branch could not be found"
         end
-        diff.split("\n").map { |f| File.join(root_dir, f) }
+
+        diff.split("\n").map { |f| File.join(@root_dir, f) }
       end
     end
 
