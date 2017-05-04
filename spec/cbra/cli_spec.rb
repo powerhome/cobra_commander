@@ -48,19 +48,31 @@ RSpec.describe "cli", type: :aruba do
 
     context "with specified format" do
       it "accepts 'png'" do
-        run_simple("cbra graph #{fixture_app_path} --format=png", fail_on_error: true)
+        run_simple("cbra graph #{fixture_app_path} -f png", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "accepts 'dot'" do
-        run_simple("cbra graph #{fixture_app_path} --format=dot", fail_on_error: true)
+        run_simple("cbra graph #{fixture_app_path} -f dot", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "rejects everything else" do
-        run_simple("cbra graph #{fixture_app_path} --format=pdf", fail_on_error: true)
+        run_simple("cbra graph #{fixture_app_path} -f pdf", fail_on_error: true)
         expect(last_command_started.output).to_not include("Graph generated")
         expect(last_command_started).to have_output "FORMAT must be 'png' or 'dot'"
+      end
+    end
+  end
+
+  describe "printing changes" do
+    context "with defaults (-r test -b master)" do
+      before do
+        run_simple("cbra changes #{fixture_app_path}", fail_on_error: true)
+      end
+
+      it "outputs scripts to run header" do
+        expect(last_command_started.output).to include("Test scripts to run")
       end
     end
   end

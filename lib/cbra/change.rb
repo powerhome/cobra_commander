@@ -18,10 +18,13 @@ module Cbra
       `cd "#{root_dir}"`
       return unless valid_branch?
 
-      changes_since_last_commit if full_output?
-      calculate_affected(@tree)
-      directly_affected_components if full_output?
-      transitively_affected_components if full_output?
+      if full_output?
+        changes_since_last_commit
+        calculate_affected(@tree)
+        directly_affected_components
+        transitively_affected_components
+      end
+
       tests_to_run
     end
 
@@ -118,6 +121,7 @@ module Cbra
     end
 
     def all_components_needing_test_runs
+      calculate_affected(@tree) unless @directly_affected && @transitively_affected
       components = (@directly_affected + @transitively_affected).uniq
       components.each_with_object([]) do |component, tests|
         tests << File.join(component[:path], "test.sh")
