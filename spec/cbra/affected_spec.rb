@@ -34,9 +34,10 @@ RSpec.describe Cbra::Affected do
 
       it "correctly reports directly affected components" do
         expect(with_change_to_a.directly).to eq [
-          { name: "a",
+          {
+            name: "a",
             path: "#{@root}/components/a",
-          }
+          },
         ]
       end
 
@@ -52,21 +53,25 @@ RSpec.describe Cbra::Affected do
 
       it "correctly reports directly affected components" do
         expect(with_change_to_b.directly).to eq [
-          { name: "b",
+          {
+            name: "b",
             path: "#{@root}/components/b",
-          }
+          },
         ]
       end
 
       it "correctly reports directly affected components" do
         expect(with_change_to_b.transitively).to eq [
-          { name: "a",
+          {
+            name: "a",
             path: "#{@root}/components/a",
           },
-          { name: "c",
+          {
+            name: "c",
             path: "#{@root}/components/c",
           },
-          { name: "d",
+          {
+            name: "d",
             path: "#{@root}/components/d",
           },
         ]

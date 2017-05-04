@@ -9,7 +9,7 @@ class AppHelper
       )
     end
 
-    def tree
+    def tree # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
       {
         name: "App",
         path: root,
