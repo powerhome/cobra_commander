@@ -49,13 +49,13 @@ module Cbra
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      puts @directly_affected.map { |c| c[:name] }
+      puts direct_names
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      puts @transitively_affected.map { |c| c[:name] }
+      puts transitive_names
       puts blank_line
     end
 
@@ -67,6 +67,14 @@ module Cbra
 
     def blank_line
       ""
+    end
+
+    def direct_names
+      @directly_affected.map { |c| c[:name] }
+    end
+
+    def transitive_names
+      @transitively_affected.map { |c| c[:name] }
     end
 
     def valid_option?

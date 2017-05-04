@@ -41,7 +41,7 @@ RSpec.describe Cbra::ComponentTree do
                 {
                   name: "c",
                   path: "#{app_root}/components/c",
-                  ancestry:[
+                  ancestry: [
                     { name: "App", path: app_root },
                     { name: "a", path: "#{app_root}/components/a" },
                   ],
