@@ -51,9 +51,9 @@ module Cbra
     end
 
     def valid_results?
-      unless @results == "test" || @results == "full"
-        raise InvalidSelectionError, "--results must be 'test' or 'full'"
-      end
+      valid_results = @results == "test" || @results == "full"
+      message = "--results must be 'test' or 'full'"
+      raise InvalidSelectionError, message unless valid_results
     end
 
     def selected_full_results?
