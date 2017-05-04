@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "cbra/component_tree"
+require "cbra/affected"
 require "open3"
 
 module Cbra
@@ -13,20 +14,14 @@ module Cbra
       @option = option
       @branch = branch
       @tree = ComponentTree.new(path).to_h
-      @transitively_affected = []
-      @directly_affected = []
+      @affected = Affected.new(@tree, changes, path)
     end
 
     def run!
       return unless valid_option?
       Dir.chdir root_dir
 
-      if full_output?
-        changes_since_last_commit
-        calculate_affected(@tree)
-        directly_affected_components
-        transitively_affected_components
-      end
+      show_full if selected_full_results?
 
       tests_to_run
     rescue InvalidBranchError => e
@@ -34,6 +29,12 @@ module Cbra
     end
 
   private
+
+    def show_full
+      changes_since_last_commit
+      directly_affected_components
+      transitively_affected_components
+    end
 
     def root_dir
       @root_dir ||= `cd "#{@path}" && git rev-parse --show-toplevel`.chomp
@@ -49,7 +50,7 @@ module Cbra
       end
     end
 
-    def full_output?
+    def selected_full_results?
       @option == "full"
     end
 
@@ -61,19 +62,19 @@ module Cbra
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      puts(@directly_affected.map { |c| c[:name] })
+      puts(@affected.directly.map { |c| c[:name] })
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      puts(@transitively_affected.map { |c| c[:name] })
+      puts(@affected.transitively.map { |c| c[:name] })
       puts blank_line
     end
 
     def tests_to_run
       puts "<<< Test scripts to run >>>"
-      puts all_components_needing_test_runs
+      puts @affected.needing_test_runs
     end
 
     def blank_line
@@ -84,42 +85,6 @@ module Cbra
       return true if @option == "test" || @option == "full"
       puts "OPTION must be 'test' or 'full'"
       false
-    end
-
-    def calculate_affected(parent_component)
-      find_affected(parent_component)
-      cleanup_affected
-    end
-
-    def find_affected(parent_component)
-      parent_component[:dependencies].each do |component|
-        add_affected(component)
-        find_affected(component)
-      end
-    end
-
-    def add_affected(component)
-      changes.each do |change|
-        if change.start_with?(component[:path])
-          @directly_affected << component.reject { |k| k == :dependencies || k == :ancestry }
-          @transitively_affected << component[:ancestry]
-        end
-      end
-    end
-
-    def cleanup_affected
-      @directly_affected.uniq!
-      @transitively_affected.flatten!
-      @transitively_affected.uniq!
-      @transitively_affected.delete(name: "App", path: @path)
-    end
-
-    def all_components_needing_test_runs
-      calculate_affected(@tree) unless @directly_affected && @transitively_affected
-      components = (@directly_affected + @transitively_affected).uniq
-      components.each_with_object([]) do |component, tests|
-        tests << File.join(component[:path], "test.sh")
-      end
     end
   end
 end
