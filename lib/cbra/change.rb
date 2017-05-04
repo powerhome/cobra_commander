@@ -57,7 +57,7 @@ module Cbra
 
     def changes_since_last_commit
       puts "<<< Changes since last commit on #{@branch} >>>"
-      changes.each { |component| puts component }
+      changes.each { |path| puts path }
       puts blank_line
     end
 
