@@ -8,12 +8,12 @@ module Cbra
     end
 
     def to_h
-      GemComponentTree.new("App", @root_path).to_h
+      GemComponentTree.new(UMBRELLA_APP_NAME, @root_path).to_h
     end
 
     # Represents a tree of gem components with dependencies extracted via Bundler
     class GemComponentTree
-      def initialize(name, path, ancestry = [])
+      def initialize(name, path, ancestry = Set.new)
         @name = name
         @root_path = path
         @ancestry = ancestry

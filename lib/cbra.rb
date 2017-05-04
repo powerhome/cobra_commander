@@ -12,5 +12,5 @@ require "cbra/affected"
 # Includes tools for graphing the components of an app and their relationships, as well as selectively
 # testing components based on changes made.
 module Cbra
-  # Your code goes here...
+  UMBRELLA_APP_NAME = "App"
 end

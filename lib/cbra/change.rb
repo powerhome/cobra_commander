@@ -60,25 +60,25 @@ module Cbra
 
     def changes_since_last_commit
       puts "<<< Changes since last commit on #{@branch} >>>"
-      puts changes
+      changes.each { |component| puts component }
       puts blank_line
     end
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      puts(@affected.directly.map { |c| c[:name] })
+      @affected.directly.each { |component| puts component[:name] }
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      puts(@affected.transitively.map { |c| c[:name] })
+      @affected.transitively.each { |component| puts component[:name] }
       puts blank_line
     end
 
     def tests_to_run
       puts "<<< Test scripts to run >>>"
-      puts @affected.needs_testing
+      @affected.needs_testing.each { |script| puts script }
     end
 
     def blank_line

@@ -9,6 +9,11 @@ Metrics/BlockLength:
     - spec/**/*.rb
     - cbra.gemspec
 
+Metrics/ClassLength:
+  Exclude:
+    - spec/**/*.rb
+    - cbra.gemspec
+
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 

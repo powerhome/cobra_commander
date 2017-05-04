@@ -18,15 +18,15 @@ RSpec.describe Cbra::Affected do
     end
 
     it "reports no directly affected components" do
-      expect(no_changes.directly).to eq []
+      expect(no_changes.directly).to eq Set.new
     end
 
     it "reports no transitiely affected components" do
-      expect(no_changes.transitively).to eq []
+      expect(no_changes.transitively).to eq Set.new
     end
 
     it "reports no testing needs" do
-      expect(no_changes.needs_testing).to eq []
+      expect(no_changes.needs_testing).to eq Set.new
     end
   end
 
@@ -36,20 +36,22 @@ RSpec.describe Cbra::Affected do
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_a.directly).to eq [
-        {
-          name: "a",
-          path: "#{@root}/components/a",
-        },
-      ]
+      expect(with_change_to_a.directly).to eq Set.new(
+        [
+          {
+            name: "a",
+            path: "#{@root}/components/a",
+          },
+        ]
+      )
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_a.transitively).to eq []
+      expect(with_change_to_a.transitively).to eq Set.new
     end
 
     it "correctly reports testing needs" do
-      expect(with_change_to_a.needs_testing).to eq ["#{@root}/components/a/test.sh"]
+      expect(with_change_to_a.needs_testing).to eq Set.new(["#{@root}/components/a/test.sh"])
     end
   end
 
@@ -59,29 +61,33 @@ RSpec.describe Cbra::Affected do
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_b.directly).to eq [
-        {
-          name: "b",
-          path: "#{@root}/components/b",
-        },
-      ]
+      expect(with_change_to_b.directly).to eq Set.new(
+        [
+          {
+            name: "b",
+            path: "#{@root}/components/b",
+          },
+        ]
+      )
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_b.transitively).to eq [
-        {
-          name: "a",
-          path: "#{@root}/components/a",
-        },
-        {
-          name: "c",
-          path: "#{@root}/components/c",
-        },
-        {
-          name: "d",
-          path: "#{@root}/components/d",
-        },
-      ]
+      expect(with_change_to_b.transitively).to eq Set.new(
+        [
+          {
+            name: "a",
+            path: "#{@root}/components/a",
+          },
+          {
+            name: "c",
+            path: "#{@root}/components/c",
+          },
+          {
+            name: "d",
+            path: "#{@root}/components/d",
+          },
+        ]
+      )
     end
 
     it "correctly reports testing needs" do

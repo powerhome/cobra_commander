@@ -8,25 +8,19 @@ module Cbra
     def initialize(tree, changes, path)
       @changes = changes
       @path = path
-      @transitively = []
-      @directly = []
-      calculate(tree)
+      @transitively = Set.new
+      @directly = Set.new
+      find_dependencies(tree)
+      @transitively.delete(name: UMBRELLA_APP_NAME, path: @path)
     end
 
     def needs_testing
-      @needs_testing ||= begin
-        components = (@directly + @transitively).uniq
-        components.each_with_object([]) do |component, tests|
-          tests << File.join(component[:path], "test.sh")
-        end
+      @needs_testing ||= (@directly + @transitively).map! do |component|
+        File.join(component[:path], "test.sh")
       end
     end
 
   private
-
-    def calculate(component)
-      find_dependencies(component) && cleanup
-    end
 
     def find_dependencies(parent_component)
       parent_component[:dependencies].each do |component|
@@ -39,16 +33,9 @@ module Cbra
       @changes.each do |change|
         if change.start_with?(component[:path])
           @directly << component.reject { |k| k == :dependencies || k == :ancestry }
-          @transitively << component[:ancestry]
+          @transitively.merge component[:ancestry]
         end
       end
-    end
-
-    def cleanup
-      @directly.uniq!
-      @transitively.flatten!
-      @transitively.uniq!
-      @transitively.delete(name: "App", path: @path)
     end
   end
 end
