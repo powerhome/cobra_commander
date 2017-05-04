@@ -75,5 +75,18 @@ RSpec.describe "cli", type: :aruba do
         expect(last_command_started.output).to include("Test scripts to run")
       end
     end
+
+    context "with full results" do
+      before do
+        run_simple("cbra changes #{fixture_app_path} -r full", fail_on_error: true)
+      end
+
+      it "outputs all headers" do
+        expect(last_command_started.output).to include("Changes since last commit on master")
+        expect(last_command_started.output).to include("Directly affected components")
+        expect(last_command_started.output).to include("Transitively affected components")
+        expect(last_command_started.output).to include("Test scripts to run")
+      end
+    end
   end
 end
