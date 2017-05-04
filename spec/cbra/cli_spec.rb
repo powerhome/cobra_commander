@@ -3,8 +3,6 @@
 require "spec_helper"
 
 RSpec.describe "cli", type: :aruba do
-  let(:fixture_app_path) { "../../spec/fixtures/app" }
-
   describe "checking the version" do
     it "reports the current version" do
       run_simple("cbra version", fail_on_error: true)
@@ -15,7 +13,7 @@ RSpec.describe "cli", type: :aruba do
 
   describe "listing components in the tree" do
     it "outputs the tree of components" do
-      run_simple("cbra ls #{fixture_app_path}", fail_on_error: true)
+      run_simple("cbra ls #{AppHelper.root}", fail_on_error: true)
 
       expect(last_command_started).to have_output <<~OUTPUT
         App
@@ -34,7 +32,7 @@ RSpec.describe "cli", type: :aruba do
   describe "generating a graph" do
     context "with default format" do
       before do
-        run_simple("cbra graph #{fixture_app_path}", fail_on_error: true)
+        run_simple("cbra graph #{AppHelper.root}", fail_on_error: true)
       end
 
       it "outputs explanation" do
@@ -48,17 +46,17 @@ RSpec.describe "cli", type: :aruba do
 
     context "with specified format" do
       it "accepts 'png'" do
-        run_simple("cbra graph #{fixture_app_path} -f png", fail_on_error: true)
+        run_simple("cbra graph #{AppHelper.root} -f png", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "accepts 'dot'" do
-        run_simple("cbra graph #{fixture_app_path} -f dot", fail_on_error: true)
+        run_simple("cbra graph #{AppHelper.root} -f dot", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "rejects everything else" do
-        run_simple("cbra graph #{fixture_app_path} -f pdf", fail_on_error: true)
+        run_simple("cbra graph #{AppHelper.root} -f pdf", fail_on_error: true)
         expect(last_command_started.output).to_not include("Graph generated")
         expect(last_command_started).to have_output "FORMAT must be 'png' or 'dot'"
       end
@@ -68,7 +66,7 @@ RSpec.describe "cli", type: :aruba do
   describe "printing changes" do
     context "with defaults (-r test -b master)" do
       before do
-        run_simple("cbra changes #{fixture_app_path}", fail_on_error: true)
+        run_simple("cbra changes #{AppHelper.root}", fail_on_error: true)
       end
 
       it "outputs 'Test scripts to run' header" do
@@ -78,7 +76,7 @@ RSpec.describe "cli", type: :aruba do
 
     context "with full results" do
       before do
-        run_simple("cbra changes #{fixture_app_path} -r full", fail_on_error: true)
+        run_simple("cbra changes #{AppHelper.root} -r full", fail_on_error: true)
       end
 
       it "outputs all headers" do
@@ -91,7 +89,7 @@ RSpec.describe "cli", type: :aruba do
 
     context "with incorrect results specified" do
       it "outputs error message" do
-        run_simple("cbra changes #{fixture_app_path} -r partial", fail_on_error: true)
+        run_simple("cbra changes #{AppHelper.root} -r partial", fail_on_error: true)
 
         expect(last_command_started).to have_output "--results must be 'test' or 'full'"
       end
@@ -100,7 +98,7 @@ RSpec.describe "cli", type: :aruba do
     context "with branch specified" do
       it "outputs specified branch in 'Changes since' header" do
         branch = "master"
-        run_simple("cbra changes #{fixture_app_path} -r full -b #{branch}", fail_on_error: true)
+        run_simple("cbra changes #{AppHelper.root} -r full -b #{branch}", fail_on_error: true)
 
         expect(last_command_started.output).to include("Changes since last commit on #{branch}")
       end
@@ -108,7 +106,7 @@ RSpec.describe "cli", type: :aruba do
 
     context "with nonexistent branch specified" do
       it "outputs error message" do
-        run_simple("cbra changes #{fixture_app_path} -b oak_branch", fail_on_error: false)
+        run_simple("cbra changes #{AppHelper.root} -b oak_branch", fail_on_error: false)
 
         expect(last_command_started.output).to include("Specified --branch could not be found")
         expect(last_command_started.output).to_not include("Test scripts to run")
