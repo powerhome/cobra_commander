@@ -91,7 +91,7 @@ class AppHelper
               },
             ],
           },
-        ]
+        ],
       }
     end
   end

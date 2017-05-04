@@ -6,7 +6,7 @@ Metrics/LineLength:
 
 Metrics/BlockLength:
   Exclude:
-    - spec/**/*_spec.rb
+    - spec/**/*.rb
     - cbra.gemspec
 
 Style/AccessModifierIndentation:
