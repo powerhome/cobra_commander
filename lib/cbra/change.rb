@@ -78,7 +78,7 @@ module Cbra
 
     def tests_to_run
       puts "<<< Test scripts to run >>>"
-      puts @affected.needing_test_runs
+      puts @affected.needs_testing
     end
 
     def blank_line

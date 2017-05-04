@@ -13,8 +13,8 @@ module Cbra
       calculate(tree)
     end
 
-    def needing_test_runs
-      @needing_test_runs ||= begin
+    def needs_testing
+      @needs_testing ||= begin
         components = (@directly + @transitively).uniq
         components.each_with_object([]) do |component, tests|
           tests << File.join(component[:path], "test.sh")
