@@ -49,13 +49,13 @@ module Cbra
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      puts @directly_affected.map{|c| c[:name]}
+      puts @directly_affected.map { |c| c[:name] }
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      puts @transitively_affected.map{|c| c[:name]}
+      puts @transitively_affected.map { |c| c[:name] }
       puts blank_line
     end
 
@@ -105,7 +105,7 @@ module Cbra
     def add_affected(component)
       changes.each do |change|
         if change.start_with?(component[:path])
-          @directly_affected << component.reject{|k| k == :dependencies || k == :ancestry}
+          @directly_affected << component.reject { |k| k == :dependencies || k == :ancestry }
           @transitively_affected << component[:ancestry]
         end
       end
@@ -115,7 +115,7 @@ module Cbra
       @directly_affected.uniq!
       @transitively_affected.flatten!
       @transitively_affected.uniq!
-      @transitively_affected.delete({name:"App", path: @path})
+      @transitively_affected.delete(name: "App", path: @path)
     end
 
     def all_components_needing_test_runs
