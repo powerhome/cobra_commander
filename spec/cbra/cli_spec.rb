@@ -71,7 +71,7 @@ RSpec.describe "cli", type: :aruba do
         run_simple("cbra changes #{fixture_app_path}", fail_on_error: true)
       end
 
-      it "outputs scripts to run header" do
+      it "outputs 'Test scripts to run' header" do
         expect(last_command_started.output).to include("Test scripts to run")
       end
     end

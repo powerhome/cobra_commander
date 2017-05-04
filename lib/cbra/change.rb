@@ -7,24 +7,24 @@ require "open3"
 module Cbra
   # Calculates and prints affected components & files
   class Change
-    InvalidBranchError = Class.new(StandardError)
+    InvalidSelectionError = Class.new(StandardError)
 
-    def initialize(path, option, branch)
+    def initialize(path, results, branch)
       @path = path
-      @option = option
+      @results = results
       @branch = branch
       @tree = ComponentTree.new(path).to_h
       @affected = Affected.new(@tree, changes, path)
     end
 
     def run!
-      return unless valid_option?
+      valid_results?
       Dir.chdir root_dir
 
       show_full if selected_full_results?
 
       tests_to_run
-    rescue InvalidBranchError => e
+    rescue InvalidSelectionError => e
       puts e.message
     end
 
@@ -44,14 +44,20 @@ module Cbra
       @changes ||= begin
         diff, _, result = Open3.capture3("git", "diff", "--name-only", @branch)
         if result.exitstatus == 128
-          raise InvalidBranchError, "Specified BRANCH could not be found"
+          raise InvalidSelectionError, "Specified --branch could not be found"
         end
         diff.split("\n").map { |f| File.join(root_dir, f) }
       end
     end
 
+    def valid_results?
+      unless @results == "test" || @results == "full"
+        raise InvalidSelectionError, "--results must be 'test' or 'full'"
+      end
+    end
+
     def selected_full_results?
-      @option == "full"
+      @results == "full"
     end
 
     def changes_since_last_commit
@@ -79,12 +85,6 @@ module Cbra
 
     def blank_line
       ""
-    end
-
-    def valid_option?
-      return true if @option == "test" || @option == "full"
-      puts "OPTION must be 'test' or 'full'"
-      false
     end
   end
 end
