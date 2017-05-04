@@ -18,7 +18,7 @@ module Cbra
     end
 
     def run!
-      valid_results?
+      assert_valid_result_choice
       Dir.chdir root_dir
       show_full if selected_full_results?
       tests_to_run
@@ -48,10 +48,8 @@ module Cbra
       end
     end
 
-    def valid_results?
-      valid_results = @results == "test" || @results == "full"
-      message = "--results must be 'test' or 'full'"
-      raise InvalidSelectionError, message unless valid_results
+    def assert_valid_result_choice
+      raise InvalidSelectionError, "--results must be 'test' or 'full'" unless %w[test full].include?(@results)
     end
 
     def selected_full_results?
