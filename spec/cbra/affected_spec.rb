@@ -44,5 +44,33 @@ RSpec.describe Cbra::Affected do
         expect(with_change_to_a.transitively).to eq []
       end
     end
+
+    context "with change to lowest level dependency" do
+      let(:with_change_to_b) do
+        described_class.new(@tree, ["#{@root}/components/b/Gemfile"], @root)
+      end
+
+      it "correctly reports directly affected components" do
+        expect(with_change_to_b.directly).to eq [
+          { name: "b",
+            path: "#{@root}/components/b",
+          }
+        ]
+      end
+
+      it "correctly reports directly affected components" do
+        expect(with_change_to_b.transitively).to eq [
+          { name: "a",
+            path: "#{@root}/components/a",
+          },
+          { name: "c",
+            path: "#{@root}/components/c",
+          },
+          { name: "d",
+            path: "#{@root}/components/d",
+          },
+        ]
+      end
+    end
   end
 end
