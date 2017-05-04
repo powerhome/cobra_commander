@@ -25,23 +25,35 @@ RSpec.describe Cbra::ComponentTree do
             {
               name: "a",
               path: "#{app_root}/components/a",
-              ancestry: ["App"],
+              ancestry: [
+                { name: "App", path: app_root },
+              ],
               dependencies: [
                 {
                   name: "b",
                   path: "#{app_root}/components/b",
-                  ancestry: %w[App a],
+                  ancestry: [
+                    { name: "App", path: app_root },
+                    { name: "a", path: "#{app_root}/components/a" },
+                  ],
                   dependencies: [],
                 },
                 {
                   name: "c",
                   path: "#{app_root}/components/c",
-                  ancestry: %w[App a],
+                  ancestry:[
+                    { name: "App", path: app_root },
+                    { name: "a", path: "#{app_root}/components/a" },
+                  ],
                   dependencies: [
                     {
                       name: "b",
                       path: "#{app_root}/components/b",
-                      ancestry: %w[App a c],
+                      ancestry: [
+                        { name: "App", path: app_root },
+                        { name: "a", path: "#{app_root}/components/a" },
+                        { name: "c", path: "#{app_root}/components/c" },
+                      ],
                       dependencies: [],
                     },
                   ],
@@ -51,23 +63,35 @@ RSpec.describe Cbra::ComponentTree do
             {
               name: "d",
               path: "#{app_root}/components/d",
-              ancestry: ["App"],
+              ancestry: [
+                { name: "App", path: app_root },
+              ],
               dependencies: [
                 {
                   name: "b",
                   path: "#{app_root}/components/b",
-                  ancestry: %w[App d],
+                  ancestry: [
+                    { name: "App", path: app_root },
+                    { name: "d", path: "#{app_root}/components/d" },
+                  ],
                   dependencies: [],
                 },
                 {
                   name: "c",
                   path: "#{app_root}/components/c",
-                  ancestry: %w[App d],
+                  ancestry: [
+                    { name: "App", path: app_root },
+                    { name: "d", path: "#{app_root}/components/d" },
+                  ],
                   dependencies: [
                     {
                       name: "b",
                       path: "#{app_root}/components/b",
-                      ancestry: %w[App d c],
+                      ancestry: [
+                        { name: "App", path: app_root },
+                        { name: "d", path: "#{app_root}/components/d" },
+                        { name: "c", path: "#{app_root}/components/c" },
+                      ],
                       dependencies: [],
                     },
                   ],
