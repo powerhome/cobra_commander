@@ -13,6 +13,8 @@ module Cbra
       @option = option
       @branch = branch
       @tree = ComponentTree.new(path).to_h
+      @transitively_affected = []
+      @directly_affected = []
     end
 
     def run!
@@ -85,14 +87,8 @@ module Cbra
     end
 
     def calculate_affected(parent_component)
-      define_affected
       find_affected(parent_component)
       cleanup_affected
-    end
-
-    def define_affected
-      @transitively_affected = []
-      @directly_affected = []
     end
 
     def find_affected(parent_component)
