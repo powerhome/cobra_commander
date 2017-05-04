@@ -6,6 +6,8 @@ require "open3"
 module Cbra
   # Calculates and prints affected components & files
   class Change
+    InvalidBranchError = Class.new(StandardError)
+
     def initialize(path, option, branch)
       @path = path
       @option = option
@@ -15,8 +17,7 @@ module Cbra
 
     def run!
       return unless valid_option?
-      `cd "#{root_dir}"`
-      return unless valid_branch?
+      Dir.chdir root_dir
 
       if full_output?
         changes_since_last_commit
@@ -26,6 +27,8 @@ module Cbra
       end
 
       tests_to_run
+    rescue InvalidBranchError => e
+      puts e.message
     end
 
   private
@@ -36,7 +39,11 @@ module Cbra
 
     def changes
       @changes ||= begin
-        `git diff --name-only #{@branch}`.split("\n").map { |f| File.join(root_dir, f) }
+        diff, _, result = Open3.capture3("git", "diff", "--name-only", @branch)
+        if result.exitstatus == 128
+          raise InvalidBranchError, "Specified BRANCH could not be found"
+        end
+        diff.split("\n").map { |f| File.join(root_dir, f) }
       end
     end
 
@@ -75,15 +82,6 @@ module Cbra
       return true if @option == "test" || @option == "full"
       puts "OPTION must be 'test' or 'full'"
       false
-    end
-
-    def valid_branch?
-      _, _, result = Open3.capture3("git", "diff", "--name-only", @branch)
-      if result.exitstatus == 128
-        puts "Specified BRANCH could not be found"
-        return false
-      end
-      true
     end
 
     def calculate_affected(parent_component)
