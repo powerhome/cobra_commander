@@ -18,10 +18,11 @@ module Cbra
       `cd "#{root_dir}"`
       return unless valid_branch?
 
-      changes_since_last_commit
+      changes_since_last_commit if full_output?
       calculate_affected(@tree)
-      directly_affected_components
-      transitively_affected_components
+      directly_affected_components if full_output?
+      transitively_affected_components if full_output?
+      tests_to_run
     end
 
   private
@@ -36,6 +37,10 @@ module Cbra
       end
     end
 
+    def full_output?
+      @option == "full"
+    end
+
     def changes_since_last_commit
       puts "<<< Changes since last commit on #{@branch} >>>"
       puts changes
@@ -44,13 +49,19 @@ module Cbra
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      puts @directly_affected
+      puts @directly_affected.map{|c| c[:name]}
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      puts @transitively_affected
+      puts @transitively_affected.map{|c| c[:name]}
+      puts blank_line
+    end
+
+    def tests_to_run
+      puts "<<< Test scripts to run >>>"
+      puts all_components_needing_test_runs
       puts blank_line
     end
 
@@ -94,7 +105,7 @@ module Cbra
     def add_affected(component)
       changes.each do |change|
         if change.start_with?(component[:path])
-          @directly_affected << component[:name]
+          @directly_affected << component.reject{|k| k == :dependencies || k == :ancestry}
           @transitively_affected << component[:ancestry]
         end
       end
@@ -104,7 +115,14 @@ module Cbra
       @directly_affected.uniq!
       @transitively_affected.flatten!
       @transitively_affected.uniq!
-      @transitively_affected.delete("App")
+      @transitively_affected.delete({name:"App", path: @path})
+    end
+
+    def all_components_needing_test_runs
+      components = (@directly_affected + @transitively_affected).uniq
+      components.each_with_object([]) do |component, tests|
+        tests << File.join(component[:path], "test.sh")
+      end
     end
   end
 end

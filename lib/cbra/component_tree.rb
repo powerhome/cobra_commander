@@ -50,7 +50,7 @@ module Cbra
 
       def dep_representation(dep)
         path = File.expand_path(File.join(@root_path, dep.source.path, dep.name))
-        ancestry = @ancestry + [@name]
+        ancestry = @ancestry + [{name: @name, path: @root_path}]
         self.class.new(dep.name, path, ancestry).to_h
       end
     end
