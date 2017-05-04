@@ -24,18 +24,18 @@ module Cbra
 
   private
 
-    def calculate(parent_component)
-      find(parent_component) && cleanup
+    def calculate(component)
+      find_dependencies(component) && cleanup
     end
 
-    def find(parent_component)
+    def find_dependencies(parent_component)
       parent_component[:dependencies].each do |component|
-        add(component)
-        find(component)
+        add_if_changed(component)
+        find_dependencies(component)
       end
     end
 
-    def add(component)
+    def add_if_changed(component)
       @changes.each do |change|
         if change.start_with?(component[:path])
           @directly << component.reject { |k| k == :dependencies || k == :ancestry }
