@@ -20,9 +20,7 @@ module Cbra
     def run!
       valid_results?
       Dir.chdir root_dir
-
       show_full if selected_full_results?
-
       tests_to_run
     rescue InvalidSelectionError => e
       puts e.message

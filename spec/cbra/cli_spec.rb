@@ -82,10 +82,36 @@ RSpec.describe "cli", type: :aruba do
       end
 
       it "outputs all headers" do
-        expect(last_command_started.output).to include("Changes since last commit on master")
+        expect(last_command_started.output).to include("Changes since last commit on ")
         expect(last_command_started.output).to include("Directly affected components")
         expect(last_command_started.output).to include("Transitively affected components")
         expect(last_command_started.output).to include("Test scripts to run")
+      end
+    end
+
+    context "with incorrect results specified" do
+      it "outputs error message" do
+        run_simple("cbra changes #{fixture_app_path} -r partial", fail_on_error: true)
+
+        expect(last_command_started).to have_output "--results must be 'test' or 'full'"
+      end
+    end
+
+    context "with branch specified" do
+      it "outputs specified branch in 'Changes since' header" do
+        branch = "master"
+        run_simple("cbra changes #{fixture_app_path} -r full -b #{branch}", fail_on_error: true)
+
+        expect(last_command_started.output).to include("Changes since last commit on #{branch}")
+      end
+    end
+
+    context "with nonexistent branch specified" do
+      it "outputs error message" do
+        run_simple("cbra changes #{fixture_app_path} -b oak_branch", fail_on_error: false)
+
+        expect(last_command_started.output).to include("Specified --branch could not be found")
+        expect(last_command_started.output).to_not include("Test scripts to run")
       end
     end
   end
