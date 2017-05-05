@@ -1,4 +1,4 @@
-# cbra
+# cobra-commander
 
 [![Gem](https://img.shields.io/gem/dv/cbra/stable.svg)](https://rubygems.org/gems/cbra)
 [![Gem](https://img.shields.io/gem/v/cbra.svg)](https://rubygems.org/gems/cbra)
@@ -26,7 +26,14 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```bash
+Commands:
+  cbra changes APP_PATH [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
+  cbra graph APP_PATH [--format=FORMAT]                        # Outputs graph
+  cbra help [COMMAND]                                          # Describe available commands or one specific command
+  cbra ls APP_PATH                                             # Prints tree of components for an app
+  cbra version                                                 # Prints version
+```
 
 ## Development
 
@@ -36,7 +43,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/powerhome/cbra. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/powerhome/cobra-commander. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
