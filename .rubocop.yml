@@ -20,6 +20,14 @@ Style/AccessModifierIndentation:
 Style/Documentation:
   Enabled: true
 
+Style/ExtraSpacing:
+  Exclude:
+    - cobra-commander.gemspec
+
+Style/SpaceAroundOperators:
+  Exclude:
+    - cobra-commander.gemspec
+
 Style/Lambda:
   EnforcedStyle: literal
 
