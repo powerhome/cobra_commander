@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Cbra
+module CobraCommander
   # Representation of the tree of components and their dependencies
   class ComponentTree
     def initialize(path)

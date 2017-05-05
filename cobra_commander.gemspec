@@ -3,21 +3,26 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "cbra/version"
+require "cobra_commander/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "cbra"
-  spec.version       = Cbra::VERSION
-  spec.authors       = ["Ben Langfeld"]
-  spec.email         = ["blangfeld@powerhrg.com"]
-
+  spec.name          = "cobra_commander"
+  spec.version       = CobraCommander::VERSION
+  spec.authors       = [
+    "Ben Langfeld",
+    "Garett Arrowood",
+  ]
+  spec.email         = [
+    "blangfeld@powerhrg.com",
+    "garett.arrowood@powerhrg.com",
+  ]
   spec.summary       = "Tools for working with Component Based Rails Apps"
   spec.description   = <<~DESCRIPTION
     Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/).
     Includes tools for graphing the components of an app and their relationships, as well as selectively
     testing components based on changes made.
 DESCRIPTION
-  spec.homepage      = "http://tech.powerhrg.com/cbra/"
+  spec.homepage      = "http://tech.powerhrg.com/cobra_commander/"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

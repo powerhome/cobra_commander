@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "cbra/component_tree"
-require "cbra/affected"
+require "cobra_commander/component_tree"
+require "cobra_commander/affected"
 require "open3"
 
-module Cbra
+module CobraCommander
   # Calculates and prints affected components & files
   class Change
     InvalidSelectionError = Class.new(StandardError)

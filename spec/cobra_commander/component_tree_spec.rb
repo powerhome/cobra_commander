@@ -2,10 +2,10 @@
 
 require "spec_helper"
 
-RSpec.describe Cbra::ComponentTree do
+RSpec.describe CobraCommander::ComponentTree do
   context "for the fixture app" do
     subject do
-      Cbra::ComponentTree.new(AppHelper.root)
+      CobraCommander::ComponentTree.new(AppHelper.root)
     end
 
     describe "#to_h" do

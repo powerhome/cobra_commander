@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "cbra/component_tree"
+require "cobra_commander/component_tree"
 
-module Cbra
+module CobraCommander
   # Formats CLI ls output
   class FormattedOutput
     attr_accessor :tree

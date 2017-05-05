@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Cbra
+module CobraCommander
   # Calculates directly & transitively affected components
   class Affected
     attr_reader :directly, :transitively

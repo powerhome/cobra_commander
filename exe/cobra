@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require "cbra"
+require "cobra_commander"
 
-Cbra::CLI.start
+CobraCommander::CLI.start

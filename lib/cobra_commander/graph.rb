@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "graphviz"
-require "cbra/component_tree"
+require "cobra_commander/component_tree"
 
-module Cbra
+module CobraCommander
   # Generates graphs of components
   class Graph
     def initialize(app_path, format)

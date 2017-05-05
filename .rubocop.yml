@@ -7,18 +7,26 @@ Metrics/LineLength:
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
-    - cbra.gemspec
+    - cobra_commander.gemspec
 
 Metrics/ClassLength:
   Exclude:
     - spec/**/*.rb
-    - cbra.gemspec
+    - cobra_commander.gemspec
 
 Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 
 Style/Documentation:
   Enabled: true
+
+Style/ExtraSpacing:
+  Exclude:
+    - cobra_commander.gemspec
+
+Style/SpaceAroundOperators:
+  Exclude:
+    - cobra_commander.gemspec
 
 Style/Lambda:
   EnforcedStyle: literal
