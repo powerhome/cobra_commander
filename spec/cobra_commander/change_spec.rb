@@ -2,14 +2,14 @@
 
 require "spec_helper"
 
-RSpec.describe Cbra::Change do
+RSpec.describe CobraCommander::Change do
   before(:all) do
     @root = AppHelper.root
     @tree = AppHelper.tree
   end
 
   before do
-    allow_any_instance_of(Cbra::ComponentTree).to receive(:to_h).and_return(@tree)
+    allow_any_instance_of(CobraCommander::ComponentTree).to receive(:to_h).and_return(@tree)
   end
 
   it "successfully instantiates" do
@@ -20,7 +20,7 @@ RSpec.describe Cbra::Change do
     context "with full results" do
       context "with no changes" do
         it "lists no files" do
-          allow_any_instance_of(Cbra::Change).to receive(:changes).and_return([])
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return([])
 
           expect do
             described_class.new(@root, "full", "master").run!
@@ -39,7 +39,7 @@ RSpec.describe Cbra::Change do
 
       context "with a change outside a component" do
         it "just lists single change" do
-          allow_any_instance_of(Cbra::Change).to receive(:changes).and_return(["/change"])
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(["/change"])
 
           expect do
             described_class.new(@root, "full", "master").run!
@@ -59,7 +59,7 @@ RSpec.describe Cbra::Change do
 
       context "with a change inside a component" do
         it "lists change, affected component, and test" do
-          allow_any_instance_of(Cbra::Change).to receive(:changes).and_return(["#{@root}/components/a"])
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(["#{@root}/components/a"])
 
           expect do
             described_class.new(@root, "full", "master").run!
@@ -81,7 +81,7 @@ RSpec.describe Cbra::Change do
 
       context "with changes inside multiple components" do
         it "lists changes, affected components, and tests" do
-          allow_any_instance_of(Cbra::Change).to receive(:changes).and_return(
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
               "#{@root}/components/a",
               "#{@root}/components/b",

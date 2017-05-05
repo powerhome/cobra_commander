@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe Cbra::Graph do
+RSpec.describe CobraCommander::Graph do
   describe "#generate!" do
     let(:root) do
       File.expand_path(
@@ -45,11 +45,11 @@ RSpec.describe Cbra::Graph do
     end
 
     before do
-      allow_any_instance_of(Cbra::ComponentTree).to receive(:to_h).and_return(hash_tree)
+      allow_any_instance_of(CobraCommander::ComponentTree).to receive(:to_h).and_return(hash_tree)
     end
 
     it "correctly generates graph.dot" do
-      Cbra::Graph.new(".", "dot").generate!
+      CobraCommander::Graph.new(".", "dot").generate!
 
       native_dot = File.join(root, "native_graph.dot")
       generated_dot = File.join(root, "graph.dot")

@@ -3,11 +3,11 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "cbra/version"
+require "cobra_commander/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "cobra-commander"
-  spec.version       = Cbra::VERSION
+  spec.name          = "cobra_commander"
+  spec.version       = CobraCommander::VERSION
   spec.authors       = [
     "Ben Langfeld",
     "Garett Arrowood",
@@ -22,7 +22,7 @@ Gem::Specification.new do |spec|
     Includes tools for graphing the components of an app and their relationships, as well as selectively
     testing components based on changes made.
 DESCRIPTION
-  spec.homepage      = "http://tech.powerhrg.com/cobra-commander/"
+  spec.homepage      = "http://tech.powerhrg.com/cobra_commander/"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|

@@ -1,19 +1,19 @@
-# cobra-commander
+# cobra_commander
 
-[![Gem](https://img.shields.io/gem/dv/cbra/stable.svg)](https://rubygems.org/gems/cbra)
-[![Gem](https://img.shields.io/gem/v/cbra.svg)](https://rubygems.org/gems/cbra)
-[![Travis](https://img.shields.io/travis/powerhome/cbra.svg)](https://travis-ci.org/powerhome/cbra)
-[![Code Climate](https://img.shields.io/codeclimate/github/powerhome/cbra.svg)](https://codeclimate.com/github/powerhome/cbra)
-[![Gemnasium](https://img.shields.io/gemnasium/powerhome/cbra.svg)](https://gemnasium.com/github.com/powerhome/cbra)
+[![Gem](https://img.shields.io/gem/dv/cobra_commander/stable.svg)](https://rubygems.org/gems/cobra_commander)
+[![Gem](https://img.shields.io/gem/v/cobra_commander.svg)](https://rubygems.org/gems/cobra_commander)
+[![Travis](https://img.shields.io/travis/powerhome/cobra.svg)](https://travis-ci.org/powerhome/cobra_commander)
+[![Code Climate](https://img.shields.io/codeclimate/github/powerhome/cobra_commander.svg)](https://codeclimate.com/github/powerhome/cobra_commander)
+[![Gemnasium](https://img.shields.io/gemnasium/powerhome/cobra_commander.svg)](https://gemnasium.com/github.com/powerhome/cobra_commander)
 
-Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/). Includes tools for graphing the components of an app and their relationships, as well as selectively testing components based on changes made.
+Tools for working with Component Based Rails Apps (see http://shageman.github.io/cobra.info/). Includes tools for graphing the components of an app and their relationships, as well as selectively testing components based on changes made.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'cbra'
+gem 'cobra'
 ```
 
 And then execute:
@@ -22,17 +22,17 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install cbra
+    $ gem install cobra
 
 ## Usage
 
 ```bash
 Commands:
-  cbra changes APP_PATH [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
-  cbra graph APP_PATH [--format=FORMAT]                        # Outputs graph
-  cbra help [COMMAND]                                          # Describe available commands or one specific command
-  cbra ls APP_PATH                                             # Prints tree of components for an app
-  cbra version                                                 # Prints version
+  cobra changes APP_PATH [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
+  cobra graph APP_PATH [--format=FORMAT]                        # Outputs graph
+  cobra help [COMMAND]                                          # Describe available commands or one specific command
+  cobra ls APP_PATH                                             # Prints tree of components for an app
+  cobra version                                                 # Prints version
 ```
 
 ## Development
@@ -43,7 +43,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/powerhome/cobra-commander. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/powerhome/cobra_commander. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 

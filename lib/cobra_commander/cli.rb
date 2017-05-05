@@ -2,7 +2,7 @@
 
 require "thor"
 
-module Cbra
+module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
     desc "ls APP_PATH", "Prints tree of components for an app"
@@ -12,7 +12,7 @@ module Cbra
 
     desc "version", "Prints version"
     def version
-      puts Cbra::VERSION
+      puts CobraCommander::VERSION
     end
 
     desc "graph APP_PATH [--format=FORMAT]", "Outputs graph"

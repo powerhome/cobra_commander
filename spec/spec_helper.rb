@@ -3,7 +3,7 @@
 require "aruba/rspec"
 require "fixtures/app_helper"
 require "pry"
-require "cbra"
+require "cobra"
 
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|

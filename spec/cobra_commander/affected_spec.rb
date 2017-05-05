@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe Cbra::Affected do
+RSpec.describe CobraCommander::Affected do
   before(:all) do
     @root = AppHelper.root
     @tree = AppHelper.tree
