@@ -3,7 +3,7 @@
 require "cbra/component_tree"
 
 module Cbra
-  # Formats CLI output
+  # Formats CLI ls output
   class FormattedOutput
     attr_accessor :tree
 

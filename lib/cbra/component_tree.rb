@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "thor"
-
 module Cbra
   # Representation of the tree of components and their dependencies
   class ComponentTree
@@ -10,19 +8,22 @@ module Cbra
     end
 
     def to_h
-      GemComponentTree.new("App", @root_path).to_h
+      GemComponentTree.new(UMBRELLA_APP_NAME, @root_path).to_h
     end
 
     # Represents a tree of gem components with dependencies extracted via Bundler
     class GemComponentTree
-      def initialize(name, path)
+      def initialize(name, path, ancestry = Set.new)
         @name = name
         @root_path = path
+        @ancestry = ancestry
       end
 
       def to_h
         {
           name: @name,
+          path: @root_path,
+          ancestry: @ancestry,
           dependencies: component_dependencies.map(&method(:dep_representation)),
         }
       end
@@ -43,13 +44,14 @@ module Cbra
 
       def component_dependencies
         bundler_definition.dependencies.select do |dep|
-          dep.source && dep.source.is_a_path?
+          dep.source&.is_a_path?
         end
       end
 
       def dep_representation(dep)
         path = File.expand_path(File.join(@root_path, dep.source.path, dep.name))
-        self.class.new(dep.name, path).to_h
+        ancestry = @ancestry + [{ name: @name, path: @root_path }]
+        self.class.new(dep.name, path, ancestry).to_h
       end
     end
   end

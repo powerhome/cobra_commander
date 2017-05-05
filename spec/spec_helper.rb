@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require "aruba/rspec"
+require "fixtures/app_helper"
+require "pry"
+require "cbra"
+
 RSpec.configure do |config|
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
@@ -42,8 +47,3 @@ RSpec.configure do |config|
 
   Kernel.srand config.seed
 end
-
-require "aruba/rspec"
-require "pry"
-
-require "cbra"

@@ -6,7 +6,12 @@ Metrics/LineLength:
 
 Metrics/BlockLength:
   Exclude:
-    - spec/**/*_spec.rb
+    - spec/**/*.rb
+    - cbra.gemspec
+
+Metrics/ClassLength:
+  Exclude:
+    - spec/**/*.rb
     - cbra.gemspec
 
 Style/AccessModifierIndentation:
@@ -17,6 +22,15 @@ Style/Documentation:
 
 Style/Lambda:
   EnforcedStyle: literal
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    default: ()
+    '%i': '[]'
+    '%I': '[]'
+    '%r': '{}'
+    '%w': '[]'
+    '%W': '[]'
 
 # Single quotes being faster is hardly measurable and only affects parse time.
 # Enforcing double quotes reduces the times where you need to change them when introducing an interpolation.
