@@ -74,7 +74,7 @@ module Cbra
     end
 
     def tests_to_run
-      puts "<<< Test scripts to run >>>"
+      puts "<<< Test scripts to run >>>" if selected_full_results?
       @affected.needs_testing.each { |script| puts script }
     end
 

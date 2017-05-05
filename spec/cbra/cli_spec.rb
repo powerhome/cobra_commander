@@ -71,8 +71,8 @@ RSpec.describe "cli", type: :aruba do
         run_simple("cbra changes #{@root}", fail_on_error: true)
       end
 
-      it "outputs 'Test scripts to run' header" do
-        expect(last_command_started.output).to include("Test scripts to run")
+      it "does not output 'Test scripts to run' header" do
+        expect(last_command_started.output).to_not include("Test scripts to run")
       end
     end
 
