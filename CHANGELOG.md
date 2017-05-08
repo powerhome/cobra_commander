@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.1.2 - 2017-05-08
+
 ### Fixed
 
 * Functions correctly when executing against a frozen gem bundle (`bundle install --deployment`). PR [#6](https://github.com/powerhome/cobra_commander/pull/6)
