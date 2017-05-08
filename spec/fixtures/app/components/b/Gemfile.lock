@@ -1,0 +1,20 @@
+PATH
+  remote: .
+  specs:
+    b (0.0.1)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (12.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  b!
+  bundler (~> 1.5)
+  rake
+
+BUNDLED WITH
+   1.13.6
