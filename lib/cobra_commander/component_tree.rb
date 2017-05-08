@@ -44,7 +44,7 @@ module CobraCommander
 
       def component_dependencies
         bundler_definition.dependencies.select do |dep|
-          dep.source&.is_a_path?
+          dep.source&.is_a_path? && dep.source.path.to_s != "."
         end
       end
 
