@@ -4,7 +4,7 @@ class AppHelper
   class << self
     def root
       File.expand_path(
-        "./app",
+        "../../../cobra_commander_fixtures",
         File.dirname(__FILE__)
       )
     end
