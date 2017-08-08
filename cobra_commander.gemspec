@@ -34,7 +34,6 @@ DESCRIPTION
 
   spec.add_dependency "thor", "~> 0.19.4"
   spec.add_dependency "ruby-graphviz", "~> 1.2.3"
-  spec.add_dependency "cobra_commander_fixtures"
 
   spec.add_development_dependency "bundler", "~> 1.13"
   spec.add_development_dependency "rake", "~> 10.0"
