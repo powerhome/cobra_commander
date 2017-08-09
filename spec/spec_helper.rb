@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "aruba/rspec"
-require "fixtures/app_helper"
+require "support/app_helper"
 require "pry"
 require "cobra_commander"
 

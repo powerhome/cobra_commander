@@ -4,7 +4,7 @@ class AppHelper
   class << self
     def root
       File.expand_path(
-        "./app",
+        "../fixture_app",
         File.dirname(__FILE__)
       )
     end

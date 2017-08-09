@@ -9,6 +9,7 @@ PATH
       b
     d (0.0.1)
       b
+      c
 
 GEM
   remote: https://rubygems.org/
@@ -123,4 +124,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.14.6
+   1.15.3

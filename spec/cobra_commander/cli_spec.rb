@@ -99,7 +99,7 @@ RSpec.describe "cli", type: :aruba do
 
     context "with branch specified" do
       it "outputs specified branch in 'Changes since' header" do
-        branch = "origin/master"
+        branch = "master"
         run_simple("cobra changes #{@root} -r full -b #{branch}", fail_on_error: true)
 
         expect(last_command_started.output).to include("Changes since last commit on #{branch}")
