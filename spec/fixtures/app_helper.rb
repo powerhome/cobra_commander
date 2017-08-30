@@ -108,24 +108,37 @@ class AppHelper
             ],
           },
           {
-            name: "e",
-            path: "#{root}/components/e",
+            name: "node_manifest",
+            path: "#{root}/node_manifest",
             ancestry: Set.new(
               [
                 { name: "App", path: root },
               ]
             ),
-            dependencies: [],
-          },
-          {
-            name: "f",
-            path: "#{root}/components/f",
-            ancestry: Set.new(
-              [
-                { name: "App", path: root },
-              ]
-            ),
-            dependencies: [],
+            dependencies: [
+              {
+                name: "e",
+                path: "#{root}/components/e",
+                ancestry: Set.new(
+                  [
+                    { name: "App", path: root },
+                    { name: "node_manifest", path: "#{root}/node_manifest" },
+                  ]
+                ),
+                dependencies: [],
+              },
+              {
+                name: "f",
+                path: "#{root}/components/f",
+                ancestry: Set.new(
+                  [
+                    { name: "App", path: root },
+                    { name: "node_manifest", path: "#{root}/node_manifest" },
+                  ]
+                ),
+                dependencies: [],
+              },
+            ],
           },
         ],
       }
