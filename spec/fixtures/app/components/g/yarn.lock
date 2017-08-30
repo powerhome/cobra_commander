@@ -2,22 +2,10 @@
 # yarn lockfile v1
 
 
-"e@link:../components/e":
-  version "0.0.0"
-  uid ""
-
 "e@link:../e":
   version "0.0.0"
   uid ""
 
-"f@link:../components/f":
-  version "0.0.0"
-  uid ""
-
 "f@link:../f":
-  version "0.0.0"
-  uid ""
-
-"g@link:../components/g":
   version "0.0.0"
   uid ""

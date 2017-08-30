@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "e": "link:../components/e",
-    "f": "link:../components/f"
+    "f": "link:../components/f",
+    "g": "link:../components/g"
   }
 }

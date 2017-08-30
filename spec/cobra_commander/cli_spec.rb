@@ -29,7 +29,10 @@ RSpec.describe "cli", type: :aruba do
         │       └── b
         └── node_manifest
             ├── e
-            └── f
+            ├── f
+            └── g
+                ├── e
+                └── f
       OUTPUT
     end
   end
