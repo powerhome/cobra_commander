@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "oj"
-require "pathname"
 
 module CobraCommander
   class ComponentTree
@@ -36,14 +35,15 @@ module CobraCommander
         linked_deps = deps.select { |_, v| v.start_with? "link:" }
         linked_deps.map do |_, v|
           relational_path = v.split("link:")[1]
-          path = Pathname.new(@root_path + "/" + relational_path)
-          { name: path.basename.to_path, path: path.cleanpath.to_path }
+          name = relational_path.split("/")[-1]
+          { name: name, path: relational_path }
         end
       end
 
       def dep_representation(dep)
+        path = File.expand_path(File.join(@root_path, dep[:path]))
         ancestry = @ancestry + [{ name: @name, path: @root_path }]
-        self.class.new(dep[:name], dep[:path], ancestry).to_h
+        self.class.new(dep[:name], path, ancestry).to_h
       end
     end
   end
