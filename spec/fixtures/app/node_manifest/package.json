@@ -5,6 +5,7 @@
   "author": "Garett Arrowood",
   "license": "UNLICENSED",
   "dependencies": {
+    "b": "link:../components/b",
     "e": "link:../components/e",
     "f": "link:../components/f",
     "g": "link:../components/g"
