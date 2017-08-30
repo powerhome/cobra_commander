@@ -55,7 +55,7 @@ RSpec.describe CobraCommander::Affected do
     end
   end
 
-  context "with change to lowest level dependency" do
+  context "with change to lower level dependency" do
     let(:with_change_to_b) do
       described_class.new(@tree, ["#{@root}/components/b/Gemfile"], @root)
     end
@@ -71,7 +71,7 @@ RSpec.describe CobraCommander::Affected do
       )
     end
 
-    it "correctly reports directly affected components" do
+    it "correctly reports transitively affected components" do
       expect(with_change_to_b.transitively).to eq Set.new(
         [
           {
@@ -86,6 +86,10 @@ RSpec.describe CobraCommander::Affected do
             name: "d",
             path: "#{@root}/components/d",
           },
+          {
+            name: "node_manifest",
+            path: "#{@root}/node_manifest",
+          },
         ]
       )
     end
@@ -95,6 +99,66 @@ RSpec.describe CobraCommander::Affected do
       expect(with_change_to_b.needs_testing).to include("#{@root}/components/b/test.sh")
       expect(with_change_to_b.needs_testing).to include("#{@root}/components/c/test.sh")
       expect(with_change_to_b.needs_testing).to include("#{@root}/components/d/test.sh")
+      expect(with_change_to_b.needs_testing).to include("#{@root}/node_manifest/test.sh")
+    end
+  end
+
+  context "with change to lowest level dependency" do
+    let(:with_change_to_f) do
+      described_class.new(@tree, ["#{@root}/components/f/package.json"], @root)
+    end
+
+    it "correctly reports directly affected components" do
+      expect(with_change_to_f.directly).to eq Set.new(
+        [
+          {
+            name: "f",
+            path: "#{@root}/components/f",
+          },
+        ]
+      )
+    end
+
+    it "correctly reports transitively affected components" do
+      expect(with_change_to_f.transitively).to eq Set.new(
+        [
+          {
+            name: "a",
+            path: "#{@root}/components/a",
+          },
+          {
+            name: "b",
+            path: "#{@root}/components/b",
+          },
+          {
+            name: "g",
+            path: "#{@root}/components/g",
+          },
+          {
+            name: "c",
+            path: "#{@root}/components/c",
+          },
+          {
+            name: "d",
+            path: "#{@root}/components/d",
+          },
+          {
+            name: "node_manifest",
+            path: "#{@root}/node_manifest",
+          },
+        ]
+      )
+    end
+
+    it "correctly reports testing needs" do
+      expect(with_change_to_f.needs_testing).to include("#{@root}/components/a/test.sh")
+      expect(with_change_to_f.needs_testing).to include("#{@root}/components/b/test.sh")
+      expect(with_change_to_f.needs_testing).to include("#{@root}/components/c/test.sh")
+      expect(with_change_to_f.needs_testing).to include("#{@root}/components/d/test.sh")
+      expect(with_change_to_f.needs_testing).to_not include("#{@root}/components/e/test.sh")
+      expect(with_change_to_f.needs_testing).to include("#{@root}/components/f/test.sh")
+      expect(with_change_to_f.needs_testing).to include("#{@root}/components/g/test.sh")
+      expect(with_change_to_f.needs_testing).to include("#{@root}/node_manifest/test.sh")
     end
   end
 end

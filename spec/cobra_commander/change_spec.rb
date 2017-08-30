@@ -103,12 +103,52 @@ RSpec.describe CobraCommander::Change do
             a
             c
             d
+            node_manifest
 
             <<< Test scripts to run >>>
             #{@root}/components/a/test.sh
             #{@root}/components/b/test.sh
             #{@root}/components/c/test.sh
             #{@root}/components/d/test.sh
+            #{@root}/node_manifest/test.sh
+            OUTPUT
+                       ).to_stdout
+        end
+      end
+
+      context "with change inside a very utilized component" do
+        it "lists changes, affected components, and tests" do
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
+            [
+              "#{@root}/components/e",
+            ]
+          )
+
+          expect do
+            described_class.new(@root, "full", "master").run!
+          end.to output(<<~OUTPUT
+            <<< Changes since last commit on master >>>
+            #{@root}/components/e
+
+            <<< Directly affected components >>>
+            e
+
+            <<< Transitively affected components >>>
+            a
+            b
+            g
+            c
+            d
+            node_manifest
+
+            <<< Test scripts to run >>>
+            #{@root}/components/e/test.sh
+            #{@root}/components/a/test.sh
+            #{@root}/components/b/test.sh
+            #{@root}/components/g/test.sh
+            #{@root}/components/c/test.sh
+            #{@root}/components/d/test.sh
+            #{@root}/node_manifest/test.sh
             OUTPUT
                        ).to_stdout
         end

@@ -33,7 +33,47 @@ class AppHelper
                     { name: "a", path: "#{root}/components/a" },
                   ]
                 ),
-                dependencies: [],
+                dependencies: [
+                  {
+                    name: "g",
+                    path: "#{root}/components/g",
+                    ancestry: Set.new(
+                      [
+                        { name: "App", path: root },
+                        { name: "a", path: "#{root}/components/a" },
+                        { name: "b", path: "#{root}/components/b" },
+                      ]
+                    ),
+                    dependencies: [
+                      {
+                        name: "e",
+                        path: "#{root}/components/e",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "a", path: "#{root}/components/a" },
+                            { name: "b", path: "#{root}/components/b" },
+                            { name: "g", path: "#{root}/components/g" },
+                          ]
+                        ),
+                        dependencies: [],
+                      },
+                      {
+                        name: "f",
+                        path: "#{root}/components/f",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "a", path: "#{root}/components/a" },
+                            { name: "b", path: "#{root}/components/b" },
+                            { name: "g", path: "#{root}/components/g" },
+                          ]
+                        ),
+                        dependencies: [],
+                      },
+                    ],
+                  },
+                ],
               },
               {
                 name: "c",
@@ -55,7 +95,50 @@ class AppHelper
                         { name: "c", path: "#{root}/components/c" },
                       ]
                     ),
-                    dependencies: [],
+                    dependencies: [
+                      {
+                        name: "g",
+                        path: "#{root}/components/g",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "a", path: "#{root}/components/a" },
+                            { name: "c", path: "#{root}/components/c" },
+                            { name: "b", path: "#{root}/components/b" },
+                          ]
+                        ),
+                        dependencies: [
+                          {
+                            name: "e",
+                            path: "#{root}/components/e",
+                            ancestry: Set.new(
+                              [
+                                { name: "App", path: root },
+                                { name: "a", path: "#{root}/components/a" },
+                                { name: "c", path: "#{root}/components/c" },
+                                { name: "b", path: "#{root}/components/b" },
+                                { name: "g", path: "#{root}/components/g" },
+                              ]
+                            ),
+                            dependencies: [],
+                          },
+                          {
+                            name: "f",
+                            path: "#{root}/components/f",
+                            ancestry: Set.new(
+                              [
+                                { name: "App", path: root },
+                                { name: "a", path: "#{root}/components/a" },
+                                { name: "c", path: "#{root}/components/c" },
+                                { name: "b", path: "#{root}/components/b" },
+                                { name: "g", path: "#{root}/components/g" },
+                              ]
+                            ),
+                            dependencies: [],
+                          },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },
@@ -79,7 +162,47 @@ class AppHelper
                     { name: "d", path: "#{root}/components/d" },
                   ]
                 ),
-                dependencies: [],
+                dependencies: [
+                  {
+                    name: "g",
+                    path: "#{root}/components/g",
+                    ancestry: Set.new(
+                      [
+                        { name: "App", path: root },
+                        { name: "d", path: "#{root}/components/d" },
+                        { name: "b", path: "#{root}/components/b" },
+                      ]
+                    ),
+                    dependencies: [
+                      {
+                        name: "e",
+                        path: "#{root}/components/e",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "d", path: "#{root}/components/d" },
+                            { name: "b", path: "#{root}/components/b" },
+                            { name: "g", path: "#{root}/components/g" },
+                          ]
+                        ),
+                        dependencies: [],
+                      },
+                      {
+                        name: "f",
+                        path: "#{root}/components/f",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "d", path: "#{root}/components/d" },
+                            { name: "b", path: "#{root}/components/b" },
+                            { name: "g", path: "#{root}/components/g" },
+                          ]
+                        ),
+                        dependencies: [],
+                      },
+                    ],
+                  },
+                ],
               },
               {
                 name: "c",
@@ -101,7 +224,50 @@ class AppHelper
                         { name: "c", path: "#{root}/components/c" },
                       ]
                     ),
-                    dependencies: [],
+                    dependencies: [
+                      {
+                        name: "g",
+                        path: "#{root}/components/g",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "d", path: "#{root}/components/d" },
+                            { name: "c", path: "#{root}/components/c" },
+                            { name: "b", path: "#{root}/components/b" },
+                          ]
+                        ),
+                        dependencies: [
+                          {
+                            name: "e",
+                            path: "#{root}/components/e",
+                            ancestry: Set.new(
+                              [
+                                { name: "App", path: root },
+                                { name: "d", path: "#{root}/components/d" },
+                                { name: "c", path: "#{root}/components/c" },
+                                { name: "b", path: "#{root}/components/b" },
+                                { name: "g", path: "#{root}/components/g" },
+                              ]
+                            ),
+                            dependencies: [],
+                          },
+                          {
+                            name: "f",
+                            path: "#{root}/components/f",
+                            ancestry: Set.new(
+                              [
+                                { name: "App", path: root },
+                                { name: "d", path: "#{root}/components/d" },
+                                { name: "c", path: "#{root}/components/c" },
+                                { name: "b", path: "#{root}/components/b" },
+                                { name: "g", path: "#{root}/components/g" },
+                              ]
+                            ),
+                            dependencies: [],
+                          },
+                        ],
+                      },
+                    ],
                   },
                 ],
               },
@@ -116,6 +282,57 @@ class AppHelper
               ]
             ),
             dependencies: [
+              {
+                name: "b",
+                path: "#{root}/components/b",
+                ancestry: Set.new(
+                  [
+                    { name: "App", path: root },
+                    { name: "node_manifest", path: "#{root}/node_manifest" },
+                  ]
+                ),
+                dependencies: [
+                  {
+                    name: "g",
+                    path: "#{root}/components/g",
+                    ancestry: Set.new(
+                      [
+                        { name: "App", path: root },
+                        { name: "node_manifest", path: "#{root}/node_manifest" },
+                        { name: "b", path: "#{root}/components/b" },
+                      ]
+                    ),
+                    dependencies: [
+                      {
+                        name: "e",
+                        path: "#{root}/components/e",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "node_manifest", path: "#{root}/node_manifest" },
+                            { name: "b", path: "#{root}/components/b" },
+                            { name: "g", path: "#{root}/components/g" },
+                          ]
+                        ),
+                        dependencies: [],
+                      },
+                      {
+                        name: "f",
+                        path: "#{root}/components/f",
+                        ancestry: Set.new(
+                          [
+                            { name: "App", path: root },
+                            { name: "node_manifest", path: "#{root}/node_manifest" },
+                            { name: "b", path: "#{root}/components/b" },
+                            { name: "g", path: "#{root}/components/g" },
+                          ]
+                        ),
+                        dependencies: [],
+                      },
+                    ],
+                  },
+                ],
+              },
               {
                 name: "e",
                 path: "#{root}/components/e",

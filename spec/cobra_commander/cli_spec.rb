@@ -21,13 +21,29 @@ RSpec.describe "cli", type: :aruba do
         App
         ├── a
         │   ├── b
+        │   │   └── g
+        │   │       ├── e
+        │   │       └── f
         │   └── c
         │       └── b
+        │           └── g
+        │               ├── e
+        │               └── f
         ├── d
         │   ├── b
+        │   │   └── g
+        │   │       ├── e
+        │   │       └── f
         │   └── c
         │       └── b
+        │           └── g
+        │               ├── e
+        │               └── f
         └── node_manifest
+            ├── b
+            │   └── g
+            │       ├── e
+            │       └── f
             ├── e
             ├── f
             └── g
