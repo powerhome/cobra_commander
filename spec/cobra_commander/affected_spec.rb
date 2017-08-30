@@ -41,6 +41,7 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "a",
             path: "#{@root}/components/a",
+            type: "Ruby",
           },
         ]
       )
@@ -66,6 +67,7 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "b",
             path: "#{@root}/components/b",
+            type: "Ruby & JS",
           },
         ]
       )
@@ -77,18 +79,22 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "a",
             path: "#{@root}/components/a",
+            type: "Ruby",
           },
           {
             name: "c",
             path: "#{@root}/components/c",
+            type: "Ruby",
           },
           {
             name: "d",
             path: "#{@root}/components/d",
+            type: "Ruby",
           },
           {
             name: "node_manifest",
             path: "#{@root}/node_manifest",
+            type: "JS",
           },
         ]
       )
@@ -114,6 +120,7 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "f",
             path: "#{@root}/components/f",
+            type: "JS",
           },
         ]
       )
@@ -125,26 +132,32 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "a",
             path: "#{@root}/components/a",
+            type: "Ruby",
           },
           {
             name: "b",
             path: "#{@root}/components/b",
+            type: "Ruby & JS",
           },
           {
             name: "g",
             path: "#{@root}/components/g",
+            type: "JS",
           },
           {
             name: "c",
             path: "#{@root}/components/c",
+            type: "Ruby",
           },
           {
             name: "d",
             path: "#{@root}/components/d",
+            type: "Ruby",
           },
           {
             name: "node_manifest",
             path: "#{@root}/node_manifest",
+            type: "JS",
           },
         ]
       )

@@ -19,12 +19,14 @@ module CobraCommander
         @name = name
         @root_path = path
         @ancestry = ancestry
+        @type = type_of_component
       end
 
       def to_h
         {
           name: @name,
           path: @root_path,
+          type: @type,
           ancestry: @ancestry,
           dependencies: dependencies.map(&method(:dep_representation)),
         }
@@ -32,13 +34,19 @@ module CobraCommander
 
     private
 
+      def type_of_component
+        return "Ruby & JS" if gem? && node?
+        return "Ruby" if gem?
+        return "JS" if node?
+      end
+
       def dependencies
         @deps ||= ruby_dependencies + linked_nodes
       end
 
       def ruby_dependencies
         @ruby_dependencies ||= begin
-          return [] unless File.exist?(gemfile_path)
+          return [] unless gem?
           bundler_definition.dependencies.select do |dep|
             dep.source&.is_a_path? && dep.source.path.to_s != "."
           end
@@ -47,7 +55,7 @@ module CobraCommander
 
       def linked_nodes
         @nodes ||= begin
-          return [] unless File.exist?(package_json_path)
+          return [] unless node?
           json = Oj.load(File.read(package_json_path))
           js_format(json["dependencies"])
         end
@@ -67,6 +75,14 @@ module CobraCommander
         ::Bundler::Definition.build(gemfile_path, gemfile_lock_path, nil)
       end
 
+      def gem?
+        @gem ||= File.exist?(gemfile_path)
+      end
+
+      def node?
+        @node ||= File.exist?(package_json_path)
+      end
+
       def package_json_path
         File.join(@root_path, "package.json")
       end
@@ -81,7 +97,7 @@ module CobraCommander
 
       def dep_representation(dep)
         dep_path, dep_name = extract_dep_info(dep)
-        ancestry = @ancestry + [{ name: @name, path: @root_path }]
+        ancestry = @ancestry + [{ name: @name, path: @root_path, type: @type }]
         self.class.new(dep_name, dep_path, ancestry).to_h
       end
 

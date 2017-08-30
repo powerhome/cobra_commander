@@ -11,7 +11,7 @@ module CobraCommander
       @transitively = Set.new
       @directly = Set.new
       find_dependencies(tree)
-      @transitively.delete(name: UMBRELLA_APP_NAME, path: @path)
+      @transitively.delete(name: UMBRELLA_APP_NAME, path: @path, type: tree[:type])
     end
 
     def needs_testing

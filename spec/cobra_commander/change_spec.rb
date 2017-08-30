@@ -68,7 +68,7 @@ RSpec.describe CobraCommander::Change do
             #{@root}/components/a
 
             <<< Directly affected components >>>
-            a
+            a - Ruby
 
             <<< Transitively affected components >>>
 
@@ -96,14 +96,14 @@ RSpec.describe CobraCommander::Change do
             #{@root}/components/b
 
             <<< Directly affected components >>>
-            a
-            b
+            a - Ruby
+            b - Ruby & JS
 
             <<< Transitively affected components >>>
-            a
-            c
-            d
-            node_manifest
+            a - Ruby
+            c - Ruby
+            d - Ruby
+            node_manifest - JS
 
             <<< Test scripts to run >>>
             #{@root}/components/a/test.sh
@@ -131,15 +131,15 @@ RSpec.describe CobraCommander::Change do
             #{@root}/components/e
 
             <<< Directly affected components >>>
-            e
+            e - JS
 
             <<< Transitively affected components >>>
-            a
-            b
-            g
-            c
-            d
-            node_manifest
+            a - Ruby
+            b - Ruby & JS
+            g - JS
+            c - Ruby
+            d - Ruby
+            node_manifest - JS
 
             <<< Test scripts to run >>>
             #{@root}/components/e/test.sh
