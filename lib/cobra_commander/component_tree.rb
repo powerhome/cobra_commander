@@ -43,7 +43,7 @@ module CobraCommander
 
       def dependencies
         @deps ||= begin
-          deps = ruby_dependencies + linked_nodes
+          deps = ruby_dependencies + js_dependencies
           deps.sort_by(&:name)
         end
       end
@@ -57,7 +57,7 @@ module CobraCommander
         end
       end
 
-      def linked_nodes
+      def js_dependencies
         @nodes ||= begin
           return [] unless node?
           json = JSON.parse(File.read(package_json_path))
