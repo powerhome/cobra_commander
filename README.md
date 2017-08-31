@@ -6,7 +6,7 @@
 [![Code Climate](https://img.shields.io/codeclimate/github/powerhome/cobra_commander.svg)](https://codeclimate.com/github/powerhome/cobra_commander)
 [![Gemnasium](https://img.shields.io/gemnasium/powerhome/cobra_commander.svg)](https://gemnasium.com/github.com/powerhome/cobra_commander)
 
-Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/). Includes tools for graphing the components of an app and their relationships, as well as selectively testing components based on changes made.
+Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/). Includes tools for graphing both Ruby and Javascript components in an application and their relationships, as well as selectively testing components based on changes made.
 
 ## Installation
 
