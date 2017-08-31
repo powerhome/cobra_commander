@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "oj"
+require "json"
 
 module CobraCommander
   # Representation of the tree of components and their dependencies
@@ -56,7 +56,7 @@ module CobraCommander
       def linked_nodes
         @nodes ||= begin
           return [] unless node?
-          json = Oj.load(File.read(package_json_path))
+          json = JSON.parse(File.read(package_json_path))
           js_format(json["dependencies"])
         end
       end
