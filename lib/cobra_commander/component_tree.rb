@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "ostruct"
 
 module CobraCommander
   # Representation of the tree of components and their dependencies
@@ -41,7 +42,10 @@ module CobraCommander
       end
 
       def dependencies
-        @deps ||= ruby_dependencies + linked_nodes
+        @deps ||= begin
+          deps = ruby_dependencies + linked_nodes
+          deps.sort_by(&:name)
+        end
       end
 
       def ruby_dependencies
@@ -67,7 +71,7 @@ module CobraCommander
         linked_deps.map do |_, v|
           relational_path = v.split("link:")[1]
           dep_name = relational_path.split("/")[-1]
-          { name: dep_name, path: relational_path }
+          OpenStruct.new(name: dep_name, path: relational_path)
         end
       end
 
@@ -102,7 +106,7 @@ module CobraCommander
       end
 
       def extract_dep_info(dep)
-        if dep.is_a?(Hash)
+        if dep.is_a?(OpenStruct)
           path = File.expand_path(File.join(@root_path, dep[:path]))
           dep_name = dep[:name]
         else

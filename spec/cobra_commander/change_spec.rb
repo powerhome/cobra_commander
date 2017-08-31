@@ -136,18 +136,18 @@ RSpec.describe CobraCommander::Change do
             <<< Transitively affected components >>>
             a - Ruby
             b - Ruby & JS
-            g - JS
             c - Ruby
             d - Ruby
+            g - JS
             node_manifest - JS
 
             <<< Test scripts to run >>>
-            #{@root}/components/e/test.sh
             #{@root}/components/a/test.sh
             #{@root}/components/b/test.sh
-            #{@root}/components/g/test.sh
             #{@root}/components/c/test.sh
             #{@root}/components/d/test.sh
+            #{@root}/components/e/test.sh
+            #{@root}/components/g/test.sh
             #{@root}/node_manifest/test.sh
             OUTPUT
                        ).to_stdout

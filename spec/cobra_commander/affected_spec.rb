@@ -18,15 +18,15 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "reports no directly affected components" do
-      expect(no_changes.directly).to eq Set.new
+      expect(no_changes.directly).to eq []
     end
 
     it "reports no transitiely affected components" do
-      expect(no_changes.transitively).to eq Set.new
+      expect(no_changes.transitively).to eq []
     end
 
     it "reports no testing needs" do
-      expect(no_changes.needs_testing).to eq Set.new
+      expect(no_changes.needs_testing).to eq []
     end
   end
 
@@ -36,7 +36,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_a.directly).to eq Set.new(
+      expect(with_change_to_a.directly).to eq(
         [
           {
             name: "a",
@@ -48,11 +48,11 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_a.transitively).to eq Set.new
+      expect(with_change_to_a.transitively).to eq []
     end
 
     it "correctly reports testing needs" do
-      expect(with_change_to_a.needs_testing).to eq Set.new(["#{@root}/components/a/test.sh"])
+      expect(with_change_to_a.needs_testing).to eq(["#{@root}/components/a/test.sh"])
     end
   end
 
@@ -62,7 +62,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_b.directly).to eq Set.new(
+      expect(with_change_to_b.directly).to eq(
         [
           {
             name: "b",
@@ -74,7 +74,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports transitively affected components" do
-      expect(with_change_to_b.transitively).to eq Set.new(
+      expect(with_change_to_b.transitively).to eq(
         [
           {
             name: "a",
@@ -115,7 +115,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_f.directly).to eq Set.new(
+      expect(with_change_to_f.directly).to eq(
         [
           {
             name: "f",
@@ -127,7 +127,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports transitively affected components" do
-      expect(with_change_to_f.transitively).to eq Set.new(
+      expect(with_change_to_f.transitively).to eq(
         [
           {
             name: "a",
@@ -140,11 +140,6 @@ RSpec.describe CobraCommander::Affected do
             type: "Ruby & JS",
           },
           {
-            name: "g",
-            path: "#{@root}/components/g",
-            type: "JS",
-          },
-          {
             name: "c",
             path: "#{@root}/components/c",
             type: "Ruby",
@@ -153,6 +148,11 @@ RSpec.describe CobraCommander::Affected do
             name: "d",
             path: "#{@root}/components/d",
             type: "Ruby",
+          },
+          {
+            name: "g",
+            path: "#{@root}/components/g",
+            type: "JS",
           },
           {
             name: "node_manifest",
