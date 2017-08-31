@@ -106,14 +106,9 @@ module CobraCommander
       end
 
       def extract_dep_info(dep)
-        if dep.is_a?(OpenStruct)
-          path = File.expand_path(File.join(@root_path, dep[:path]))
-          dep_name = dep[:name]
-        else
-          path = File.expand_path(File.join(@root_path, dep.source.path, dep.name))
-          dep_name = dep.name
-        end
-        [path, dep_name]
+        relational_path = dep.is_a?(OpenStruct) ? dep.path : "#{dep.source.path}/#{dep.name}"
+        path = File.expand_path(File.join(@root_path, relational_path))
+        [path, dep.name]
       end
     end
   end
