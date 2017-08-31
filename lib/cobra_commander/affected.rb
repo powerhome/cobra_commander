@@ -6,21 +6,28 @@ module CobraCommander
     attr_reader :directly, :transitively
 
     def initialize(tree, changes, path)
+      @tree = tree
       @changes = changes
       @path = path
-      @transitively = Set.new
-      @directly = Set.new
-      find_dependencies(tree)
-      @transitively.delete(name: UMBRELLA_APP_NAME, path: @path)
+      run!
     end
 
     def needs_testing
-      @needs_testing ||= (@directly + @transitively).map! do |component|
+      @needs_testing ||= all_affected.map! do |component|
         File.join(component[:path], "test.sh")
       end
     end
 
   private
+
+    def run!
+      @transitively = Set.new
+      @directly = Set.new
+      find_dependencies(@tree)
+      @transitively.delete(name: UMBRELLA_APP_NAME, path: @path, type: @tree[:type])
+      @transitively = @transitively.to_a.sort_by { |h| h[:name] }
+      @directly = @directly.to_a.sort_by { |h| h[:name] }
+    end
 
     def find_dependencies(parent_component)
       parent_component[:dependencies].each do |component|
@@ -36,6 +43,10 @@ module CobraCommander
           @transitively.merge component[:ancestry]
         end
       end
+    end
+
+    def all_affected
+      (@directly + @transitively).uniq.sort_by { |h| h[:path] }
     end
   end
 end

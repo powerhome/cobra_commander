@@ -1,0 +1,13 @@
+{
+  "name": "node_manifest",
+  "version": "0.0.1",
+  "description": "Manifest node linking all dependent nodes.",
+  "author": "Garett Arrowood",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "b": "link:../components/b",
+    "e": "link:../components/e",
+    "f": "link:../components/f",
+    "g": "link:../components/g"
+  }
+}

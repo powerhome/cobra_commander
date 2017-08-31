@@ -1,0 +1,10 @@
+{
+  "name": "AppName",
+  "version": "0.0.1",
+  "description": "Some description",
+  "author": "Garett Arrowood",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "node_manifest": "link:node_manifest"
+  }
+}

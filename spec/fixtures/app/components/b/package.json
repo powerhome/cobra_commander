@@ -1,0 +1,12 @@
+{
+  "name": "b",
+  "version": "0.0.1",
+  "description": "Some description",
+  "main": "n",
+  "repository": "n",
+  "author": "Garett Arrowood",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "g": "link:../g"
+  }
+}

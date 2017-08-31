@@ -9,4 +9,7 @@
 /pkg/
 /spec/examples.txt
 /spec/reports/
+/spec/fixtures/app/node_modules/
+/spec/fixtures/app/node_manifest/node_modules/
+/spec/fixtures/app/components/*/node_modules/
 /tmp/

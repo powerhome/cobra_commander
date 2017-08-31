@@ -63,19 +63,23 @@ module CobraCommander
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      @affected.directly.each { |component| puts component[:name] }
+      @affected.directly.each { |component| puts display(component) }
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      @affected.transitively.each { |component| puts component[:name] }
+      @affected.transitively.each { |component| puts display(component) }
       puts blank_line
     end
 
     def tests_to_run
       puts "<<< Test scripts to run >>>" if selected_full_results?
       @affected.needs_testing.each { |script| puts script }
+    end
+
+    def display(component)
+      "#{component[:name]} - #{component[:type]}"
     end
 
     def blank_line
