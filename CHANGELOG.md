@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## Version 0.2.0 - 2017-09-01
+
+### Added
+
+* Track javascript components via package.json links. PR [#10](https://github.com/powerhome/cobra_commander/pull/10)
+
+* Alphabetize dependencies in `ls` & `changes` output. PR [#10](https://github.com/powerhome/cobra_commander/pull/10)
+
+* Add component type to `changes` output. PR [#10](https://github.com/powerhome/cobra_commander/pull/10)
+
 ## Version 0.1.2 - 2017-05-08
 
 ### Fixed
