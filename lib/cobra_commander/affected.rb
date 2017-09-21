@@ -13,11 +13,11 @@ module CobraCommander
     end
 
     def names
-      @names ||= paths.map! { |path| File.basename(path) }
+      @names ||= paths.map { |path| File.basename(path) }
     end
 
     def scripts
-      @paths ||= paths.map! { |path| File.join(path, "test.sh") }
+      @paths ||= paths.map { |path| File.join(path, "test.sh") }
     end
 
   private
@@ -52,7 +52,7 @@ module CobraCommander
     end
 
     def paths
-      @paths ||= all_affected.map! { |component| component[:path] }
+      @paths ||= all_affected.map { |component| component[:path] }
     end
   end
 end
