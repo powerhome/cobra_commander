@@ -22,7 +22,7 @@ module CobraCommander
     end
 
     desc "changes APP_PATH [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
-    method_option :results, default: "test", aliases: "-r", desc: "Accepts test or full"
+    method_option :results, default: "test", aliases: "-r", desc: "Accepts test, full, or name"
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
     def changes(app_path)
       Change.new(app_path, @options[:results], @options[:branch]).run!

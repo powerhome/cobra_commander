@@ -12,10 +12,16 @@ module CobraCommander
       run!
     end
 
-    def needs_testing
-      @needs_testing ||= all_affected.map! do |component|
-        File.join(component[:path], "test.sh")
-      end
+    def paths
+      @paths ||= all_affected.map! { |component| component[:path] }
+    end
+
+    def names
+      @names ||= paths.map! { |path| File.basename(path) }
+    end
+
+    def scripts
+      @paths ||= paths.map! { |path| File.join(path, "test.sh") }
     end
 
   private

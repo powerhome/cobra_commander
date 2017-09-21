@@ -115,7 +115,7 @@ RSpec.describe "cli", type: :aruba do
       it "outputs error message" do
         run_simple("cobra changes #{@root} -r partial", fail_on_error: true)
 
-        expect(last_command_started).to have_output "--results must be 'test' or 'full'"
+        expect(last_command_started).to have_output "--results must be 'test', 'full', or 'name'"
       end
     end
 
