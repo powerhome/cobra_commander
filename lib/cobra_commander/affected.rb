@@ -12,10 +12,12 @@ module CobraCommander
       run!
     end
 
-    def needs_testing
-      @needs_testing ||= all_affected.map! do |component|
-        File.join(component[:path], "test.sh")
-      end
+    def names
+      @names ||= paths.map! { |path| File.basename(path) }
+    end
+
+    def scripts
+      @paths ||= paths.map! { |path| File.join(path, "test.sh") }
     end
 
   private
@@ -47,6 +49,10 @@ module CobraCommander
 
     def all_affected
       (@directly + @transitively).uniq.sort_by { |h| h[:path] }
+    end
+
+    def paths
+      @paths ||= all_affected.map! { |component| component[:path] }
     end
   end
 end

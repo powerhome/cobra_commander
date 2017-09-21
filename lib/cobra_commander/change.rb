@@ -48,11 +48,15 @@ module CobraCommander
     end
 
     def assert_valid_result_choice
-      raise InvalidSelectionError, "--results must be 'test' or 'full'" unless %w[test full].include?(@results)
+      raise InvalidSelectionError, "--results must be 'test', 'full', or 'name'" unless %w[test full name].include?(@results) # rubocop:disable Metrics/LineLength
     end
 
     def selected_full_results?
       @results == "full"
+    end
+
+    def selected_name_results?
+      @results == "name"
     end
 
     def changes_since_last_commit
@@ -75,7 +79,11 @@ module CobraCommander
 
     def tests_to_run
       puts "<<< Test scripts to run >>>" if selected_full_results?
-      @affected.needs_testing.each { |script| puts script }
+      if selected_name_results?
+        @affected.names.each { |component_name| puts component_name }
+      else
+        @affected.scripts.each { |component_script| puts component_script }
+      end
     end
 
     def display(component)

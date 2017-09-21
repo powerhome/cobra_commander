@@ -26,7 +26,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "reports no testing needs" do
-      expect(no_changes.needs_testing).to eq []
+      expect(no_changes.scripts).to eq []
     end
   end
 
@@ -51,8 +51,12 @@ RSpec.describe CobraCommander::Affected do
       expect(with_change_to_a.transitively).to eq []
     end
 
-    it "correctly reports testing needs" do
-      expect(with_change_to_a.needs_testing).to eq(["#{@root}/components/a/test.sh"])
+    it "correctly reports test scripts" do
+      expect(with_change_to_a.scripts).to eq(["#{@root}/components/a/test.sh"])
+    end
+
+    it "correctly reports component names" do
+      expect(with_change_to_a.names).to eq(["a"])
     end
   end
 
@@ -100,12 +104,20 @@ RSpec.describe CobraCommander::Affected do
       )
     end
 
-    it "correctly reports testing needs" do
-      expect(with_change_to_b.needs_testing).to include("#{@root}/components/a/test.sh")
-      expect(with_change_to_b.needs_testing).to include("#{@root}/components/b/test.sh")
-      expect(with_change_to_b.needs_testing).to include("#{@root}/components/c/test.sh")
-      expect(with_change_to_b.needs_testing).to include("#{@root}/components/d/test.sh")
-      expect(with_change_to_b.needs_testing).to include("#{@root}/node_manifest/test.sh")
+    it "correctly reports test scripts" do
+      expect(with_change_to_b.scripts).to include("#{@root}/components/a/test.sh")
+      expect(with_change_to_b.scripts).to include("#{@root}/components/b/test.sh")
+      expect(with_change_to_b.scripts).to include("#{@root}/components/c/test.sh")
+      expect(with_change_to_b.scripts).to include("#{@root}/components/d/test.sh")
+      expect(with_change_to_b.scripts).to include("#{@root}/node_manifest/test.sh")
+    end
+
+    it "correctly reports component names" do
+      expect(with_change_to_b.names).to include("a")
+      expect(with_change_to_b.names).to include("b")
+      expect(with_change_to_b.names).to include("c")
+      expect(with_change_to_b.names).to include("d")
+      expect(with_change_to_b.names).to include("node_manifest")
     end
   end
 
@@ -163,15 +175,26 @@ RSpec.describe CobraCommander::Affected do
       )
     end
 
-    it "correctly reports testing needs" do
-      expect(with_change_to_f.needs_testing).to include("#{@root}/components/a/test.sh")
-      expect(with_change_to_f.needs_testing).to include("#{@root}/components/b/test.sh")
-      expect(with_change_to_f.needs_testing).to include("#{@root}/components/c/test.sh")
-      expect(with_change_to_f.needs_testing).to include("#{@root}/components/d/test.sh")
-      expect(with_change_to_f.needs_testing).to_not include("#{@root}/components/e/test.sh")
-      expect(with_change_to_f.needs_testing).to include("#{@root}/components/f/test.sh")
-      expect(with_change_to_f.needs_testing).to include("#{@root}/components/g/test.sh")
-      expect(with_change_to_f.needs_testing).to include("#{@root}/node_manifest/test.sh")
+    it "correctly reports test scripts" do
+      expect(with_change_to_f.scripts).to include("#{@root}/components/a/test.sh")
+      expect(with_change_to_f.scripts).to include("#{@root}/components/b/test.sh")
+      expect(with_change_to_f.scripts).to include("#{@root}/components/c/test.sh")
+      expect(with_change_to_f.scripts).to include("#{@root}/components/d/test.sh")
+      expect(with_change_to_f.scripts).to_not include("#{@root}/components/e/test.sh")
+      expect(with_change_to_f.scripts).to include("#{@root}/components/f/test.sh")
+      expect(with_change_to_f.scripts).to include("#{@root}/components/g/test.sh")
+      expect(with_change_to_f.scripts).to include("#{@root}/node_manifest/test.sh")
+    end
+
+    it "correctly reports component names" do
+      expect(with_change_to_f.names).to include("a")
+      expect(with_change_to_f.names).to include("b")
+      expect(with_change_to_f.names).to include("c")
+      expect(with_change_to_f.names).to include("d")
+      expect(with_change_to_f.names).to_not include("e")
+      expect(with_change_to_f.names).to include("f")
+      expect(with_change_to_f.names).to include("g")
+      expect(with_change_to_f.names).to include("node_manifest")
     end
   end
 end
