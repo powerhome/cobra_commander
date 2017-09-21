@@ -6,6 +6,8 @@
 
 * Add `name` option for `changes --result` flag that outputs affected component names. PR [#12](https://github.com/powerhome/cobra_commander/pull/12)
 
+* Track package.json `devDependencies` in addition to `dependencies`. PR [#13](https://github.com/powerhome/cobra_commander/pull/13)
+
 ## Version 0.2.0 - 2017-09-01
 
 ### Added

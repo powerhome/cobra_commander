@@ -105,7 +105,7 @@ module CobraCommander
           @deps ||= begin
             return [] unless node?
             json = JSON.parse(File.read(package_json_path))
-            format(json["dependencies"])
+            format combined_deps(json)
           end
         end
 
@@ -125,6 +125,10 @@ module CobraCommander
 
         def package_json_path
           File.join(@root_path, "package.json")
+        end
+
+        def combined_deps(json)
+          Hash(json["dependencies"]).merge(Hash(json["devDependencies"]))
         end
       end
     end
