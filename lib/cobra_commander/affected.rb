@@ -12,10 +12,6 @@ module CobraCommander
       run!
     end
 
-    def paths
-      @paths ||= all_affected.map! { |component| component[:path] }
-    end
-
     def names
       @names ||= paths.map! { |path| File.basename(path) }
     end
@@ -53,6 +49,10 @@ module CobraCommander
 
     def all_affected
       (@directly + @transitively).uniq.sort_by { |h| h[:path] }
+    end
+
+    def paths
+      @paths ||= all_affected.map! { |component| component[:path] }
     end
   end
 end
