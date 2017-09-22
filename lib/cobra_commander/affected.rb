@@ -17,7 +17,21 @@ module CobraCommander
     end
 
     def scripts
-      @paths ||= paths.map { |path| File.join(path, "test.sh") }
+      @scripts ||= paths.map { |path| File.join(path, "test.sh") }
+    end
+
+    def json_representation # rubocop:disable Metrics/MethodLength
+      {
+        changed_files: @changes,
+        directly_affected_components: @directly,
+        transitively_affected_components: @transitively,
+        test_scripts: scripts,
+        component_names: names,
+        languages: {
+          ruby: contains_ruby?,
+          javascript: contains_js?,
+        },
+      }.to_json
     end
 
   private
@@ -48,11 +62,23 @@ module CobraCommander
     end
 
     def all_affected
-      (@directly + @transitively).uniq.sort_by { |h| h[:path] }
+      @all_affected ||= (@directly + @transitively).uniq.sort_by { |h| h[:path] }
     end
 
     def paths
       @paths ||= all_affected.map { |component| component[:path] }
+    end
+
+    def types
+      @types ||= all_affected.map { |component| component[:type] }
+    end
+
+    def contains_ruby?
+      types.uniq.join.include?("Ruby")
+    end
+
+    def contains_js?
+      types.uniq.join.include?("JS")
     end
   end
 end
