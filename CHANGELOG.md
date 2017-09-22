@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.3.0 - 2017-10-22
+
 ### Added
 
 * Add `name` option for `changes --result` flag that outputs affected component names. PR [#12](https://github.com/powerhome/cobra_commander/pull/12)
