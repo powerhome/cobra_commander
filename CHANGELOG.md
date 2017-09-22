@@ -8,6 +8,8 @@
 
 * Track package.json `devDependencies` in addition to `dependencies`. PR [#13](https://github.com/powerhome/cobra_commander/pull/13)
 
+* Add `json` option for `changes --result` flag that outputs data as json object. PR [#15](https://github.com/powerhome/cobra_commander/pull/15)
+
 ## Version 0.2.0 - 2017-09-01
 
 ### Added
