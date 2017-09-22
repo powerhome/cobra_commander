@@ -19,8 +19,12 @@ module CobraCommander
 
     def run!
       assert_valid_result_choice
-      show_full if selected_full_results?
-      tests_to_run
+      if selected_result?("json")
+        puts @affected.json_representation
+      else
+        show_full if selected_result?("full")
+        tests_to_run
+      end
     rescue InvalidSelectionError => e
       puts e.message
     end
@@ -48,15 +52,11 @@ module CobraCommander
     end
 
     def assert_valid_result_choice
-      raise InvalidSelectionError, "--results must be 'test', 'full', or 'name'" unless %w[test full name].include?(@results) # rubocop:disable Metrics/LineLength
+      raise InvalidSelectionError, "--results must be 'test', 'full', 'name' or 'json'" unless %w[test full name json].include?(@results) # rubocop:disable Metrics/LineLength
     end
 
-    def selected_full_results?
-      @results == "full"
-    end
-
-    def selected_name_results?
-      @results == "name"
+    def selected_result?(result)
+      @results == result
     end
 
     def changes_since_last_commit
@@ -78,8 +78,8 @@ module CobraCommander
     end
 
     def tests_to_run
-      puts "<<< Test scripts to run >>>" if selected_full_results?
-      if selected_name_results?
+      puts "<<< Test scripts to run >>>" if selected_result?("full")
+      if selected_result?("name")
         @affected.names.each { |component_name| puts component_name }
       else
         @affected.scripts.each { |component_script| puts component_script }
