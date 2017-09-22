@@ -17,6 +17,55 @@ RSpec.describe CobraCommander::Change do
   end
 
   describe ".run!" do
+    context "with json results" do
+      context "with no changes" do
+        it "lists no files" do
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return([])
+
+          expect do
+            described_class.new(@root, "json", "master").run!
+          end.to output(<<~OUTPUT
+            {"changed_files":[],"directly_affected_components":[],"transitively_affected_components":[],"test_scripts":[],"component_names":[],"languages":{"ruby":false,"javascript":false}}
+            OUTPUT
+                       ).to_stdout
+        end
+      end
+
+      context "with a change inside a component" do
+        it "lists change, affected component, and test" do
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
+            [
+              "#{@root}/components/a",
+            ]
+          )
+
+          expect do
+            described_class.new(@root, "json", "master").run!
+          end.to output(<<~OUTPUT
+            {"changed_files":["#{@root}/components/a"],"directly_affected_components":[{"name":"a","path":"#{@root}/components/a","type":"Ruby"}],"transitively_affected_components":[],"test_scripts":["#{@root}/components/a/test.sh"],"component_names":["a"],"languages":{"ruby":true,"javascript":false}}
+            OUTPUT
+                       ).to_stdout
+        end
+      end
+
+      context "with change inside a very utilized component" do
+        it "lists changes, affected components, and tests" do
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
+            [
+              "#{@root}/components/e",
+            ]
+          )
+
+          expect do
+            described_class.new(@root, "json", "master").run!
+          end.to output(<<~OUTPUT
+            {"changed_files":["#{@root}/components/e"],"directly_affected_components":[{"name":"e","path":"#{@root}/components/e","type":"JS"}],"transitively_affected_components":[{"name":"a","path":"#{@root}/components/a","type":"Ruby"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"},{"name":"c","path":"#{@root}/components/c","type":"Ruby"},{"name":"d","path":"#{@root}/components/d","type":"Ruby"},{"name":"g","path":"#{@root}/components/g","type":"JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"test_scripts":["#{@root}/components/a/test.sh","#{@root}/components/b/test.sh","#{@root}/components/c/test.sh","#{@root}/components/d/test.sh","#{@root}/components/e/test.sh","#{@root}/components/g/test.sh","#{@root}/node_manifest/test.sh"],"component_names":["a","b","c","d","e","g","node_manifest"],"languages":{"ruby":true,"javascript":true}}
+            OUTPUT
+                       ).to_stdout
+        end
+      end
+    end
+
     context "with full results" do
       context "with no changes" do
         it "lists no files" do
@@ -39,7 +88,11 @@ RSpec.describe CobraCommander::Change do
 
       context "with a change outside a component" do
         it "just lists single change" do
-          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(["/change"])
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
+            [
+              "/change",
+            ]
+          )
 
           expect do
             described_class.new(@root, "full", "master").run!
@@ -59,7 +112,11 @@ RSpec.describe CobraCommander::Change do
 
       context "with a change inside a component" do
         it "lists change, affected component, and test" do
-          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(["#{@root}/components/a"])
+          allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
+            [
+              "#{@root}/components/a",
+            ]
+          )
 
           expect do
             described_class.new(@root, "full", "master").run!
