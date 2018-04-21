@@ -65,7 +65,7 @@ module CobraCommander
           @deps ||= begin
             return [] unless gem?
             gems = bundler_definition.dependencies.select do |dep|
-              dep.source&.is_a_path? && dep.source.path.to_s != "."
+              dep.source&.path? && dep.source.path.to_s != "."
             end
             format(gems)
           end
