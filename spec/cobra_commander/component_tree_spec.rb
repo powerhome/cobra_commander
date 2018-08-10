@@ -19,8 +19,8 @@ RSpec.describe CobraCommander::ComponentTree do
       # (triggered by `gemspec` in its Gemfile) as a Bundler::Source::Path, rather than a
       # Bundler::Source::Gemspec. This can be confused with a dependency on another component.
       before do
-        @original = Bundler.settings[:frozen]
-        Bundler.settings[:frozen] = true
+        @original = Bundler.settings.frozen?
+        Bundler.settings.set_local(:frozen, true)
       end
 
       it "#component_dependencies still accurately selects" do
@@ -28,7 +28,7 @@ RSpec.describe CobraCommander::ComponentTree do
       end
 
       after do
-        Bundler.settings[:frozen] = @original
+        Bundler.settings.set_local(:frozen, @original)
       end
     end
   end
