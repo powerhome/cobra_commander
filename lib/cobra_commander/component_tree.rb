@@ -87,7 +87,7 @@ module CobraCommander
         end
 
         def bundler_definition
-          @bundler_definition ||= ::Bundler::Definition.build(gemfile_path, gemfile_lock_path, nil)
+          ::Bundler::Definition.build(gemfile_path, gemfile_lock_path, nil)
         end
 
         def gemfile_path
@@ -103,7 +103,7 @@ module CobraCommander
         end
 
         def bundler_minor_version
-          bundler_definition.locked_bundler_version.split(".")[1].to_i
+          Bundler::VERSION.split(".")[1].to_i
         end
       end
 
