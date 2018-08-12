@@ -3,8 +3,6 @@ language: ruby
 rvm:
   - 2.3.1
 before_install:
-  - sudo apt-get -qq install graphviz
-install:
   - gem uninstall bundler
   - gem install bundler:1.13.6
-  - bundle install
+  - sudo apt-get -qq install graphviz
