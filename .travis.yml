@@ -7,3 +7,5 @@ before_install:
   - sudo apt-get -qq install graphviz
 install:
   - bundle _1.13.6_ install --jobs=3 --retry=3
+script:
+  - bundle _1.13.6_ exec rake
