@@ -9,5 +9,5 @@ rvm:
   - 2.4.4
   - 2.5.1
 env:
-  - BUNDLER_VERSION=1.13.16
+  - BUNDLER_VERSION=1.13.6
   - BUNDLER_VERSION=1.16.3
