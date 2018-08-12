@@ -1,8 +1,13 @@
 sudo: true
 language: ruby
-rvm:
-  - 2.3.1
 before_install:
   - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
-  - gem install bundler:1.13.6
+  - gem install bundler:"$BUNDLER_VERSION"
   - sudo apt-get -qq install graphviz
+rvm:
+  - 2.3.7
+  - 2.4.4
+  - 2.5.1
+env:
+  - BUNDLER_VERSION=1.13.16
+  - BUNDLER_VERSION=1.16.3
