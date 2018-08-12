@@ -3,6 +3,6 @@ language: ruby
 rvm:
   - 2.3.1
 before_install:
-  - gem uninstall bundler
+  - "find /home/travis/.rvm/rubies -wholename '*default/bundler-*.gemspec' -delete"
   - gem install bundler:1.13.6
   - sudo apt-get -qq install graphviz
