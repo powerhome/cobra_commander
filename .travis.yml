@@ -5,11 +5,7 @@ before_install:
   - gem install bundler:"$BUNDLER_VERSION"
   - sudo apt-get -qq install graphviz
 rvm:
-  - 2.3.7
-  - 2.4.4
   - 2.5.1
 env:
-  - BUNDLER_VERSION=1.13.6
-  - BUNDLER_VERSION=1.14.6
   - BUNDLER_VERSION=1.15.4
   - BUNDLER_VERSION=1.16.3
