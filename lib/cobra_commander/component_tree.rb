@@ -64,16 +64,17 @@ module CobraCommander
         def dependencies
           @deps ||= begin
             return [] unless gem?
-            gems = bundler_definition.dependencies.select { |dep| path?(dep) }
+            gems = bundler_definition.dependencies.select { |dep| path?(dep.source) }
             format(gems)
           end
         end
 
-        def path?(dep)
-          if bundler_version_supporting_path_method?
-            dep.source&.path? && dep.source.path.to_s != "."
+        def path?(source)
+          return if source.nil?
+          if source.respond_to?(:path?)
+            source.path? && source.path.to_s != "."
           else
-            dep.source&.is_a_path? && dep.source.path.to_s != "."
+            source.is_a_path? && source.path.to_s != "."
           end
         end
 
@@ -98,11 +99,6 @@ module CobraCommander
 
         def gemfile_lock_path
           File.join(@root_path, "Gemfile.lock")
-        end
-
-        def bundler_version_supporting_path_method?
-          @bundler_version_supporting_path_method ||=
-            Gem::Version.new(Bundler::VERSION) >= Gem::Version.new("1.16.0")
         end
       end
 
