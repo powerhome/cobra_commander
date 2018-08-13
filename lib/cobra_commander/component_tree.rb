@@ -71,11 +71,8 @@ module CobraCommander
 
         def path?(source)
           return if source.nil?
-          if source.respond_to?(:path?)
-            source.path? && source.path.to_s != "."
-          else
-            source.is_a_path? && source.path.to_s != "."
-          end
+          source_has_path = source.respond_to?(:path?) ? source.path? : source.is_a_path?
+          source_has_path && source.path.to_s != "."
         end
 
         def format(deps)
