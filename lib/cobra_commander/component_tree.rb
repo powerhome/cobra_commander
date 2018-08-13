@@ -101,11 +101,8 @@ module CobraCommander
         end
 
         def bundler_version_supporting_path_method?
-          @bundler_version_supporting_path_method ||= bundler_minor_version >= 16
-        end
-
-        def bundler_minor_version
-          Bundler::VERSION.split(".")[1].to_i
+          @bundler_version_supporting_path_method ||=
+            Gem::Version.new(Bundler::VERSION) >= Gem::Version.new("1.16.0")
         end
       end
 
