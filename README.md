@@ -3,8 +3,6 @@
 [![Gem](https://img.shields.io/gem/dv/cobra_commander/stable.svg)](https://rubygems.org/gems/cobra_commander)
 [![Gem](https://img.shields.io/gem/v/cobra_commander.svg)](https://rubygems.org/gems/cobra_commander)
 [![Travis](https://img.shields.io/travis/powerhome/cobra_commander.svg)](https://travis-ci.org/powerhome/cobra_commander)
-[![Code Climate](https://img.shields.io/codeclimate/github/powerhome/cobra_commander.svg)](https://codeclimate.com/github/powerhome/cobra_commander)
-[![Gemnasium](https://img.shields.io/gemnasium/powerhome/cobra_commander.svg)](https://gemnasium.com/github.com/powerhome/cobra_commander)
 
 Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/). Includes tools for graphing both Ruby and Javascript components in an application and their relationships, as well as selectively testing components based on changes made.
 
