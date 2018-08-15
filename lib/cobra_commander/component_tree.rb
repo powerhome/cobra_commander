@@ -64,11 +64,15 @@ module CobraCommander
         def dependencies
           @deps ||= begin
             return [] unless gem?
-            gems = bundler_definition.dependencies.select do |dep|
-              dep.source&.is_a_path? && dep.source.path.to_s != "."
-            end
+            gems = bundler_definition.dependencies.select { |dep| path?(dep.source) }
             format(gems)
           end
+        end
+
+        def path?(source)
+          return if source.nil?
+          source_has_path = source.respond_to?(:path?) ? source.path? : source.is_a_path?
+          source_has_path && source.path.to_s != "."
         end
 
         def format(deps)
