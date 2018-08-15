@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## Version 0.3.1 - 2018-08-15
+
+* Resolve Bundler API version issue causing breakage building a ComponentTree. PR [#19](https://github.com/powerhome/cobra_commander/pull/19)
+
 ## Version 0.3.0 - 2017-10-22
 
 ### Added
