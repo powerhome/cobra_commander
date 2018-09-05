@@ -40,7 +40,7 @@ module CobraCommander
 
     def add_tee(outdents, dep)
       puts line(outdents, TEE, dep[:name])
-      list_dependencies(dep, ([BAR] + outdents))
+      list_dependencies(dep, (outdents + [BAR]))
     end
 
     def add_corner(outdents, dep)

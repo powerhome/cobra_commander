@@ -17,7 +17,7 @@ RSpec.describe "cli", type: :aruba do
     it "outputs the tree of components" do
       run_simple("cobra ls #{@root}", fail_on_error: true)
 
-      expect(last_command_started).to have_output <<~OUTPUT
+      expected_output = <<~OUTPUT
         App
         ├── a
         │   ├── b
@@ -41,15 +41,21 @@ RSpec.describe "cli", type: :aruba do
         │               └── f
         └── node_manifest
             ├── b
-        │       └── g
-        │           ├── e
-        │           └── f
+            │   └── g
+            │       ├── e
+            │       └── f
             ├── e
             ├── f
             └── g
                 ├── e
                 └── f
       OUTPUT
+
+      # This converts a unicode non-breaking space with
+      # a normal space because editors.
+      expected_output = expected_output.strip.tr("\u00a0", " ")
+
+      expect(last_command_started.output.strip.tr("\u00a0", " ")).to eq(expected_output)
     end
   end
 
