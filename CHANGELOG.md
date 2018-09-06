@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Add `dependencies_of` command to permit listing or counting the dependencies of a particular component. PR [#24](https://github.com/powerhome/cobra_commander/pull/24)
+* Fix indentation of tree output. PR [#23](https://github.com/powerhome/cobra_commander/pull/23)
+
 ## Version 0.3.1 - 2018-08-15
 
 * Resolve Bundler API version issue causing breakage building a ComponentTree. PR [#19](https://github.com/powerhome/cobra_commander/pull/19)
