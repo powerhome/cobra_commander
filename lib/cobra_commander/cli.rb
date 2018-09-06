@@ -10,6 +10,13 @@ module CobraCommander
       puts FormattedOutput.new(app_path).run!
     end
 
+    desc "dependencies_of APP_PATH", "Outputs count of components in APP_PATH dependent on COMPONENT"
+    method_option :component, required: true, aliases: "-c", desc: "Name of component. Ex: my_component"
+    method_option :format, default: "count", aliases: "-f", desc: "count or list"
+    def dependencies_of(app_path)
+      puts FormattedOutput.new(app_path).dependencies_of!(@options[:component], @options[:format])
+    end
+
     desc "version", "Prints version"
     def version
       puts CobraCommander::VERSION

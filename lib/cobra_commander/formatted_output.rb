@@ -22,7 +22,28 @@ module CobraCommander
       nil
     end
 
+    def dependencies_of!(component_name, format)
+      @component_name = component_name
+
+      results = @tree[:dependencies].map do |component|
+        if @component_name == component[:name]
+          @tree[:name]
+        elsif dependency?(component)
+          component[:name]
+        end
+      end.compact
+
+      "list" == format ? results : results.size
+    end
+
   private
+
+    def dependency?(deps)
+      deps[:dependencies].each do |dep|
+        return true if @component_name == dep[:name] || dependency?(dep)
+      end
+      false
+    end
 
     def list_dependencies(deps, outdents = [])
       deps[:dependencies].each do |dep|
