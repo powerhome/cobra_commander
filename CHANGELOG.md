@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.4.0 - 2018-09-06
+
 * Add `dependencies_of` command to permit listing or counting the dependencies of a particular component. PR [#24](https://github.com/powerhome/cobra_commander/pull/24)
 * Fix indentation of tree output. PR [#23](https://github.com/powerhome/cobra_commander/pull/23)
 
