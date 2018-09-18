@@ -22,7 +22,7 @@ module CobraCommander
       nil
     end
 
-    def dependencies_of!(component_name, format)
+    def dependents_of!(component_name, format)
       @component_name = component_name
 
       results = @tree[:dependencies].map do |component|
