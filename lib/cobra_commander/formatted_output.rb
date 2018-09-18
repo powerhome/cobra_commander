@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "cobra_commander/component_tree"
-
 module CobraCommander
   # Formats CLI ls output
   class FormattedOutput

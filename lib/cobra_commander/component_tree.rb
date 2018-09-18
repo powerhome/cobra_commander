@@ -7,15 +7,30 @@ module CobraCommander
   # Representation of the tree of components and their dependencies
   class ComponentTree
     def initialize(path)
-      @root_path = path
+      @tree = Tree.new(UMBRELLA_APP_NAME, path)
     end
 
     def to_h
-      Tree.new(UMBRELLA_APP_NAME, @root_path).to_h
+      @tree.to_h
+    end
+
+    def find_component(name)
+      subtree(name, @tree)
+    end
+
+  private
+
+    def subtree(name, tree)
+      return tree if tree.name == name
+      tree.dependencies.each do |component|
+        return subtree(name, component)
+      end
     end
 
     # Generates component tree
     class Tree
+      attr_reader :name
+
       def initialize(name, path, ancestry = Set.new)
         @name = name
         @root_path = path
@@ -31,8 +46,16 @@ module CobraCommander
           path: @root_path,
           type: @type,
           ancestry: @ancestry,
-          dependencies: dependencies.map(&method(:dep_representation)),
+          dependencies: dependencies.map(&:to_h),
         }
+      end
+
+      def dependencies
+        @deps ||= begin
+          deps = @ruby.dependencies + @js.dependencies
+          deps.sort_by { |dep| dep[:name] }
+              .map(&method(:dep_representation))
+        end
       end
 
     private
@@ -43,17 +66,10 @@ module CobraCommander
         return "JS" if @js.node?
       end
 
-      def dependencies
-        @deps ||= begin
-          deps = @ruby.dependencies + @js.dependencies
-          deps.sort_by { |dep| dep[:name] }
-        end
-      end
-
       def dep_representation(dep)
         full_path = File.expand_path(File.join(@root_path, dep[:path]))
         ancestry = @ancestry + [{ name: @name, path: @root_path, type: @type }]
-        self.class.new(dep[:name], full_path, ancestry).to_h
+        self.class.new(dep[:name], full_path, ancestry)
       end
 
       # Calculates ruby dependencies

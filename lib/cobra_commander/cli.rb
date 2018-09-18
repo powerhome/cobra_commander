@@ -14,7 +14,15 @@ module CobraCommander
     method_option :component, required: true, aliases: "-c", desc: "Name of component. Ex: my_component"
     method_option :format, default: "count", aliases: "-f", desc: "count or list"
     def dependents_of(app_path)
-      puts FormattedOutput.new(app_path).dependents_of!(@options[:component], @options[:format])
+      puts FormattedOutput.new(app_path).dependents_of!(options.component, options.format)
+    end
+
+    desc "dependencies_of [component]", "Outputs a list of components in APP_PATH that COMPONENT depends on directly or indirectly"
+    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (defaults: CWD)"
+    def dependencies_of(component)
+      tree = ComponentTree.new(options.app)
+      component = tree.find_component(component)
+      puts Output::FlatList.new(component).to_s
     end
 
     desc "version", "Prints version"

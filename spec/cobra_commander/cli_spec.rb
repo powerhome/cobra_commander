@@ -169,4 +169,18 @@ RSpec.describe "cli", type: :aruba do
       expect(last_command_started.output.strip.split("\n")).to match([])
     end
   end
+
+  describe "dependencies_of" do
+    it "counts a component's direct dependency" do
+      run_simple("cobra dependencies_of g -a #{@root}", fail_on_error: true)
+
+      expect(last_command_started.output.strip.split("\n")).to match(%w[e f])
+    end
+
+    it "counts a component's transient dependency" do
+      run_simple("cobra dependencies_of b -a #{@root}", fail_on_error: true)
+
+      expect(last_command_started.output.strip.split("\n")).to match(%w[g e f])
+    end
+  end
 end
