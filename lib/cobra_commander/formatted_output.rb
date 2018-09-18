@@ -19,7 +19,6 @@ module CobraCommander
     def run!
       puts @tree[:name]
       list_dependencies(@tree)
-      nil
     end
 
     def dependents_of!(component_name, format)
@@ -39,16 +38,16 @@ module CobraCommander
   private
 
     def dependency?(deps)
-      deps[:dependencies].each do |dep|
-        return true if @component_name == dep[:name] || dependency?(dep)
+      deps[:dependencies].any? do |dep|
+        @component_name == dep[:name] || dependency?(dep)
       end
-      false
     end
 
     def list_dependencies(deps, outdents = [])
       deps[:dependencies].each do |dep|
         decide_on_line(deps, dep, outdents)
       end
+      nil
     end
 
     def decide_on_line(parent, dep, outdents)
