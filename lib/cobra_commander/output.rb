@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 
 module CobraCommander
+  # Module for pretty printing dependency trees
   module Output
     def self.print(tree, format)
       output = format == "list" ? Output::FlatList.new(tree) : Output::Tree.new(tree)
       puts output.to_s
     end
 
+    # Flattens a tree and prints unique items
     class FlatList
       def initialize(tree)
         @tree = tree
@@ -25,6 +27,7 @@ module CobraCommander
       end
     end
 
+    # Prints the tree in a nice tree form
     class Tree
       attr_accessor :tree
 

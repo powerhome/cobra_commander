@@ -4,10 +4,7 @@ require "bundler"
 require "json"
 
 module CobraCommander
-  def self.umbrella_tree(path)
-    ComponentTree.new(UMBRELLA_APP_NAME, path)
-  end
-
+  # Represents a dependency tree in a given context
   class ComponentTree
     attr_reader :name
 

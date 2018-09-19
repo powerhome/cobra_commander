@@ -13,4 +13,8 @@ require "cobra_commander/output"
 # testing components based on changes made.
 module CobraCommander
   UMBRELLA_APP_NAME = "App"
+
+  def self.umbrella_tree(path)
+    ComponentTree.new(UMBRELLA_APP_NAME, path)
+  end
 end
