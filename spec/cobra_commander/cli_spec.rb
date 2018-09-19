@@ -146,27 +146,41 @@ RSpec.describe "cli", type: :aruba do
 
   describe "counting dependencies on a component in the tree" do
     it "counts a component's direct dependency" do
-      run_simple("cobra dependencies_of #{@root} --component=node_manifest --format=list", fail_on_error: true)
+      run_simple("cobra dependents_of node_manifest -a #{@root} --format=list", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match(["App"])
     end
 
     it "counts a component's transient dependency" do
-      run_simple("cobra dependencies_of #{@root} --component=g --format=list", fail_on_error: true)
+      run_simple("cobra dependents_of g -a #{@root} --format=list", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(%w[a d node_manifest])
+      expect(last_command_started.output.strip.split("\n")).to match(%w[App a b c d node_manifest])
     end
 
     it "counts a component's transient dependency" do
-      run_simple("cobra dependencies_of #{@root} --component=g --format=count", fail_on_error: true)
+      run_simple("cobra dependents_of g -a #{@root} --format=count", fail_on_error: true)
 
-      expect(last_command_started.output.to_i).to eq(3)
+      expect(last_command_started.output.to_i).to eq(6)
     end
 
     it "doesn't count a component it's not dependent on" do
-      run_simple("cobra dependencies_of #{@root} --component=non_existent --format=list", fail_on_error: true)
+      run_simple("cobra dependents_of non_existent -a #{@root} --format=list", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match([])
+    end
+  end
+
+  describe "dependencies_of" do
+    it "counts a component's direct dependency" do
+      run_simple("cobra dependencies_of g -a #{@root}", fail_on_error: true)
+
+      expect(last_command_started.output.strip.split("\n")).to match(%w[e f])
+    end
+
+    it "counts a component's transient dependency" do
+      run_simple("cobra dependencies_of b -a #{@root}", fail_on_error: true)
+
+      expect(last_command_started.output.strip.split("\n")).to match(%w[g e f])
     end
   end
 end

@@ -8,7 +8,7 @@ module CobraCommander
   class Graph
     def initialize(app_path, format)
       @format = format
-      @tree = ComponentTree.new(app_path).to_h
+      @tree = CobraCommander.umbrella_tree(app_path).to_h
     end
 
     def generate!

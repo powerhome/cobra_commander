@@ -13,7 +13,7 @@ module CobraCommander
       @root_dir = Dir.chdir(path) { `git rev-parse --show-toplevel`.chomp }
       @results = results
       @branch = branch
-      @tree = ComponentTree.new(path).to_h
+      @tree = CobraCommander.umbrella_tree(path).to_h
       @affected = Affected.new(@tree, changes, path)
     end
 
