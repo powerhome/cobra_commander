@@ -5,7 +5,7 @@ require "spec_helper"
 RSpec.describe CobraCommander::ComponentTree do
   context "for the fixture app" do
     subject do
-      CobraCommander::ComponentTree.new(AppHelper.root)
+      CobraCommander.umbrella_tree(AppHelper.root)
     end
 
     describe "#to_h" do

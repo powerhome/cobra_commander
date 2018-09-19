@@ -10,7 +10,7 @@ module CobraCommander
     method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"
     def ls(app_path=nil)
       Output.print(
-        umbrella_tree(app_path || options.app),
+        CobraCommander.umbrella_tree(app_path || options.app),
         options.format
       )
     end
@@ -19,7 +19,7 @@ module CobraCommander
     method_option :app, default: Dir.pwd, aliases: "-a", desc: "Path to the root app where the component is mounted"
     method_option :format, default: "count", aliases: "-f", desc: "count or list"
     def dependents_of(component)
-      dependents = umbrella_tree(options.app).dependents_of(component)
+      dependents = CobraCommander.umbrella_tree(options.app).dependents_of(component)
       puts "list" == options.format ? dependents.map(&:name) : dependents.size
     end
 
@@ -28,7 +28,7 @@ module CobraCommander
     method_option :format, default: "list", aliases: "-f", desc: "Format (list or tree, default: list)"
     def dependencies_of(component)
       Output.print(
-        umbrella_tree(app_path).subtree(component),
+        CobraCommander.umbrella_tree(options.app).subtree(component),
         options.format
       )
     end
@@ -49,12 +49,6 @@ module CobraCommander
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
     def changes(app_path)
       Change.new(app_path, options.results, options.branch).run!
-    end
-
-  private
-
-    def umbrella_tree(path)
-      ComponentTree.new(UMBRELLA_APP_NAME, path)
     end
   end
 end
