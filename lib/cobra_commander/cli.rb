@@ -8,7 +8,7 @@ module CobraCommander
     desc "ls [app_path]", "Prints tree of components for an app"
     method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"
-    def ls(app_path=nil)
+    def ls(app_path = nil)
       Output.print(
         CobraCommander.umbrella_tree(app_path || options.app),
         options.format
@@ -23,7 +23,7 @@ module CobraCommander
       puts "list" == options.format ? dependents.map(&:name) : dependents.size
     end
 
-    desc "dependencies_of [component]", "Outputs a list of components in APP_PATH that COMPONENT depends on directly or indirectly"
+    desc "dependencies_of [component]", "Outputs a list of components that [component] depends on within [app] context"
     method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     method_option :format, default: "list", aliases: "-f", desc: "Format (list or tree, default: list)"
     def dependencies_of(component)

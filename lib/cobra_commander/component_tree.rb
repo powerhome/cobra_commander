@@ -29,7 +29,7 @@ module CobraCommander
         component.name == component_name || component.depends_directly?(component_name)
       end
     end
-    
+
     def dependents_of(component_name)
       depends = depends_directly?(component_name) ? self : nil
       dependents_below = dependencies.map do |component|
