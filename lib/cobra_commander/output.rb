@@ -15,15 +15,7 @@ module CobraCommander
       end
 
       def to_s
-        flatten_tree(@tree)
-      end
-
-    private
-
-      def flatten_tree(component)
-        component.dependencies.map do |dep|
-          [dep.name] + flatten_tree(dep)
-        end.flatten.uniq
+        @tree.flatten.map(&:name)
       end
     end
 

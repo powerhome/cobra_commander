@@ -17,6 +17,10 @@ module CobraCommander
       @type = type_of_component
     end
 
+    def flatten
+      _flatten(self)
+    end
+
     def subtree(name)
       _subtree(name, self)
     end
@@ -54,6 +58,12 @@ module CobraCommander
     end
 
   private
+
+    def _flatten(component)
+      component.dependencies.map do |dep|
+        [dep] + _flatten(dep)
+      end.flatten.uniq(&:name)
+    end
 
     def _subtree(name, tree)
       return tree if tree.name == name
