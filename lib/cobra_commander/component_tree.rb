@@ -6,11 +6,11 @@ require "json"
 module CobraCommander
   # Represents a dependency tree in a given context
   class ComponentTree
-    attr_reader :name
+    attr_reader :name, :path
 
     def initialize(name, path, ancestry = Set.new)
       @name = name
-      @root_path = path
+      @path = path
       @ancestry = ancestry
       @ruby = Ruby.new(path)
       @js = Js.new(path)
@@ -42,7 +42,7 @@ module CobraCommander
     def to_h
       {
         name: @name,
-        path: @root_path,
+        path: path,
         type: @type,
         ancestry: @ancestry,
         dependencies: dependencies.map(&:to_h),
@@ -79,8 +79,8 @@ module CobraCommander
     end
 
     def dep_representation(dep)
-      full_path = File.expand_path(File.join(@root_path, dep[:path]))
-      ancestry = @ancestry + [{ name: @name, path: @root_path, type: @type }]
+      full_path = File.expand_path(File.join(path, dep[:path]))
+      ancestry = @ancestry + [{ name: @name, path: path, type: @type }]
       ComponentTree.new(dep[:name], full_path, ancestry)
     end
 
