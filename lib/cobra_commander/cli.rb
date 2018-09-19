@@ -15,11 +15,11 @@ module CobraCommander
       )
     end
 
-    desc "dependents_of APP_PATH", "Outputs count of components in APP_PATH dependent on COMPONENT"
-    method_option :component, required: true, aliases: "-c", desc: "Name of component. Ex: my_component"
+    desc "dependents_of [component]", "Outputs count of components in [app] dependent on [component]"
+    method_option :app, default: Dir.pwd, aliases: "-a", desc: "Path to the root app where the component is mounted"
     method_option :format, default: "count", aliases: "-f", desc: "count or list"
-    def dependents_of(app_path)
-      dependents = umbrella_tree(app_path).dependents_of(options.component)
+    def dependents_of(component)
+      dependents = umbrella_tree(options.app).dependents_of(component)
       puts "list" == options.format ? dependents.map(&:name) : dependents.size
     end
 
