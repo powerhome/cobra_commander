@@ -25,14 +25,14 @@ module CobraCommander
       _subtree(name, self)
     end
 
-    def depends_directly?(component_name)
+    def depends_on?(component_name)
       dependencies.any? do |component|
-        component.name == component_name || component.depends_directly?(component_name)
+        component.name == component_name || component.depends_on?(component_name)
       end
     end
 
     def dependents_of(component_name)
-      depends = depends_directly?(component_name) ? self : nil
+      depends = depends_on?(component_name) ? self : nil
       dependents_below = dependencies.map do |component|
         component.dependents_of(component_name)
       end
