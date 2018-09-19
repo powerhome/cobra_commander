@@ -3,7 +3,6 @@
 require "cobra_commander/cli"
 require "cobra_commander/component_tree"
 require "cobra_commander/version"
-require "cobra_commander/formatted_output"
 require "cobra_commander/graph"
 require "cobra_commander/change"
 require "cobra_commander/affected"

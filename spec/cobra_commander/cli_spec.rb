@@ -154,7 +154,7 @@ RSpec.describe "cli", type: :aruba do
     it "counts a component's transient dependency" do
       run_simple("cobra dependents_of #{@root} --component=g --format=list", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(%w[a d node_manifest])
+      expect(last_command_started.output.strip.split("\n")).to match(%w[App a b c d node_manifest])
     end
 
     it "counts a component's transient dependency" do
