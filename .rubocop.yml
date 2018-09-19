@@ -14,24 +14,24 @@ Metrics/ClassLength:
     - spec/**/*.rb
     - cobra_commander.gemspec
 
-Layout/AccessModifierIndentation:
+Style/AccessModifierIndentation:
   EnforcedStyle: outdent
 
 Style/Documentation:
   Enabled: true
 
-Layout/ExtraSpacing:
+Style/ExtraSpacing:
   Exclude:
     - cobra_commander.gemspec
 
-Layout/SpaceAroundOperators:
+Style/SpaceAroundOperators:
   Exclude:
     - cobra_commander.gemspec
 
 Style/Lambda:
   EnforcedStyle: literal
 
-Layout/PercentLiteralDelimiters:
+Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     default: ()
     '%i': '[]'
