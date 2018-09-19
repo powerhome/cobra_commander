@@ -5,6 +5,14 @@ require "thor"
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
+    desc "do [command]", "Executes the command in the context of each component in [app]"
+    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
+    def do(command)
+      tree = CobraCommander.umbrella_tree(options.app)
+      executor = Executor.new(tree)
+      executor.exec(command)
+    end
+
     desc "ls [app_path]", "Prints tree of components for an app"
     method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"

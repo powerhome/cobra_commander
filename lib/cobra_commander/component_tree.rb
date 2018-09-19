@@ -6,29 +6,33 @@ require "json"
 module CobraCommander
   # Represents a dependency tree in a given context
   class ComponentTree
-    attr_reader :name
+    attr_reader :name, :path
 
     def initialize(name, path, ancestry = Set.new)
       @name = name
-      @root_path = path
+      @path = path
       @ancestry = ancestry
       @ruby = Ruby.new(path)
       @js = Js.new(path)
       @type = type_of_component
     end
 
+    def flatten
+      _flatten(self)
+    end
+
     def subtree(name)
       _subtree(name, self)
     end
 
-    def depends_directly?(component_name)
+    def depends_on?(component_name)
       dependencies.any? do |component|
-        component.name == component_name || component.depends_directly?(component_name)
+        component.name == component_name || component.depends_on?(component_name)
       end
     end
 
     def dependents_of(component_name)
-      depends = depends_directly?(component_name) ? self : nil
+      depends = depends_on?(component_name) ? self : nil
       dependents_below = dependencies.map do |component|
         component.dependents_of(component_name)
       end
@@ -38,7 +42,7 @@ module CobraCommander
     def to_h
       {
         name: @name,
-        path: @root_path,
+        path: path,
         type: @type,
         ancestry: @ancestry,
         dependencies: dependencies.map(&:to_h),
@@ -55,6 +59,12 @@ module CobraCommander
 
   private
 
+    def _flatten(component)
+      component.dependencies.map do |dep|
+        [dep] + _flatten(dep)
+      end.flatten.uniq(&:name)
+    end
+
     def _subtree(name, tree)
       return tree if tree.name == name
       tree.dependencies.each do |component|
@@ -69,8 +79,8 @@ module CobraCommander
     end
 
     def dep_representation(dep)
-      full_path = File.expand_path(File.join(@root_path, dep[:path]))
-      ancestry = @ancestry + [{ name: @name, path: @root_path, type: @type }]
+      full_path = File.expand_path(File.join(path, dep[:path]))
+      ancestry = @ancestry + [{ name: @name, path: path, type: @type }]
       ComponentTree.new(dep[:name], full_path, ancestry)
     end
 
