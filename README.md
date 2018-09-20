@@ -28,11 +28,15 @@ Or install it yourself as:
 
 ```bash
 Commands:
-  cobra changes APP_PATH [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
-  cobra graph APP_PATH [--format=FORMAT]                        # Outputs graph
-  cobra help [COMMAND]                                          # Describe available commands or one specific command
-  cobra ls APP_PATH                                             # Prints tree of components for an app
-  cobra version                                                 # Prints version
+  cobra changes APP_PATH [--results=RESULTS] [--branch=BRANCH]                # Prints list of changed files
+  cobra graph APP_PATH [--format=FORMAT]                                      # Outputs graph
+  cobra help [COMMAND]                                                        # Describe available commands or one specific command
+  cobra ls APP_PATH  [--format=list|tree]                                     # Prints tree of components for an app
+  cobra version                                                               # Prints version
+  cobra do [command]                                                          # Executes the command in the context of each component
+  cobra dependencies_of [component] [--app=/path/to/app] [--format=list|tree] # Lists the dependencies of the component in the app context
+  cobra dependents_of [component] [--app=/path/to/app] [--format=list|count]  # Lists or counts the components that depend directly or indirectly on the given component
+  cobra version                                                               # Prints version
 ```
 
 ## Development
