@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## Version 0.5.0 - 2018-09-20
+
+* Renames `dependencies_of` to `dependents_of`. PR [#25](https://github.com/powerhome/cobra_commander/pull/25)
+* Add `dependencies_of` command list the direct and indirect dependencies of one component. PR [#25](https://github.com/powerhome/cobra_commander/pull/25)
+* Add `do` command allow executing a command in the context of each component. PR [#26](https://github.com/powerhome/cobra_commander/pull/26)
+
 ## Version 0.4.0 - 2018-09-06
 
 * Add `dependencies_of` command to permit listing or counting the dependencies of a particular component. PR [#24](https://github.com/powerhome/cobra_commander/pull/24)
