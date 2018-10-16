@@ -182,5 +182,11 @@ RSpec.describe "cli", type: :aruba do
 
       expect(last_command_started.output.strip.split("\n")).to match(%w[g e f])
     end
+
+    it "finds subtrees that are not the first match" do
+      run_simple("cobra dependencies_of d -a #{@root}", fail_on_error: true)
+
+      expect(last_command_started.output.strip.split("\n")).to match(%w[b g e f c])
+    end
   end
 end

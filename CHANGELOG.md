@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## Version 0.5.1 - 2018-10-15
+
+* Fix a bug with dependencies_of where it wouldn't match components further down the list of umbrella's dependencies
+* Bumps Thor version from 0.19.4 to a range (< 2.0, >= 0.18.1) compatible with railties
+
 ## Version 0.5.0 - 2018-09-20
 
 * Renames `dependencies_of` to `dependents_of`. PR [#25](https://github.com/powerhome/cobra_commander/pull/25)

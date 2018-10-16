@@ -68,8 +68,10 @@ module CobraCommander
     def _subtree(name, tree)
       return tree if tree.name == name
       tree.dependencies.each do |component|
-        return _subtree(name, component)
+        presence = _subtree(name, component)
+        return presence if presence
       end
+      nil
     end
 
     def type_of_component
