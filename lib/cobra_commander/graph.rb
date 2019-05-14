@@ -15,8 +15,19 @@ module CobraCommander
       return unless valid_format?
 
       g = GraphViz.new(:G, type: :digraph, concentrate: true)
+      engines = g.subgraph 'engines'
+      gems = g.subgraph 'gems'
 
-      app_node = g.add_nodes(@tree[:name])
+      app_node = g.add_nodes(@tree[:name], shape: 'diamond')
+
+      @tree[:dependencies].reject { |dep| dep[:path].match(/engine/) }.each do |dep|
+        gems.add_nodes(dep[:name]);
+      end
+
+      @tree[:dependencies].select { |dep| dep[:path].match(/engine/) }.each do |dep|
+        engines.add_nodes(dep[:name], style: 'filled', shape: 'box');
+      end
+
       map_nodes(g, app_node, @tree)
       output(g)
     end
@@ -25,7 +36,7 @@ module CobraCommander
 
     def map_nodes(g, parent_node, tree)
       tree[:dependencies].each do |dep|
-        node = g.find_node(dep[:name]) || g.add_nodes(dep[:name])
+        node = g.find_node(dep[:name])
         g.add_edges(parent_node, node)
         map_nodes(g, node, dep)
       end
