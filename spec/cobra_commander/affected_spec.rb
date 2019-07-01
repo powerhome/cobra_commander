@@ -167,6 +167,11 @@ RSpec.describe CobraCommander::Affected do
             type: "JS",
           },
           {
+            name: "h",
+            path: "#{@root}/components/h",
+            type: "JS",
+          },
+          {
             name: "node_manifest",
             path: "#{@root}/node_manifest",
             type: "JS",
