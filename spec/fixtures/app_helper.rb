@@ -295,6 +295,30 @@ class AppHelper
             ],
           },
           {
+            name: "h",
+            path: "#{root}/components/h",
+            type: "JS",
+            ancestry: Set.new(
+              [
+                { name: "App", path: root, type: "Ruby & JS" },
+              ]
+            ),
+            dependencies: [
+              {
+                name: "f",
+                path: "#{root}/components/f",
+                type: "JS",
+                ancestry: Set.new(
+                  [
+                    { name: "App", path: root, type: "Ruby & JS" },
+                    { name: "h", path: "#{root}/components/h", type: "JS" },
+                  ]
+                ),
+                dependencies: [],
+              },
+            ],
+          },
+          {
             name: "node_manifest",
             path: "#{root}/node_manifest",
             type: "JS",

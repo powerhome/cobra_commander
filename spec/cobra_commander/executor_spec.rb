@@ -24,6 +24,8 @@ RSpec.describe CobraCommander::Executor do
 .*spec/fixtures/app/components/c
 ===> d \(.*spec/fixtures/app/components/d\)
 .*spec/fixtures/app/components/d
+===> h \(.*spec/fixtures/app/components/h\)
+.*spec/fixtures/app/components/h
 ===> node_manifest \(.*spec/fixtures/app/node_manifest\)
 .*spec/fixtures/app/node_manifest}
   end
@@ -46,6 +48,8 @@ f .*spec/fixtures/app/components/f
 c .*spec/fixtures/app/components/c
 ===> d \(.*spec/fixtures/app/components/d\)
 d .*spec/fixtures/app/components/d
+===> h \(.*spec/fixtures/app/components/h\)
+h .*spec/fixtures/app/components/h
 ===> node_manifest \(.*spec/fixtures/app/node_manifest\)
 node_manifest .*spec/fixtures/app/node_manifest}
   end
