@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.6.0 - 2019-07-03
+
 * Tracks package.json `workspaces` in addition to `dependencies` and `devDependencies`. PR [#31](https://github.com/powerhome/cobra_commander/pull/31)
 * Permits caching the component tree of a project on disk to avoid calculating it repeatedly on subsequent cobra invocations.
 
