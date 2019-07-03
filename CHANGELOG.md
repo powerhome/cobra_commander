@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Tracks package.json `workspaces` in addition to `dependencies` and `devDepedencies`. PR [#31](https://github.com/powerhome/cobra_commander/pull/31)
+* Tracks package.json `workspaces` in addition to `dependencies` and `devDependencies`. PR [#31](https://github.com/powerhome/cobra_commander/pull/31)
 
 ## Version 0.5.1 - 2018-10-15
 
