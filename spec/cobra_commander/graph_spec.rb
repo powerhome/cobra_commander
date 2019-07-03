@@ -44,12 +44,12 @@ RSpec.describe CobraCommander::Graph do
       }
     end
 
-    before do
-      allow_any_instance_of(CobraCommander::ComponentTree).to receive(:to_h).and_return(hash_tree)
+    let(:tree) do
+      double(to_h: hash_tree)
     end
 
     it "correctly generates graph.dot" do
-      CobraCommander::Graph.new(".", "dot").generate!
+      CobraCommander::Graph.new(tree, "dot").generate!
 
       native_dot = File.join(root, "native_graph.dot")
       generated_dot = File.join(root, "graph.dot")

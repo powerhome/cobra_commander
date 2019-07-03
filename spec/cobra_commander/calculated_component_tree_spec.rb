@@ -2,7 +2,7 @@
 
 require "spec_helper"
 
-RSpec.describe CobraCommander::ComponentTree do
+RSpec.describe CobraCommander::CalculatedComponentTree do
   context "for the fixture app" do
     subject do
       CobraCommander.umbrella_tree(AppHelper.root)

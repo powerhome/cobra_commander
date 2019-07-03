@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 require "graphviz"
-require "cobra_commander/component_tree"
 
 module CobraCommander
   # Generates graphs of components
   class Graph
-    def initialize(app_path, format)
+    def initialize(tree, format)
       @format = format
-      @tree = CobraCommander.umbrella_tree(app_path).to_h
+      @tree = tree.to_h
     end
 
     def generate!

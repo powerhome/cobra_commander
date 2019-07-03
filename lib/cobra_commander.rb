@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
 require "cobra_commander/cli"
-require "cobra_commander/component_tree"
+require "cobra_commander/cached_component_tree"
+require "cobra_commander/calculated_component_tree"
 require "cobra_commander/version"
 require "cobra_commander/graph"
 require "cobra_commander/change"
@@ -16,6 +17,10 @@ module CobraCommander
   UMBRELLA_APP_NAME = "App"
 
   def self.umbrella_tree(path)
-    ComponentTree.new(UMBRELLA_APP_NAME, path)
+    CalculatedComponentTree.new(UMBRELLA_APP_NAME, path)
+  end
+
+  def self.tree_from_cache(cache_file)
+    CachedComponentTree.from_cache_file(cache_file)
   end
 end

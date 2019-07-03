@@ -8,12 +8,12 @@ RSpec.describe CobraCommander::Change do
     @tree = AppHelper.tree
   end
 
-  before do
-    allow_any_instance_of(CobraCommander::ComponentTree).to receive(:to_h).and_return(@tree)
+  let(:tree) do
+    double(to_h: @tree, path: @root)
   end
 
   it "successfully instantiates" do
-    expect(described_class.new(@root, "full", "master")).to be_truthy
+    expect(described_class.new(tree, "full", "master")).to be_truthy
   end
 
   describe ".run!" do
@@ -23,7 +23,7 @@ RSpec.describe CobraCommander::Change do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return([])
 
           expect do
-            described_class.new(@root, "json", "master").run!
+            described_class.new(tree, "json", "master").run!
           end.to output(<<~OUTPUT
             {"changed_files":[],"directly_affected_components":[],"transitively_affected_components":[],"test_scripts":[],"component_names":[],"languages":{"ruby":false,"javascript":false}}
             OUTPUT
@@ -40,7 +40,7 @@ RSpec.describe CobraCommander::Change do
           )
 
           expect do
-            described_class.new(@root, "json", "master").run!
+            described_class.new(tree, "json", "master").run!
           end.to output(<<~OUTPUT
             {"changed_files":["#{@root}/components/a"],"directly_affected_components":[{"name":"a","path":"#{@root}/components/a","type":"Ruby"}],"transitively_affected_components":[],"test_scripts":["#{@root}/components/a/test.sh"],"component_names":["a"],"languages":{"ruby":true,"javascript":false}}
             OUTPUT
@@ -57,7 +57,7 @@ RSpec.describe CobraCommander::Change do
           )
 
           expect do
-            described_class.new(@root, "json", "master").run!
+            described_class.new(tree, "json", "master").run!
           end.to output(<<~OUTPUT
             {"changed_files":["#{@root}/components/e"],"directly_affected_components":[{"name":"e","path":"#{@root}/components/e","type":"JS"}],"transitively_affected_components":[{"name":"a","path":"#{@root}/components/a","type":"Ruby"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"},{"name":"c","path":"#{@root}/components/c","type":"Ruby"},{"name":"d","path":"#{@root}/components/d","type":"Ruby"},{"name":"g","path":"#{@root}/components/g","type":"JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"test_scripts":["#{@root}/components/a/test.sh","#{@root}/components/b/test.sh","#{@root}/components/c/test.sh","#{@root}/components/d/test.sh","#{@root}/components/e/test.sh","#{@root}/components/g/test.sh","#{@root}/node_manifest/test.sh"],"component_names":["a","b","c","d","e","g","node_manifest"],"languages":{"ruby":true,"javascript":true}}
             OUTPUT
@@ -72,7 +72,7 @@ RSpec.describe CobraCommander::Change do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return([])
 
           expect do
-            described_class.new(@root, "full", "master").run!
+            described_class.new(tree, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
 
@@ -95,7 +95,7 @@ RSpec.describe CobraCommander::Change do
           )
 
           expect do
-            described_class.new(@root, "full", "master").run!
+            described_class.new(tree, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
             /change
@@ -119,7 +119,7 @@ RSpec.describe CobraCommander::Change do
           )
 
           expect do
-            described_class.new(@root, "full", "master").run!
+            described_class.new(tree, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
             #{@root}/components/a
@@ -146,7 +146,7 @@ RSpec.describe CobraCommander::Change do
           )
 
           expect do
-            described_class.new(@root, "full", "master").run!
+            described_class.new(tree, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
             #{@root}/components/a
@@ -182,7 +182,7 @@ RSpec.describe CobraCommander::Change do
           )
 
           expect do
-            described_class.new(@root, "full", "master").run!
+            described_class.new(tree, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
             #{@root}/components/e

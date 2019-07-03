@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require "cobra_commander/component_tree"
 require "cobra_commander/affected"
 require "open3"
 
@@ -9,12 +8,12 @@ module CobraCommander
   class Change
     InvalidSelectionError = Class.new(StandardError)
 
-    def initialize(path, results, branch)
-      @root_dir = Dir.chdir(path) { `git rev-parse --show-toplevel`.chomp }
+    def initialize(tree, results, branch)
+      @root_dir = Dir.chdir(tree.path) { `git rev-parse --show-toplevel`.chomp }
       @results = results
       @branch = branch
-      @tree = CobraCommander.umbrella_tree(path).to_h
-      @affected = Affected.new(@tree, changes, path)
+      @tree = tree.to_h
+      @affected = Affected.new(@tree, changes, tree.path)
     end
 
     def run!
