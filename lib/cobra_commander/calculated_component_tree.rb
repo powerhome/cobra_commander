@@ -123,7 +123,6 @@ module CobraCommander
       def build_workspaces(workspaces)
         return [] if workspaces.nil?
 
-        yarn_workspaces = read_workspaces
         yarn_workspaces.map do |_, component|
           { name: component["location"].split("/")[-1], path: component["location"] }
         end
@@ -131,10 +130,11 @@ module CobraCommander
 
     private
 
-      def read_workspaces
-        output, = Open3.capture2("yarn workspaces info", chdir: @root_path)
-        striped_output = output.lines[1..-2].join
-        JSON.parse(striped_output)
+      def yarn_workspaces
+        @yarn_workspaces ||= begin
+          output, = Open3.capture2("yarn workspaces info --silent", chdir: @root_path)
+          JSON.parse(output)
+        end
       end
     end
   end
