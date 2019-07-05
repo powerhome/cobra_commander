@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-* Changes implementation of how we get the declared workspaces. Now we use `yarn workspaces info` instead of reading it from the list in `package.json`. PR [#34](https://github.com/powerhome/cobra_commander/pull/34)
+* Better supports yarn workspaces globbing by delegating to yarn to calculate the list of components rather than re-implementing in Ruby. PR [#34](https://github.com/powerhome/cobra_commander/pull/34)
 
 ## Version 0.6.0 - 2019-07-03
 
