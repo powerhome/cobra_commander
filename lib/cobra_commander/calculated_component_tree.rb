@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "cobra_commander/component_tree"
+require "open3"
 
 module CobraCommander
   # Represents a dependency tree in a given context
@@ -121,25 +122,19 @@ module CobraCommander
 
       def build_workspaces(workspaces)
         return [] if workspaces.nil?
-        workspaces.map do |workspace|
-          glob = "#{@root_path}/#{workspace}/package.json"
-          workspace_dependencies = Dir.glob(glob)
-          workspace_dependencies.map do |wd|
-            { name: component_name(wd), path: component_path(wd) }
-          end
-        end.flatten
+
+        yarn_workspaces.map do |_, component|
+          { name: component["location"].split("/")[-1], path: component["location"] }
+        end
       end
 
     private
 
-      def component_name(dir)
-        component_path(dir).split("/")[-1]
-      end
-
-      def component_path(dir)
-        return dir.split("/package.json")[0] if @root_path == "."
-
-        dir.split(@root_path)[-1].split("/package.json")[0]
+      def yarn_workspaces
+        @yarn_workspaces ||= begin
+          output, = Open3.capture2("yarn workspaces info --silent", chdir: @root_path)
+          JSON.parse(output)
+        end
       end
     end
   end
