@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Changes implementation of how we get the declared workspaces. Now we use `yarn workspaces info` instead of reading it from the list in `package.json`. PR [#34](https://github.com/powerhome/cobra_commander/pull/34)
+
 ## Version 0.6.0 - 2019-07-03
 
 * Tracks package.json `workspaces` in addition to `dependencies` and `devDependencies`. PR [#31](https://github.com/powerhome/cobra_commander/pull/31)
