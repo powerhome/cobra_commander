@@ -3,28 +3,33 @@
 module CobraCommander
   # Calculates directly & transitively affected components
   class Affected
-    attr_reader :directly, :transitively
-
-    def initialize(tree, changes, path)
-      @tree = tree
+    def initialize(umbrella, changes)
+      @umbrella = umbrella
       @changes = changes
-      @path = path
       run!
     end
 
     def names
-      @names ||= paths.map { |path| File.basename(path) }
+      @names ||= all_affected.map(&:name)
     end
 
     def scripts
       @scripts ||= paths.map { |path| File.join(path, "test.sh") }
     end
 
+    def directly
+      @directly.map(&method(:affected_component))
+    end
+
+    def transitively
+      @transitively.map(&method(:affected_component))
+    end
+
     def json_representation # rubocop:disable Metrics/MethodLength
       {
         changed_files: @changes,
-        directly_affected_components: @directly,
-        transitively_affected_components: @transitively,
+        directly_affected_components: directly,
+        transitively_affected_components: transitively,
         test_scripts: scripts,
         component_names: names,
         languages: {
@@ -39,46 +44,48 @@ module CobraCommander
     def run!
       @transitively = Set.new
       @directly = Set.new
-      find_dependencies(@tree)
-      @transitively.delete(name: UMBRELLA_APP_NAME, path: @path, type: @tree[:type])
-      @transitively = @transitively.to_a.sort_by { |h| h[:name] }
-      @directly = @directly.to_a.sort_by { |h| h[:name] }
-    end
-
-    def find_dependencies(parent_component)
-      parent_component[:dependencies].each do |component|
-        add_if_changed(component)
-        find_dependencies(component)
-      end
+      @umbrella.components.each(&method(:add_if_changed))
+      @transitively = @transitively.sort_by(&:name)
+      @directly = @directly.sort_by(&:name)
     end
 
     def add_if_changed(component)
-      @changes.each do |change|
-        if change.start_with?(component[:path])
-          @directly << component.reject { |k| k == :dependencies || k == :ancestry }
-          @transitively.merge component[:ancestry]
-        end
-      end
+      return if component.root_paths.uniq.none? { |path| @changes.any?(Regexp.new(path)) }
+
+      @directly << component
+      @transitively.merge(component.deep_dependents)
+    end
+
+    def affected_component(component)
+      {
+        name: component.name,
+        path: component.root_paths,
+        type: component.sources.keys.map(&:to_s).map(&:capitalize).join(" & "),
+      }
     end
 
     def all_affected
-      @all_affected ||= (@directly + @transitively).uniq.sort_by { |h| h[:path] }
+      @all_affected ||= (@directly | @transitively).sort_by(&:name)
     end
 
     def paths
-      @paths ||= all_affected.map { |component| component[:path] }
+      @paths ||= all_affected.map(&:root_paths).flatten.uniq
     end
 
-    def types
-      @types ||= all_affected.map { |component| component[:type] }
+    def all_affected_sources
+      all_affected
+        .map(&:sources)
+        .map(&:keys)
+        .flatten
+        .uniq
     end
 
     def contains_ruby?
-      types.uniq.join.include?("Ruby")
+      all_affected_sources.include?(:bundler)
     end
 
     def contains_js?
-      types.uniq.join.include?("JS")
+      all_affected_sources.include?(:yarn)
     end
   end
 end

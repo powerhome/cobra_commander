@@ -3,18 +3,15 @@
 require "spec_helper"
 
 RSpec.describe CobraCommander::Affected do
-  before(:all) do
-    @root = AppHelper.root
-    @tree = AppHelper.tree
-  end
+  let(:umbrella) { CobraCommander.umbrella(AppHelper.root) }
 
   it "successfully instantiates" do
-    expect(described_class.new(@tree, [], @root)).to be_truthy
+    expect(CobraCommander::Affected.new(umbrella, [])).to be_truthy
   end
 
   context "with no changes" do
     let(:no_changes) do
-      described_class.new(@tree, [], @root)
+      CobraCommander::Affected.new(umbrella, [])
     end
 
     it "reports no directly affected components" do
@@ -32,7 +29,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to top level dependency" do
     let(:with_change_to_a) do
-      described_class.new(@tree, ["#{@root}/components/a/Gemfile"], @root)
+      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/a/Gemfile"])
     end
 
     it "correctly reports directly affected components" do
@@ -40,8 +37,8 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "a",
-            path: "#{@root}/components/a",
-            type: "Ruby",
+            path: ["#{umbrella.path}/components/a"],
+            type: "Bundler",
           },
         ]
       )
@@ -52,7 +49,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_a.scripts).to eq(["#{@root}/components/a/test.sh"])
+      expect(with_change_to_a.scripts).to eq(["#{umbrella.path}/components/a/test.sh"])
     end
 
     it "correctly reports component names" do
@@ -62,7 +59,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to lower level dependency" do
     let(:with_change_to_b) do
-      described_class.new(@tree, ["#{@root}/components/b/Gemfile"], @root)
+      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/b/Gemfile"])
     end
 
     it "correctly reports directly affected components" do
@@ -70,8 +67,8 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "b",
-            path: "#{@root}/components/b",
-            type: "Ruby & JS",
+            path: ["#{umbrella.path}/components/b"],
+            type: "Yarn & Bundler",
           },
         ]
       )
@@ -82,34 +79,34 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "a",
-            path: "#{@root}/components/a",
-            type: "Ruby",
+            path: ["#{umbrella.path}/components/a"],
+            type: "Bundler",
           },
           {
             name: "c",
-            path: "#{@root}/components/c",
-            type: "Ruby",
+            path: ["#{umbrella.path}/components/c"],
+            type: "Bundler",
           },
           {
             name: "d",
-            path: "#{@root}/components/d",
-            type: "Ruby",
+            path: ["#{umbrella.path}/components/d"],
+            type: "Bundler",
           },
           {
             name: "node_manifest",
-            path: "#{@root}/node_manifest",
-            type: "JS",
+            path: ["#{umbrella.path}/node_manifest"],
+            type: "Yarn",
           },
         ]
       )
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_b.scripts).to include("#{@root}/components/a/test.sh")
-      expect(with_change_to_b.scripts).to include("#{@root}/components/b/test.sh")
-      expect(with_change_to_b.scripts).to include("#{@root}/components/c/test.sh")
-      expect(with_change_to_b.scripts).to include("#{@root}/components/d/test.sh")
-      expect(with_change_to_b.scripts).to include("#{@root}/node_manifest/test.sh")
+      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/a/test.sh")
+      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/b/test.sh")
+      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/c/test.sh")
+      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/d/test.sh")
+      expect(with_change_to_b.scripts).to include("#{umbrella.path}/node_manifest/test.sh")
     end
 
     it "correctly reports component names" do
@@ -123,7 +120,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to lowest level dependency" do
     let(:with_change_to_f) do
-      described_class.new(@tree, ["#{@root}/components/f/package.json"], @root)
+      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/f/package.json"])
     end
 
     it "correctly reports directly affected components" do
@@ -131,8 +128,8 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "f",
-            path: "#{@root}/components/f",
-            type: "JS",
+            path: ["#{umbrella.path}/components/f"],
+            type: "Yarn",
           },
         ]
       )
@@ -143,52 +140,52 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "a",
-            path: "#{@root}/components/a",
-            type: "Ruby",
+            path: ["#{umbrella.path}/components/a"],
+            type: "Bundler",
           },
           {
             name: "b",
-            path: "#{@root}/components/b",
-            type: "Ruby & JS",
+            path: ["#{umbrella.path}/components/b"],
+            type: "Yarn & Bundler",
           },
           {
             name: "c",
-            path: "#{@root}/components/c",
-            type: "Ruby",
+            path: ["#{umbrella.path}/components/c"],
+            type: "Bundler",
           },
           {
             name: "d",
-            path: "#{@root}/components/d",
-            type: "Ruby",
+            path: ["#{umbrella.path}/components/d"],
+            type: "Bundler",
           },
           {
             name: "g",
-            path: "#{@root}/components/g",
-            type: "JS",
+            path: ["#{umbrella.path}/components/g"],
+            type: "Yarn",
           },
           {
             name: "h",
-            path: "#{@root}/components/h",
-            type: "JS",
+            path: ["#{umbrella.path}/components/h"],
+            type: "Yarn",
           },
           {
             name: "node_manifest",
-            path: "#{@root}/node_manifest",
-            type: "JS",
+            path: ["#{umbrella.path}/node_manifest"],
+            type: "Yarn",
           },
         ]
       )
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_f.scripts).to include("#{@root}/components/a/test.sh")
-      expect(with_change_to_f.scripts).to include("#{@root}/components/b/test.sh")
-      expect(with_change_to_f.scripts).to include("#{@root}/components/c/test.sh")
-      expect(with_change_to_f.scripts).to include("#{@root}/components/d/test.sh")
-      expect(with_change_to_f.scripts).to_not include("#{@root}/components/e/test.sh")
-      expect(with_change_to_f.scripts).to include("#{@root}/components/f/test.sh")
-      expect(with_change_to_f.scripts).to include("#{@root}/components/g/test.sh")
-      expect(with_change_to_f.scripts).to include("#{@root}/node_manifest/test.sh")
+      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/a/test.sh")
+      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/b/test.sh")
+      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/c/test.sh")
+      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/d/test.sh")
+      expect(with_change_to_f.scripts).to_not include("#{umbrella.path}/components/e/test.sh")
+      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/f/test.sh")
+      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/g/test.sh")
+      expect(with_change_to_f.scripts).to include("#{umbrella.path}/node_manifest/test.sh")
     end
 
     it "correctly reports component names" do

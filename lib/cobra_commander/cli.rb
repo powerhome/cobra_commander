@@ -69,8 +69,7 @@ module CobraCommander
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
     method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
     def changes(app_path)
-      tree = maybe_cached_tree(app_path, options.cache)
-      Change.new(tree, options.results, options.branch).run!
+      Change.new(umbrella(app_path), options.results, options.branch).run!
     end
 
     desc "cache APP_PATH CACHE_PATH", "Caches a representation of the component structure of the app"
