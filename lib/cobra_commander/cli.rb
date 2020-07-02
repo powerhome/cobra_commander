@@ -35,8 +35,8 @@ module CobraCommander
     method_option :format, default: "count", aliases: "-f", desc: "count or list"
     method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
     def dependents_of(component)
-      tree = maybe_cached_tree(options.app, options.cache)
-      dependents = tree.dependents_of(component)
+      dependents = umbrella(options.app).dependents_of(component)
+      return unless dependents
       puts "list" == options.format ? dependents.map(&:name) : dependents.size
     end
 
