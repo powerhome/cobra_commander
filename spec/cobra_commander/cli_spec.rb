@@ -9,7 +9,7 @@ RSpec.describe "cli", type: :aruba do
 
   describe "checking the version" do
     it "reports the current version" do
-      run_simple("cobra version", fail_on_error: true)
+      run_command_and_stop("cobra version", fail_on_error: true)
 
       expect(last_command_started).to have_output CobraCommander::VERSION
     end
@@ -17,7 +17,7 @@ RSpec.describe "cli", type: :aruba do
 
   describe "creating a cache" do
     it "saves the dependency structure in JSON format" do
-      run_simple("cobra cache #{@root} tmp/cobra-cache.json", fail_on_error: true)
+      run_command_and_stop("cobra cache #{@root} tmp/cobra-cache.json", fail_on_error: true)
 
       expect(exist?("./tmp/cobra-cache.json")).to be true
       expect("./tmp/cobra-cache.json").to have_file_content(
@@ -28,7 +28,7 @@ RSpec.describe "cli", type: :aruba do
 
   describe "listing components in the tree" do
     it "outputs the tree of components" do
-      run_simple("cobra ls #{@root}", fail_on_error: true)
+      run_command_and_stop("cobra ls #{@root}", fail_on_error: true)
 
       expected_output = <<~OUTPUT
         App
@@ -81,7 +81,7 @@ RSpec.describe "cli", type: :aruba do
         )
 
         # Use cache
-        run_simple("cobra ls #{@root} --cache #{cache_file}", fail_on_error: true)
+        run_command_and_stop("cobra ls #{@root} --cache #{cache_file}", fail_on_error: true)
 
         expected_output = <<~OUTPUT
           App
@@ -103,7 +103,7 @@ RSpec.describe "cli", type: :aruba do
         let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
 
         before do
-          run_simple("cobra ls #{@root} --cache #{cache_file}", fail_on_error: false)
+          run_command_and_stop("cobra ls #{@root} --cache #{cache_file}", fail_on_error: false)
         end
 
         it "outputs the tree of components" do
@@ -161,7 +161,7 @@ RSpec.describe "cli", type: :aruba do
   describe "generating a graph" do
     context "with default format" do
       before do
-        run_simple("cobra graph #{@root}", fail_on_error: true)
+        run_command_and_stop("cobra graph #{@root}", fail_on_error: true)
       end
 
       it "outputs explanation" do
@@ -175,17 +175,17 @@ RSpec.describe "cli", type: :aruba do
 
     context "with specified format" do
       it "accepts 'png'" do
-        run_simple("cobra graph #{@root} -f png", fail_on_error: true)
+        run_command_and_stop("cobra graph #{@root} -f png", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "accepts 'dot'" do
-        run_simple("cobra graph #{@root} -f dot", fail_on_error: true)
+        run_command_and_stop("cobra graph #{@root} -f dot", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "rejects everything else" do
-        run_simple("cobra graph #{@root} -f pdf", fail_on_error: true)
+        run_command_and_stop("cobra graph #{@root} -f pdf", fail_on_error: true)
         expect(last_command_started.output).to_not include("Graph generated")
         expect(last_command_started).to have_output "FORMAT must be 'png' or 'dot'"
       end
@@ -198,7 +198,7 @@ RSpec.describe "cli", type: :aruba do
             %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
           )
 
-          run_simple("cobra graph #{@root} --cache #{cache_file}", fail_on_error: true)
+          run_command_and_stop("cobra graph #{@root} --cache #{cache_file}", fail_on_error: true)
         end
 
         it "outputs explanation" do
@@ -214,7 +214,7 @@ RSpec.describe "cli", type: :aruba do
         let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
 
         before do
-          run_simple("cobra graph #{@root} --cache #{cache_file}", fail_on_error: true)
+          run_command_and_stop("cobra graph #{@root} --cache #{cache_file}", fail_on_error: true)
         end
 
         it "outputs explanation" do
@@ -236,7 +236,7 @@ RSpec.describe "cli", type: :aruba do
   describe "printing changes" do
     context "with defaults (-r test -b master)" do
       before do
-        run_simple("cobra changes #{@root}", fail_on_error: true)
+        run_command_and_stop("cobra changes #{@root}", fail_on_error: true)
       end
 
       it "does not output 'Test scripts to run' header" do
@@ -246,7 +246,7 @@ RSpec.describe "cli", type: :aruba do
 
     context "with full results" do
       before do
-        run_simple("cobra changes #{@root} -r full", fail_on_error: true)
+        run_command_and_stop("cobra changes #{@root} -r full", fail_on_error: true)
       end
 
       it "outputs all headers" do
@@ -259,7 +259,7 @@ RSpec.describe "cli", type: :aruba do
 
     context "with incorrect results specified" do
       it "outputs error message" do
-        run_simple("cobra changes #{@root} -r partial", fail_on_error: true)
+        run_command_and_stop("cobra changes #{@root} -r partial", fail_on_error: true)
 
         expect(last_command_started).to have_output "--results must be 'test', 'full', 'name' or 'json'"
       end
@@ -268,7 +268,7 @@ RSpec.describe "cli", type: :aruba do
     context "with branch specified" do
       it "outputs specified branch in 'Changes since' header" do
         branch = "origin/master"
-        run_simple("cobra changes #{@root} -r full -b #{branch}", fail_on_error: true)
+        run_command_and_stop("cobra changes #{@root} -r full -b #{branch}", fail_on_error: true)
 
         expect(last_command_started.output).to include("Changes since last commit on #{branch}")
       end
@@ -276,7 +276,7 @@ RSpec.describe "cli", type: :aruba do
 
     context "with nonexistent branch specified" do
       it "outputs error message" do
-        run_simple("cobra changes #{@root} -b oak_branch", fail_on_error: false)
+        run_command_and_stop("cobra changes #{@root} -b oak_branch", fail_on_error: false)
 
         expect(last_command_started.output).to include("Specified --branch could not be found")
         expect(last_command_started.output).to_not include("Test scripts to run")
@@ -290,7 +290,7 @@ RSpec.describe "cli", type: :aruba do
             cache_file = write_cache(
               %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
             )
-            run_simple("cobra changes #{@root} -r full --cache #{cache_file}", fail_on_error: true)
+            run_command_and_stop("cobra changes #{@root} -r full --cache #{cache_file}", fail_on_error: true)
           end
 
           it "outputs all headers" do
@@ -307,7 +307,7 @@ RSpec.describe "cli", type: :aruba do
 
         context "with full results" do
           before do
-            run_simple("cobra changes #{@root} -r full --cache #{cache_file}", fail_on_error: true)
+            run_command_and_stop("cobra changes #{@root} -r full --cache #{cache_file}", fail_on_error: true)
           end
 
           it "outputs all headers" do
@@ -328,25 +328,25 @@ RSpec.describe "cli", type: :aruba do
 
   describe "fetching dependents of a component in the tree" do
     it "lists a component's direct dependents" do
-      run_simple("cobra dependents_of node_manifest -a #{@root} --format=list", fail_on_error: true)
+      run_command_and_stop("cobra dependents_of node_manifest -a #{@root} --format=list", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match(["App"])
     end
 
     it "lists a component's transient dependents" do
-      run_simple("cobra dependents_of g -a #{@root} --format=list", fail_on_error: true)
+      run_command_and_stop("cobra dependents_of g -a #{@root} --format=list", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match(%w[App a b c d node_manifest])
     end
 
     it "counts a component's transient dependents" do
-      run_simple("cobra dependents_of g -a #{@root} --format=count", fail_on_error: true)
+      run_command_and_stop("cobra dependents_of g -a #{@root} --format=count", fail_on_error: true)
 
       expect(last_command_started.output.to_i).to eq(6)
     end
 
     it "doesn't count a component it's not dependent on" do
-      run_simple("cobra dependents_of non_existent -a #{@root} --format=list", fail_on_error: true)
+      run_command_and_stop("cobra dependents_of non_existent -a #{@root} --format=list", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match([])
     end
@@ -357,7 +357,7 @@ RSpec.describe "cli", type: :aruba do
           %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
         )
 
-        run_simple("cobra dependents_of c -a #{@root} --format=list --cache #{cache_file}", fail_on_error: true)
+        run_command_and_stop("cobra dependents_of c -a #{@root} --format=list --cache #{cache_file}", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match(%w[App b])
       end
@@ -366,7 +366,7 @@ RSpec.describe "cli", type: :aruba do
         let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
 
         before do
-          run_simple("cobra dependents_of c -a #{@root} --format=list --cache #{cache_file}", fail_on_error: true)
+          run_command_and_stop("cobra dependents_of c -a #{@root} --format=list --cache #{cache_file}", fail_on_error: true)
         end
 
         it "lists a component's dependents" do
@@ -383,19 +383,19 @@ RSpec.describe "cli", type: :aruba do
 
   describe "dependencies_of" do
     it "counts a component's direct dependency" do
-      run_simple("cobra dependencies_of g -a #{@root}", fail_on_error: true)
+      run_command_and_stop("cobra dependencies_of g -a #{@root}", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match(%w[e f])
     end
 
     it "counts a component's transient dependency" do
-      run_simple("cobra dependencies_of b -a #{@root}", fail_on_error: true)
+      run_command_and_stop("cobra dependencies_of b -a #{@root}", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match(%w[g e f])
     end
 
     it "finds subtrees that are not the first match" do
-      run_simple("cobra dependencies_of d -a #{@root}", fail_on_error: true)
+      run_command_and_stop("cobra dependencies_of d -a #{@root}", fail_on_error: true)
 
       expect(last_command_started.output.strip.split("\n")).to match(%w[b g e f c])
     end
@@ -406,7 +406,7 @@ RSpec.describe "cli", type: :aruba do
           %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
         )
 
-        run_simple("cobra dependencies_of b -a #{@root} --cache #{cache_file}", fail_on_error: true)
+        run_command_and_stop("cobra dependencies_of b -a #{@root} --cache #{cache_file}", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match(%w[c])
       end
@@ -416,7 +416,7 @@ RSpec.describe "cli", type: :aruba do
       let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
 
       before do
-        run_simple("cobra dependencies_of b -a #{@root} --cache #{cache_file}", fail_on_error: true)
+        run_command_and_stop("cobra dependencies_of b -a #{@root} --cache #{cache_file}", fail_on_error: true)
       end
 
       it "lists a component's direct dependency" do
