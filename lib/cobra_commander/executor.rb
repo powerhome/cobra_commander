@@ -3,28 +3,26 @@
 module CobraCommander
   # Execute commands on all components of a ComponentTree
   class Executor
-    def initialize(tree)
-      @tree = tree
+    def initialize(components)
+      @components = components
     end
 
     def exec(command, printer = $stdout)
-      @tree.flatten.each do |component|
-        printer.puts "===> #{component.name} (#{component.path})"
-        output, = run_in_component(component, command)
-        printer.puts output
+      @components.each do |component|
+        component.root_paths.each do |path|
+          printer.puts "===> #{component.name} (#{path})"
+          output, = run_in_component(path, command)
+          printer.puts output
+        end
       end
     end
 
   private
 
-    def run_in_component(component, command)
-      Dir.chdir(component.path) do
-        Open3.capture2e(env_vars(component), command)
+    def run_in_component(path, command)
+      Dir.chdir(path) do
+        Open3.capture2e({}, command)
       end
-    end
-
-    def env_vars(component)
-      { "CURRENT_COMPONENT" => component.name, "CURRENT_COMPONENT_PATH" => component.path }
     end
   end
 end

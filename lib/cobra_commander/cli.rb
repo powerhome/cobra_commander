@@ -15,8 +15,7 @@ module CobraCommander
     method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
     def do(command)
-      tree = maybe_cached_tree(options.app, options.cache)
-      executor = Executor.new(tree)
+      executor = Executor.new(umbrella(options.app).components)
       executor.exec(command)
     end
 
@@ -84,6 +83,10 @@ module CobraCommander
     end
 
   private
+
+    def umbrella(path)
+      CobraCommander.umbrella(path)
+    end
 
     def maybe_cached_tree(app_path, cache_path)
       return CobraCommander.umbrella_tree(app_path) unless cache_path
