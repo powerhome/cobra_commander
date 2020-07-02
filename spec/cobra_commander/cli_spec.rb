@@ -124,47 +124,6 @@ RSpec.describe "cli", type: :aruba do
         expect(last_command_started).to have_output "FORMAT must be 'png' or 'dot'"
       end
     end
-
-    context "from a cache" do
-      context "which is warm" do
-        before do
-          cache_file = write_cache(
-            %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
-          )
-
-          run_command_and_stop("cobra graph #{@root} --cache #{cache_file}", fail_on_error: true)
-        end
-
-        it "outputs explanation" do
-          expect(last_command_started.output).to include("Graph generated at #{`pwd`.chomp}")
-        end
-
-        it "creates file" do
-          expect(exist?("./graph.png")).to be true
-        end
-      end
-
-      context "which is cold" do
-        let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
-
-        before do
-          run_command_and_stop("cobra graph #{@root} --cache #{cache_file}", fail_on_error: true)
-        end
-
-        it "outputs explanation" do
-          expect(last_command_started.output).to include("Graph generated at #{`pwd`.chomp}")
-        end
-
-        it "creates file" do
-          expect(exist?("./graph.png")).to be true
-        end
-
-        it "primes the cache" do
-          expect(exist?(cache_file)).to be true
-          expect(cache_file).to have_file_content(/"name":"App"/)
-        end
-      end
-    end
   end
 
   describe "printing changes" do

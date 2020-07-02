@@ -5,29 +5,21 @@ require "graphviz"
 module CobraCommander
   # Generates graphs of components
   class Graph
-    def initialize(tree, format)
+    def initialize(node, format)
       @format = format
-      @tree = tree.to_h
+      @node = node
     end
 
     def generate!
       return unless valid_format?
 
       g = GraphViz.new(:G, type: :digraph, concentrate: true)
-
-      app_node = g.add_nodes(@tree[:name])
-      map_nodes(g, app_node, @tree)
-      output(g)
-    end
-
-  private
-
-    def map_nodes(g, parent_node, tree)
-      tree[:dependencies].each do |dep|
-        node = g.find_node(dep[:name]) || g.add_nodes(dep[:name])
-        g.add_edges(parent_node, node)
-        map_nodes(g, node, dep)
+      ([@node] + @node.deep_dependencies).each do |component|
+        g.add_nodes component.name
+        g.add_edges component.name, component.dependencies.map(&:name)
       end
+
+      output(g)
     end
 
     def output(g)

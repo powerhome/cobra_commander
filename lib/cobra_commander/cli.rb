@@ -56,12 +56,11 @@ module CobraCommander
       puts CobraCommander::VERSION
     end
 
-    desc "graph APP_PATH [--format=FORMAT] [--cache=nil]", "Outputs graph"
+    desc "graph APP_PATH [--format=FORMAT] [--cache=nil] [--component]", "Outputs graph"
     method_option :format, default: "png", aliases: "-f", desc: "Accepts png or dot"
     method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
     def graph(app_path)
-      tree = maybe_cached_tree(app_path, options.cache)
-      Graph.new(tree, options.format).generate!
+      Graph.new(umbrella(app_path).root, options.format).generate!
     end
 
     desc "changes APP_PATH [--results=RESULTS] [--branch=BRANCH] [--cache=nil]", "Prints list of changed files"

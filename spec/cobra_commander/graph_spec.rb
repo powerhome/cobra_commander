@@ -15,11 +15,14 @@ RSpec.describe CobraCommander::Graph do
       graph = GraphViz.new(:G, type: :digraph, concentrate: true)
 
       # Add 3 nodes
+      app = graph.add_nodes("App")
+
       a = graph.add_nodes("a")
       b = graph.add_nodes("b")
       c = graph.add_nodes("c")
 
       # Connect b & c to a
+      graph.add_edges(app, [a, b])
       graph.add_edges(a, b)
       graph.add_edges(a, c)
 
@@ -27,29 +30,22 @@ RSpec.describe CobraCommander::Graph do
       graph.output(dot: "native_graph.dot")
     end
 
-    let(:hash_tree) do
-      # Hash setup identical to native_graph construction
-      {
-        name: "a",
-        dependencies: [
-          {
-            name: "b",
-            dependencies: [],
-          },
-          {
-            name: "c",
-            dependencies: [],
-          },
-        ],
-      }
-    end
-
-    let(:tree) do
-      double(to_h: hash_tree)
+    let(:umbrella) do
+      CobraCommander::Umbrella.new("App", "fake/path").tap do |umbrella|
+        umbrella.add_source :test, double(
+          path: "a.path",
+          dependencies: %w[a b],
+          components: [
+            { name: "a", path: "a.path", dependencies: %w[b c] },
+            { name: "b", path: "b.path", dependencies: [] },
+            { name: "c", path: "c.path", dependencies: [] },
+          ]
+        )
+      end
     end
 
     it "correctly generates graph.dot" do
-      CobraCommander::Graph.new(tree, "dot").generate!
+      CobraCommander::Graph.new(umbrella.root, "dot").generate!
 
       native_dot = File.join(root, "native_graph.dot")
       generated_dot = File.join(root, "graph.dot")
@@ -59,8 +55,8 @@ RSpec.describe CobraCommander::Graph do
 
     after do
       # Cleanup extra files
-      `rm native_graph.dot`
-      `rm graph.dot`
+      `rm -f native_graph.dot`
+      `rm -f graph.dot`
     end
   end
 end
