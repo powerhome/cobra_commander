@@ -90,90 +90,6 @@ RSpec.describe "cli", type: :aruba do
 
       expect(last_command_started.output.strip.tr("\u00a0", " ")).to eq(expected_output)
     end
-
-    context "from a cache" do
-      it "outputs the tree of components" do
-        # Generate dependency cache
-        cache_file = write_cache(
-          %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
-        )
-
-        # Use cache
-        run_command_and_stop("cobra ls #{@root} --cache #{cache_file}", fail_on_error: true)
-
-        expected_output = <<~OUTPUT
-          App
-          ├── a
-          ├── b
-          │   └── c
-          └── node_manifest
-              └── b
-        OUTPUT
-
-        # This converts a unicode non-breaking space with
-        # a normal space because editors.
-        expected_output = expected_output.strip.tr("\u00a0", " ")
-
-        expect(last_command_started.output.strip.tr("\u00a0", " ")).to eq(expected_output)
-      end
-
-      context "which is cold" do
-        let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
-
-        before do
-          run_command_and_stop("cobra ls #{@root} --cache #{cache_file}", fail_on_error: false)
-        end
-
-        it "outputs the tree of components" do
-          expected_output = <<~OUTPUT
-            App
-            ├── a
-            │   ├── b
-            │   │   └── g
-            │   │       ├── e
-            │   │       └── f
-            │   └── c
-            │       └── b
-            │           └── g
-            │               ├── e
-            │               └── f
-            ├── d
-            │   ├── b
-            │   │   └── g
-            │   │       ├── e
-            │   │       └── f
-            │   └── c
-            │       └── b
-            │           └── g
-            │               ├── e
-            │               └── f
-            ├── h
-            │   └── f
-            └── node_manifest
-                ├── b
-                │   └── g
-                │       ├── e
-                │       └── f
-                ├── e
-                ├── f
-                └── g
-                    ├── e
-                    └── f
-          OUTPUT
-
-          # This converts a unicode non-breaking space with
-          # a normal space because editors.
-          expected_output = expected_output.strip.tr("\u00a0", " ")
-
-          expect(last_command_started.output.strip.tr("\u00a0", " ")).to eq(expected_output)
-        end
-
-        it "primes the cache" do
-          expect(exist?(cache_file)).to be true
-          expect(cache_file).to have_file_content(/"name":"App"/)
-        end
-      end
-    end
   end
 
   describe "generating a graph" do
@@ -348,19 +264,19 @@ RSpec.describe "cli", type: :aruba do
     it "lists a component's direct dependents" do
       run_command_and_stop("cobra dependents_of node_manifest -a #{@root} --format=list", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(["App"])
+      expect(last_command_started.output.strip.split("\n")).to match([])
     end
 
     it "lists a component's transient dependents" do
       run_command_and_stop("cobra dependents_of g -a #{@root} --format=list", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(%w[App a b c d node_manifest])
+      expect(last_command_started.output.strip.split("\n")).to match(%w[a b c d node_manifest])
     end
 
     it "counts a component's transient dependents" do
       run_command_and_stop("cobra dependents_of g -a #{@root} --format=count", fail_on_error: true)
 
-      expect(last_command_started.output.to_i).to eq(6)
+      expect(last_command_started.output.to_i).to eq(5)
     end
 
     it "doesn't count a component it's not dependent on" do
@@ -368,83 +284,25 @@ RSpec.describe "cli", type: :aruba do
 
       expect(last_command_started.output.strip.split("\n")).to match([])
     end
-
-    context "from a cache" do
-      it "lists a component's dependents" do
-        cache_file = write_cache(
-          %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
-        )
-
-        run_command_and_stop("cobra dependents_of c -a #{@root} --format=list --cache #{cache_file}", fail_on_error: true)
-
-        expect(last_command_started.output.strip.split("\n")).to match(%w[App b])
-      end
-
-      context "which is cold" do
-        let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
-
-        before do
-          run_command_and_stop("cobra dependents_of c -a #{@root} --format=list --cache #{cache_file}", fail_on_error: true)
-        end
-
-        it "lists a component's dependents" do
-          expect(last_command_started.output.strip.split("\n")).to match(%w[App a d])
-        end
-
-        it "primes the cache" do
-          expect(exist?(cache_file)).to be true
-          expect(cache_file).to have_file_content(/"name":"App"/)
-        end
-      end
-    end
   end
 
   describe "dependencies_of" do
     it "counts a component's direct dependency" do
       run_command_and_stop("cobra dependencies_of g -a #{@root}", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(%w[e f])
+      expect(last_command_started.output.strip.split("\n")).to match_array %w[e f]
     end
 
     it "counts a component's transient dependency" do
       run_command_and_stop("cobra dependencies_of b -a #{@root}", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(%w[g e f])
+      expect(last_command_started.output.strip.split("\n")).to match_array %w[g e f]
     end
 
     it "finds subtrees that are not the first match" do
       run_command_and_stop("cobra dependencies_of d -a #{@root}", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(%w[b g e f c])
-    end
-
-    context "from a cache" do
-      it "lists a component's direct dependency" do
-        cache_file = write_cache(
-          %({"name":"App","path":"#{@root}","type":"Ruby & JS","ancestry":[],"dependencies":[{"name":"a","path":"#{@root}/components/a","type":"Ruby","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}]},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"c","path":"#{@root}/components/c","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS"}],"dependencies":[]}]},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"}],"dependencies":[{"name":"b","path":"#{@root}/components/b","type":"Ruby & JS","ancestry":[{"name":"App","path":"#{@root}","type":"Ruby & JS"},{"name":"node_manifest","path":"#{@root}/node_manifest","type":"JS"}],"dependencies":[]}]}]}) # rubocop:disable Metrics/LineLength
-        )
-
-        run_command_and_stop("cobra dependencies_of b -a #{@root} --cache #{cache_file}", fail_on_error: true)
-
-        expect(last_command_started.output.strip.split("\n")).to match(%w[c])
-      end
-    end
-
-    context "which is cold" do
-      let(:cache_file) { "tmp/#{SecureRandom.uuid}.json" }
-
-      before do
-        run_command_and_stop("cobra dependencies_of b -a #{@root} --cache #{cache_file}", fail_on_error: true)
-      end
-
-      it "lists a component's direct dependency" do
-        expect(last_command_started.output.strip.split("\n")).to match(%w[g e f])
-      end
-
-      it "primes the cache" do
-        expect(exist?(cache_file)).to be true
-        expect(cache_file).to have_file_content(/"name":"App"/)
-      end
+      expect(last_command_started.output.strip.split("\n")).to match_array %w[b g e f c]
     end
   end
 

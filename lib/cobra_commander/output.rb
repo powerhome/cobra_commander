@@ -3,8 +3,8 @@
 module CobraCommander
   # Module for pretty printing dependency trees
   module Output
-    def self.print(tree, format)
-      output = format == "list" ? Output::FlatList.new(tree) : Output::Tree.new(tree)
+    def self.print(node, format)
+      output = format == "list" ? Output::FlatList.new(node) : Output::Tree.new(node)
       puts output.to_s
     end
 
@@ -15,7 +15,7 @@ module CobraCommander
       end
 
       def to_s
-        @tree.flatten.map(&:name)
+        @tree.deep_dependencies.map(&:name).sort
       end
     end
 
@@ -28,22 +28,22 @@ module CobraCommander
       TEE    = "├── "
       CORNER = "└── "
 
-      def initialize(tree)
-        @tree = tree
+      def initialize(node)
+        @node = node
       end
 
       def to_s
         StringIO.new.tap do |io|
-          io.puts @tree.name
-          list_dependencies(io, @tree)
+          io.puts @node.name
+          list_dependencies(io, @node)
         end.string
       end
 
     private
 
-      def list_dependencies(io, deps, outdents = [])
-        deps.dependencies.each do |dep|
-          decide_on_line(io, deps, dep, outdents)
+      def list_dependencies(io, node, outdents = [])
+        node.dependencies.each do |dep|
+          decide_on_line(io, node, dep, outdents)
         end
         nil
       end

@@ -23,10 +23,9 @@ module CobraCommander
     method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"
     method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
-    def ls(app_path = nil)
-      tree = maybe_cached_tree(app_path || options.app, options.cache)
+    def ls(app_path = Dir.pwd)
       Output.print(
-        tree,
+        umbrella(app_path).root,
         options.format
       )
     end
@@ -46,9 +45,8 @@ module CobraCommander
     method_option :format, default: "list", aliases: "-f", desc: "Format (list or tree, default: list)"
     method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
     def dependencies_of(component)
-      tree = maybe_cached_tree(options.app, options.cache)
       Output.print(
-        tree.subtree(component),
+        umbrella(options.app).find(component),
         options.format
       )
     end
