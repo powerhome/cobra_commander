@@ -20,4 +20,19 @@ RSpec.describe CobraCommander::Executor do
     expect(output.string).to match %r{===> h \(.*spec/fixtures/app/components/h\)}
     expect(output.string).to match %r{===> node_manifest \(.*spec/fixtures/app/node_manifest\)}
   end
+
+  it "executes with clean environment" do
+    output = StringIO.new
+    subject.exec("env", output)
+
+    expect(output.string).to match %r{===> a \(.*spec/fixtures/app/components/a\)\n^$}
+    expect(output.string).to match %r{===> b \(.*spec/fixtures/app/components/b\)\n^$}
+    expect(output.string).to match %r{===> c \(.*spec/fixtures/app/components/c\)\n^$}
+    expect(output.string).to match %r{===> d \(.*spec/fixtures/app/components/d\)\n^$}
+    expect(output.string).to match %r{===> e \(.*spec/fixtures/app/components/e\)\n^$}
+    expect(output.string).to match %r{===> f \(.*spec/fixtures/app/components/f\)\n^$}
+    expect(output.string).to match %r{===> g \(.*spec/fixtures/app/components/g\)\n^$}
+    expect(output.string).to match %r{===> h \(.*spec/fixtures/app/components/h\)\n^$}
+    expect(output.string).to match %r{===> node_manifest \(.*spec/fixtures/app/node_manifest\)\n^$}
+  end
 end

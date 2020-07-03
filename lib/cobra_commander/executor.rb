@@ -11,17 +11,9 @@ module CobraCommander
       @components.each do |component|
         component.root_paths.each do |path|
           printer.puts "===> #{component.name} (#{path})"
-          output, = run_in_component(path, command)
+          output, = Open3.capture2e(command, chdir: path, unsetenv_others: true)
           printer.puts output
         end
-      end
-    end
-
-  private
-
-    def run_in_component(path, command)
-      Dir.chdir(path) do
-        Open3.capture2e({}, command)
       end
     end
   end
