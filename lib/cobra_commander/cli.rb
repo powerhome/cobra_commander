@@ -74,7 +74,8 @@ module CobraCommander
     desc "cache APP_PATH CACHE_PATH", "Caches a representation of the component structure of the app"
     def cache(app_path, cache_path)
       tree = CobraCommander.umbrella_tree(app_path)
-      write_tree_cache(tree, cache_path)
+      FileUtils.mkdir_p(File.dirname(cache_path))
+      File.write(cache_path, tree.to_json)
       puts "Created cache of component tree at #{cache_path}"
     end
 
@@ -82,23 +83,6 @@ module CobraCommander
 
     def umbrella(path)
       CobraCommander.umbrella(path)
-    end
-
-    def maybe_cached_tree(app_path, cache_path)
-      return CobraCommander.umbrella_tree(app_path) unless cache_path
-
-      if File.exist?(cache_path)
-        CobraCommander.tree_from_cache(cache_path)
-      else
-        tree = CobraCommander.umbrella_tree(app_path)
-        write_tree_cache(tree, cache_path)
-        tree
-      end
-    end
-
-    def write_tree_cache(tree, cache_path)
-      FileUtils.mkdir_p(File.dirname(cache_path))
-      File.write(cache_path, tree.to_json)
     end
   end
 end
