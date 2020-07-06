@@ -4,9 +4,9 @@ require "spec_helper"
 
 RSpec.describe CobraCommander::Umbrella do
   subject do
-    CobraCommander::Umbrella.new("App", "fake/path").tap do |umbrella|
+    CobraCommander::Umbrella.new("App", "/a/b").tap do |umbrella|
       umbrella.add_source :test, double(
-        path: "a.path",
+        path: "/a/b/a.path",
         dependencies: %w[a b],
         components: [
           { name: "x", path: "/a/b/c/x/x.path", dependencies: %w[b c] },
@@ -18,6 +18,10 @@ RSpec.describe CobraCommander::Umbrella do
   end
 
   describe ".resolve(component_root_path)" do
+    it "resolves the root component" do
+      expect(subject.resolve("/a/b").name).to eql "App"
+    end
+
     it "resolves a component given the root path" do
       expect(subject.resolve("/a/b/c/y").name).to eql "y"
     end
