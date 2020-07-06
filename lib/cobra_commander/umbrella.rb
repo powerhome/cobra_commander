@@ -18,6 +18,12 @@ module CobraCommander
       @root_component
     end
 
+    def resolve(component_root_path)
+      components.find do |component|
+        component.root_paths.include?(component_root_path)
+      end
+    end
+
     def add_source(key, source)
       @root_component.add_source key, source.path, source.dependencies
       source.components.each do |path:, name:, dependencies:|
