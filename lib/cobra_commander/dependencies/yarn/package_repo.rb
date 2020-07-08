@@ -3,6 +3,7 @@
 module CobraCommander
   module Dependencies
     module Yarn
+      # Yarn package repository to load and cache package.json files
       class PackageRepo
         def initialize
           @specs ||= {}

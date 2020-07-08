@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module CobraCommander
+  # Represents a component withing an Umbrella
   class Component
     attr_reader :name, :dependencies, :sources
 

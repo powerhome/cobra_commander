@@ -7,6 +7,7 @@ require_relative "yarn/package_repo"
 
 module CobraCommander
   module Dependencies
+    # Yarn workspace components source for an umbrella
     class YarnWorkspace
       attr_reader :packages
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module CobraCommander
+  # An umbrella application
   class Umbrella
     attr_reader :name, :path
 

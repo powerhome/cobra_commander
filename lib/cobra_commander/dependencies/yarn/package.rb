@@ -5,6 +5,7 @@ require "json"
 module CobraCommander
   module Dependencies
     module Yarn
+      # Represents an Yarn package.json file
       class Package
         attr_reader :path
 
