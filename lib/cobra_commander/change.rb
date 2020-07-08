@@ -8,12 +8,12 @@ module CobraCommander
   class Change
     InvalidSelectionError = Class.new(StandardError)
 
-    def initialize(tree, results, branch)
-      @root_dir = Dir.chdir(tree.path) { `git rev-parse --show-toplevel`.chomp }
+    def initialize(umbrella, results, branch)
+      @root_dir = Dir.chdir(umbrella.path) { `git rev-parse --show-toplevel`.chomp }
       @results = results
       @branch = branch
-      @tree = tree.to_h
-      @affected = Affected.new(@tree, changes, tree.path)
+      @umbrella = umbrella
+      @affected = Affected.new(@umbrella, changes)
     end
 
     def run!
@@ -85,8 +85,8 @@ module CobraCommander
       end
     end
 
-    def display(component)
-      "#{component[:name]} - #{component[:type]}"
+    def display(name:, type:, **)
+      "#{name} - #{type}"
     end
 
     def blank_line

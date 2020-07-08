@@ -132,8 +132,8 @@ module CobraCommander
 
       def yarn_workspaces
         @yarn_workspaces ||= begin
-          output, = Open3.capture2("yarn workspaces info --silent", chdir: @root_path)
-          JSON.parse(output)
+          output, = Open3.capture2("yarn --json workspaces info", chdir: @root_path)
+          JSON.parse(JSON.parse(output)["data"])
         end
       end
     end

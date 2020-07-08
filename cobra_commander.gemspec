@@ -11,10 +11,12 @@ Gem::Specification.new do |spec|
   spec.authors       = [
     "Ben Langfeld",
     "Garett Arrowood",
+    "Carlos Palhares",
   ]
   spec.email         = [
     "blangfeld@powerhrg.com",
     "garett.arrowood@powerhrg.com",
+    "carlos.palhares@powerhrg.com",
   ]
   spec.summary       = "Tools for working with Component Based Rails Apps"
   spec.description   = <<~DESCRIPTION
@@ -35,7 +37,7 @@ DESCRIPTION
   spec.add_dependency "thor", ["< 2.0", ">= 0.18.1"]
   spec.add_dependency "ruby-graphviz", "~> 1.2.3"
 
-  spec.add_development_dependency "bundler", "~> 1.13"
+  spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.5"
   spec.add_development_dependency "guard-rspec"
