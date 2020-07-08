@@ -2,6 +2,11 @@
 
 ## Unreleased
 
+## Version 0.7 - 2020-07-08
+
+* Introduces CobraCommander::Umbrella with optimizations for dependency resolution
+* Deprecates cobra cache and cache usages
+
 ## Version 0.6.1 - 2019-07-05
 
 * Better supports yarn workspaces globbing by delegating to yarn to calculate the list of components rather than re-implementing in Ruby. PR [#34](https://github.com/powerhome/cobra_commander/pull/34)
