@@ -11,10 +11,12 @@ Gem::Specification.new do |spec|
   spec.authors       = [
     "Ben Langfeld",
     "Garett Arrowood",
+    "Carlos Palhares",
   ]
   spec.email         = [
     "blangfeld@powerhrg.com",
     "garett.arrowood@powerhrg.com",
+    "carlos.palhares@powerhrg.com",
   ]
   spec.summary       = "Tools for working with Component Based Rails Apps"
   spec.description   = <<~DESCRIPTION
