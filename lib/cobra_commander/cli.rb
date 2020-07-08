@@ -6,9 +6,9 @@ require "fileutils"
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
-    CACHE_DESCRIPTION = "Path to a cache file to use (default: nil). If specified, this file will be used to store " \
-      "the component tree for the app to speed up subsequent invocations. Must be rotated any time the component " \
-      "dependency structure changes."
+    CACHE_DESCRIPTION = "[DEPRECATED] Path to a cache file to use (default: nil). If specified, this file will " \
+      "be used to store the component tree for the app to speed up subsequent invocations. Must be rotated any time " \
+      "the component dependency structure changes."
     COMMON_OPTIONS = "[--app=pwd] [--format=FORMAT] [--cache=nil]"
 
     desc "do [command] [--app=pwd] [--cache=nil]", "Executes the command in the context of each component in [app]"
@@ -71,7 +71,7 @@ module CobraCommander
       Change.new(umbrella(app_path), options.results, options.branch).run!
     end
 
-    desc "cache APP_PATH CACHE_PATH", "Caches a representation of the component structure of the app"
+    desc "cache APP_PATH CACHE_PATH", "[DEPRECATED] Caches a representation of the component structure of the app"
     def cache(app_path, cache_path)
       tree = CobraCommander.umbrella_tree(app_path)
       FileUtils.mkdir_p(File.dirname(cache_path))
