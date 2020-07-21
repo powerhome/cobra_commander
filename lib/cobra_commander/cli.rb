@@ -13,17 +13,17 @@ require "cobra_commander/executor"
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
-    COMMON_OPTIONS = "[--app=pwd] [--format=FORMAT] [--cache=nil]"
+    class_option :app, default: Dir.pwd, aliases: "-a", type: :string
+
+    COMMON_OPTIONS = "[--app=pwd] [--format=FORMAT]"
 
     desc "do [command] [--app=pwd] [--cache=nil]", "Executes the command in the context of each component in [app]"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     def do(command)
       executor = Executor.new(umbrella(options.app).components)
       executor.exec(command)
     end
 
     desc "ls [app_path] #{COMMON_OPTIONS}", "Prints tree of components for an app"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"
     def ls(app_path = Dir.pwd)
       Output.print(
@@ -33,7 +33,6 @@ module CobraCommander
     end
 
     desc "dependents_of [component] #{COMMON_OPTIONS}", "Outputs count of components in [app] dependent on [component]"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "Path to the root app where the component is mounted"
     method_option :format, default: "count", aliases: "-f", desc: "count or list"
     def dependents_of(component)
       dependents = umbrella(options.app).dependents_of(component)
@@ -42,7 +41,6 @@ module CobraCommander
     end
 
     desc "dependencies_of [component] #{COMMON_OPTIONS}", "Outputs a list of components that [component] depends on"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
     method_option :format, default: "list", aliases: "-f", desc: "Format (list or tree, default: list)"
     def dependencies_of(component)
       Output.print(
