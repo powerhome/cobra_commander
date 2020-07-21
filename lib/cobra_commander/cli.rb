@@ -41,14 +41,14 @@ module CobraCommander
 
     desc "tree", "Prints the dependency tree of a given component or umbrella"
     def tree(component = nil)
-      component = component ? umbrella.find(component) : umbrella.root
+      component = find_component(component)
       puts CobraCommander::Output::AsciiTree.new(component).to_s
     end
 
     desc "graph", "Outputs a graph of a given component or umbrella"
     method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o", desc: "Output file, accepts .png or .dot"
     def graph(component = nil)
-      component = component ? umbrella.find(component) : umbrella.root
+      component = find_component(component)
       CobraCommander::Output::GraphViz.new(component).generate!(options.output)
       puts "Graph generated at #{options.output}"
     rescue ArgumentError => error
@@ -69,6 +69,8 @@ module CobraCommander
     end
 
     def find_component(name)
+      return umbrella.root unless name
+
       umbrella.find(name) || error("Component #{name} not found, try one of `cobra ls`") || exit(1)
     end
 

@@ -6,6 +6,12 @@ RSpec.describe "cobra cli", type: :aruba do
   before(:all) { @root = AppHelper.root }
 
   describe "cobra exec" do
+    it "errors gently if component doesn't exist" do
+      run_command_and_stop("cobra exec -a #{@root} non_existent pwd", fail_on_error: false)
+
+      expect(last_command_started.output).to match /Component non_existent not found/
+    end
+
     it "executes the given command on all components" do
       run_command_and_stop("cobra exec -a #{@root} 'basename $PWD'", fail_on_error: true)
 
@@ -24,6 +30,12 @@ RSpec.describe "cobra cli", type: :aruba do
   end
 
   describe "cobra graph" do
+    it "errors gently if component doesn't exist" do
+      run_command_and_stop("cobra graph -a #{@root} non_existent", fail_on_error: false)
+
+      expect(last_command_started.output).to match /Component non_existent not found/
+    end
+
     context "with default output" do
       before do
         run_command_and_stop("cobra graph -a #{@root}", fail_on_error: true)
@@ -73,6 +85,12 @@ RSpec.describe "cobra cli", type: :aruba do
   end
 
   describe "cobra tree" do
+    it "errors gently if component doesn't exist" do
+      run_command_and_stop("cobra tree -a #{@root} non_existent", fail_on_error: false)
+
+      expect(last_command_started.output).to match /Component non_existent not found/
+    end
+
     it "outputs the tree of components from umbrella when no component is specified" do
       run_command_and_stop("cobra tree -a #{@root}", fail_on_error: true)
 
