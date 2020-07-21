@@ -17,12 +17,6 @@ module CobraCommander
 
     COMMON_OPTIONS = "[--app=pwd] [--format=FORMAT]"
 
-    desc "do [command] [--app=pwd] [--cache=nil]", "Executes the command in the context of each component in [app]"
-    def do(command)
-      executor = Executor.new(umbrella(options.app).components)
-      executor.exec(command)
-    end
-
     desc "ls [app_path] #{COMMON_OPTIONS}", "Prints tree of components for an app"
     method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"
     def ls(app_path = Dir.pwd)
@@ -54,6 +48,16 @@ module CobraCommander
       puts CobraCommander::VERSION
     end
 
+    desc "exec", "Executes the command in the context of a given component or set of components"
+    method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
+    method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
+    def exec(command_or_component, command = nil)
+      CobraCommander::Executor.exec(
+        components_filtered(command && command_or_component),
+        command ? command : command_or_component
+      )
+    end
+
     desc "tree", "Prints the dependency tree of a given component or umbrella"
     def tree(component = nil)
       component = component ? umbrella.find(component) : umbrella.root
@@ -81,6 +85,21 @@ module CobraCommander
 
     def umbrella(path = options.app)
       @umbrella ||= CobraCommander.umbrella(path)
+    end
+
+    def components_filtered(component_name)
+      if component_name
+        component = umbrella.find(component_name)
+        if options.dependencies
+          [component, *component.deep_dependencies]
+        elsif options.dependents
+          [component, *component.deep_dependents]
+        else
+          [component]
+        end
+      else
+        umbrella.components
+      end
     end
   end
 end

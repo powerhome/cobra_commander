@@ -7,9 +7,9 @@ require "securerandom"
 RSpec.describe "cobra cli", type: :aruba do
   before(:all) { @root = AppHelper.root }
 
-  describe "cobra do" do
+  describe "cobra exec" do
     it "executes the given command on all components" do
-      run_command_and_stop("cobra do --app #{@root} 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{@root} 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[
         e

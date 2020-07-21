@@ -5,11 +5,10 @@ require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor do
   let(:umbrella) { CobraCommander.umbrella(AppHelper.root) }
-  subject { CobraCommander::Executor.new(umbrella.components) }
 
   it "executes the given command once on each element of the tree" do
     output = StringIO.new
-    subject.exec("pwd", output)
+    CobraCommander::Executor.exec(umbrella.components, "pwd", output)
 
     expect(output.string).to match %r{===> a \(.*spec/fixtures/app/components/a\)}
     expect(output.string).to match %r{===> b \(.*spec/fixtures/app/components/b\)}
@@ -24,7 +23,7 @@ RSpec.describe CobraCommander::Executor do
 
   it "executes with clean environment" do
     output = StringIO.new
-    subject.exec("env", output)
+    CobraCommander::Executor.exec(umbrella.components, "env", output)
 
     expect(output.string).to match %r{===> a \(.*spec/fixtures/app/components/a\)\n^$}
     expect(output.string).to match %r{===> b \(.*spec/fixtures/app/components/b\)\n^$}
