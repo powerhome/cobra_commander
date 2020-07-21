@@ -5,8 +5,6 @@ require "cobra_commander/component"
 require "cobra_commander/umbrella"
 
 require "cobra_commander/cli"
-require "cobra_commander/cached_component_tree"
-require "cobra_commander/calculated_component_tree"
 require "cobra_commander/version"
 require "cobra_commander/graph"
 require "cobra_commander/change"
