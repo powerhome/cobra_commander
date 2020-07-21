@@ -15,37 +15,18 @@ module CobraCommander
   class CLI < Thor
     class_option :app, default: Dir.pwd, aliases: "-a", type: :string
 
-    COMMON_OPTIONS = "[--app=pwd] [--format=FORMAT]"
-
-    desc "ls [app_path] #{COMMON_OPTIONS}", "Prints tree of components for an app"
-    method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"
-    def ls(app_path = Dir.pwd)
-      Output.print(
-        umbrella(app_path).root,
-        options.format
-      )
-    end
-
-    desc "dependents_of [component] #{COMMON_OPTIONS}", "Outputs count of components in [app] dependent on [component]"
-    method_option :format, default: "count", aliases: "-f", desc: "count or list"
-    def dependents_of(component)
-      dependents = umbrella(options.app).dependents_of(component)
-      return unless dependents
-      puts "list" == options.format ? dependents.map(&:name) : dependents.size
-    end
-
-    desc "dependencies_of [component] #{COMMON_OPTIONS}", "Outputs a list of components that [component] depends on"
-    method_option :format, default: "list", aliases: "-f", desc: "Format (list or tree, default: list)"
-    def dependencies_of(component)
-      Output.print(
-        umbrella(options.app).find(component),
-        options.format
-      )
-    end
-
     desc "version", "Prints version"
     def version
       puts CobraCommander::VERSION
+    end
+
+    desc "ls", "Lists the components in the context of a given component or umbrella"
+    method_option :dependencies, type: :boolean, aliases: "-d", desc: "Run the command on each dependency of a given component"
+    method_option :dependents, type: :boolean, aliases: "-D", desc: "Run the command on each dependency of a given component"
+    method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
+    def ls(component = nil)
+      components = components_filtered(component)
+      puts options.total ? components.size : CobraCommander::Output::FlatList.new(components).to_s
     end
 
     desc "exec", "Executes the command in the context of a given component or set of components"
@@ -87,13 +68,17 @@ module CobraCommander
       @umbrella ||= CobraCommander.umbrella(path)
     end
 
+    def find_component(name)
+      umbrella.find(name) || error("Component #{name} not found, try one of `cobra ls`") || exit(1)
+    end
+
     def components_filtered(component_name)
       if component_name
-        component = umbrella.find(component_name)
+        component = find_component(component_name)
         if options.dependencies
-          [component, *component.deep_dependencies]
+          component.deep_dependencies
         elsif options.dependents
-          [component, *component.deep_dependents]
+          component.deep_dependents
         else
           [component]
         end

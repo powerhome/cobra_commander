@@ -2,8 +2,6 @@
 
 require "spec_helper"
 
-require "securerandom"
-
 RSpec.describe "cobra cli", type: :aruba do
   before(:all) { @root = AppHelper.root }
 
@@ -196,49 +194,51 @@ RSpec.describe "cobra cli", type: :aruba do
     end
   end
 
-  describe "fetching dependents of a component in the tree" do
-    it "lists a component's direct dependents" do
-      run_command_and_stop("cobra dependents_of node_manifest -a #{@root} --format=list", fail_on_error: true)
+  describe "cobra ls" do
+    it "errors gently if component doesn't exist" do
+      run_command_and_stop("cobra ls -a #{@root} non_existent", fail_on_error: false)
 
-      expect(last_command_started.output.strip.split("\n")).to match([])
+      expect(last_command_started.output).to match /Component non_existent not found/
     end
 
-    it "lists a component's transient dependents" do
-      run_command_and_stop("cobra dependents_of g -a #{@root} --format=list", fail_on_error: true)
+    describe "cobra ls component --dependents" do
+      it "lists a component's direct dependents" do
+        run_command_and_stop("cobra ls -a #{@root} --dependents node_manifest", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match(%w[a b c d node_manifest])
+        expect(last_command_started.output.strip.split("\n")).to match([])
+      end
+
+      it "lists a component's transient dependents" do
+        run_command_and_stop("cobra ls -a #{@root} --dependents g", fail_on_error: true)
+
+        expect(last_command_started.output.strip.split("\n")).to match(%w[a b c d node_manifest])
+      end
+
+      it "counts a component's transient dependents" do
+        run_command_and_stop("cobra ls -a #{@root} --dependents -t g", fail_on_error: true)
+
+        expect(last_command_started.output.to_i).to eq(5)
+      end
     end
 
-    it "counts a component's transient dependents" do
-      run_command_and_stop("cobra dependents_of g -a #{@root} --format=count", fail_on_error: true)
+    describe "cobra ls component --dependencies" do
+      it "lists a component's direct dependency" do
+        run_command_and_stop("cobra ls --dependencies -a #{@root} g", fail_on_error: true)
 
-      expect(last_command_started.output.to_i).to eq(5)
-    end
+        expect(last_command_started.output.strip.split("\n")).to match_array %w[e f]
+      end
 
-    it "doesn't count a component it's not dependent on" do
-      run_command_and_stop("cobra dependents_of non_existent -a #{@root} --format=list", fail_on_error: true)
+      it "lists a component's transient dependency" do
+        run_command_and_stop("cobra ls --dependencies -a #{@root} b", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match([])
-    end
-  end
+        expect(last_command_started.output.strip.split("\n")).to match_array %w[g e f]
+      end
 
-  describe "dependencies_of" do
-    it "counts a component's direct dependency" do
-      run_command_and_stop("cobra dependencies_of g -a #{@root}", fail_on_error: true)
+      it "counts a component's transient dependency" do
+        run_command_and_stop("cobra ls --dependencies -a #{@root} -t b", fail_on_error: true)
 
-      expect(last_command_started.output.strip.split("\n")).to match_array %w[e f]
-    end
-
-    it "counts a component's transient dependency" do
-      run_command_and_stop("cobra dependencies_of b -a #{@root}", fail_on_error: true)
-
-      expect(last_command_started.output.strip.split("\n")).to match_array %w[g e f]
-    end
-
-    it "finds subtrees that are not the first match" do
-      run_command_and_stop("cobra dependencies_of d -a #{@root}", fail_on_error: true)
-
-      expect(last_command_started.output.strip.split("\n")).to match_array %w[b g e f c]
+        expect(last_command_started.output.strip.to_i).to eq(3)
+      end
     end
   end
 end
