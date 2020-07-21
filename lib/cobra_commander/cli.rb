@@ -49,8 +49,10 @@ module CobraCommander
     desc "graph", "Outputs a graph of a given component or umbrella"
     method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o", desc: "Output file, accepts .png or .dot"
     def graph(component = nil)
-      component = find_component(component)
-      CobraCommander::Output::GraphViz.new(component).generate!(options.output)
+      CobraCommander::Output::GraphViz.generate(
+        find_component(component),
+        options.output
+      )
       puts "Graph generated at #{options.output}"
     rescue ArgumentError => error
       error error.message

@@ -42,7 +42,7 @@ RSpec.describe CobraCommander::Output::GraphViz do
     end
 
     it "correctly generates graph.dot" do
-      CobraCommander::Output::GraphViz.new(umbrella.root).generate!(generated_dot)
+      CobraCommander::Output::GraphViz.generate(umbrella.root, generated_dot)
 
       expect(IO.readlines(native_dot)).to eq(IO.readlines(generated_dot))
     end

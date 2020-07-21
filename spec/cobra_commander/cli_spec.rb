@@ -9,7 +9,7 @@ RSpec.describe "cobra cli", type: :aruba do
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra exec -a #{@root} non_existent pwd", fail_on_error: false)
 
-      expect(last_command_started.output).to match /Component non_existent not found/
+      expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     it "executes the given command on all components" do
@@ -75,7 +75,7 @@ RSpec.describe "cobra cli", type: :aruba do
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra graph -a #{@root} non_existent", fail_on_error: false)
 
-      expect(last_command_started.output).to match /Component non_existent not found/
+      expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     context "with default output" do
@@ -84,7 +84,7 @@ RSpec.describe "cobra cli", type: :aruba do
       end
 
       it "outputs explanation" do
-        expect(last_command_started.output).to match /Graph generated at #{`pwd`.chomp}.*\/output.png/
+        expect(last_command_started.output).to match(/Graph generated at #{`pwd`.chomp}.*\/output.png/)
       end
 
       it "creates file" do
@@ -130,7 +130,7 @@ RSpec.describe "cobra cli", type: :aruba do
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra tree -a #{@root} non_existent", fail_on_error: false)
 
-      expect(last_command_started.output).to match /Component non_existent not found/
+      expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     it "outputs the tree of components from umbrella when no component is specified" do
@@ -252,7 +252,7 @@ RSpec.describe "cobra cli", type: :aruba do
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra ls -a #{@root} non_existent", fail_on_error: false)
 
-      expect(last_command_started.output).to match /Component non_existent not found/
+      expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     describe "cobra ls component --dependents" do

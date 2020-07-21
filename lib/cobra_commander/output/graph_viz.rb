@@ -5,24 +5,18 @@ require "graphviz"
 module CobraCommander
   module Output
     # Generates graphs of components
-    class GraphViz
-      def initialize(component)
-        @component = component
-      end
-
-      def generate!(output)
+    module GraphViz
+      def self.generate(component, output)
         g = ::GraphViz.new(:G, type: :digraph, concentrate: true)
-        ([@component] + @component.deep_dependencies).each do |component|
-          g.add_nodes component.name
-          g.add_edges component.name, component.dependencies.map(&:name)
+        ([component] + component.deep_dependencies).each do |comp|
+          g.add_nodes comp.name
+          g.add_edges comp.name, comp.dependencies.map(&:name)
         end
 
         g.output(extract_format(output) => output)
       end
 
-    private
-
-      def extract_format(output)
+      private_class_method def self.extract_format(output)
         format = output[-3..-1]
         return format if format == "png" || format == "dot"
 
