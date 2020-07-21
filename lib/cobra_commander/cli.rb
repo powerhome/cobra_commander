@@ -4,11 +4,10 @@ require "thor"
 require "fileutils"
 
 require "cobra_commander"
-require "cobra_commander/output/graph_viz"
-require "cobra_commander/change"
 require "cobra_commander/affected"
-require "cobra_commander/output"
+require "cobra_commander/change"
 require "cobra_commander/executor"
+require "cobra_commander/output"
 
 module CobraCommander
   # Implements the tool's CLI
