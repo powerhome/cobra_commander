@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "cobra_commander/graph"
+require "cobra_commander/output/graph_viz"
 
-RSpec.describe CobraCommander::Graph do
+RSpec.describe CobraCommander::Output::GraphViz do
   describe "#generate!" do
     let(:native_dot) { Tempfile.new(["native_graph", ".dot"]).path }
     let(:generated_dot) { Tempfile.new(["generated_graph", ".dot"]).path }
 
     let!(:native_graph) do
-      graph = GraphViz.new(:G, type: :digraph, concentrate: true)
+      graph = ::GraphViz.new(:G, type: :digraph, concentrate: true)
 
       # Add 3 nodes
       app = graph.add_nodes("App")
@@ -42,7 +42,7 @@ RSpec.describe CobraCommander::Graph do
     end
 
     it "correctly generates graph.dot" do
-      CobraCommander::Graph.new(umbrella.root).generate!(generated_dot)
+      CobraCommander::Output::GraphViz.new(umbrella.root).generate!(generated_dot)
 
       expect(IO.readlines(native_dot)).to eq(IO.readlines(generated_dot))
     end

@@ -66,7 +66,7 @@ RSpec.describe "cobra cli", type: :aruba do
     end
   end
 
-  describe "checking the version" do
+  describe "cobra version" do
     it "reports the current version" do
       run_command_and_stop("cobra version", fail_on_error: true)
 

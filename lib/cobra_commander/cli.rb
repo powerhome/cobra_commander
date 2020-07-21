@@ -4,7 +4,7 @@ require "thor"
 require "fileutils"
 
 require "cobra_commander"
-require "cobra_commander/graph"
+require "cobra_commander/output/graph_viz"
 require "cobra_commander/change"
 require "cobra_commander/affected"
 require "cobra_commander/output"
@@ -58,7 +58,7 @@ module CobraCommander
     method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o", desc: "Output file, accepts .png or .dot"
     def graph(component = nil)
       component = component ? umbrella.find(component) : umbrella.root
-      Graph.new(component).generate!(options.output)
+      CobraCommander::Output::GraphViz.new(component).generate!(options.output)
       puts "Graph generated at #{options.output}"
     rescue ArgumentError => error
       error error.message
