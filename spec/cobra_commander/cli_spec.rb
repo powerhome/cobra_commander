@@ -27,6 +27,48 @@ RSpec.describe "cobra cli", type: :aruba do
         d
       ]
     end
+
+    it "executes the given command a given component" do
+      run_command_and_stop("cobra exec -a #{@root} b 'basename $PWD'", fail_on_error: true)
+
+      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b]
+    end
+
+    it "executes the given command a given component's dependents" do
+      run_command_and_stop("cobra exec -a #{@root} --dependents b 'basename $PWD'", fail_on_error: true)
+
+      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[a c d f g h node_manifest]
+    end
+
+    it "executes the given command a given component's js dependents" do
+      run_command_and_stop("cobra exec -a #{@root} --js --dependents b 'basename $PWD'", fail_on_error: true)
+
+      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[f g h node_manifest]
+    end
+
+    it "executes the given command a given component's ruby dependents" do
+      run_command_and_stop("cobra exec -a #{@root} --ruby --dependents b 'basename $PWD'", fail_on_error: true)
+
+      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[a c d h]
+    end
+
+    it "executes the given command a given component's dependencies" do
+      run_command_and_stop("cobra exec -a #{@root} --dependencies b 'basename $PWD'", fail_on_error: true)
+
+      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[e]
+    end
+
+    it "executes the given command a given component's js dependencies" do
+      run_command_and_stop("cobra exec -a #{@root} --js --dependencies h 'basename $PWD'", fail_on_error: true)
+
+      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b e f]
+    end
+
+    it "executes the given command a given component's ruby dependencies" do
+      run_command_and_stop("cobra exec -a #{@root} --ruby --dependencies h 'basename $PWD'", fail_on_error: true)
+
+      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b]
+    end
   end
 
   describe "cobra graph" do
@@ -98,36 +140,34 @@ RSpec.describe "cobra cli", type: :aruba do
         App
         ├── a
         │   ├── b
-        │   │   └── g
-        │   │       ├── e
-        │   │       └── f
+        │   │   └── e
         │   └── c
         │       └── b
-        │           └── g
-        │               ├── e
-        │               └── f
+        │           └── e
         ├── d
         │   ├── b
-        │   │   └── g
-        │   │       ├── e
-        │   │       └── f
+        │   │   └── e
         │   └── c
         │       └── b
-        │           └── g
-        │               ├── e
-        │               └── f
+        │           └── e
         ├── h
+        │   ├── b
+        │   │   └── e
         │   └── f
+        │       └── b
+        │           └── e
         └── node_manifest
             ├── b
-            │   └── g
-            │       ├── e
-            │       └── f
+            │   └── e
             ├── e
             ├── f
+            │   └── b
+            │       └── e
             └── g
                 ├── e
                 └── f
+                    └── b
+                        └── e
       OUTPUT
 
       # This converts a unicode non-breaking space with
@@ -143,14 +183,10 @@ RSpec.describe "cobra cli", type: :aruba do
       expected_output = <<~OUTPUT
         a
         ├── b
-        │   └── g
-        │       ├── e
-        │       └── f
+        │   └── e
         └── c
             └── b
-                └── g
-                    ├── e
-                    └── f
+                └── e
       OUTPUT
 
       # This converts a unicode non-breaking space with
@@ -227,33 +263,45 @@ RSpec.describe "cobra cli", type: :aruba do
       end
 
       it "lists a component's transient dependents" do
-        run_command_and_stop("cobra ls -a #{@root} --dependents g", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{@root} --dependents b", fail_on_error: true)
 
-        expect(last_command_started.output.strip.split("\n")).to match(%w[a b c d node_manifest])
+        expect(last_command_started.output.strip.split("\n")).to match(%w[a c d f g h node_manifest])
       end
 
       it "counts a component's transient dependents" do
-        run_command_and_stop("cobra ls -a #{@root} --dependents -t g", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{@root} --dependents -t b", fail_on_error: true)
 
-        expect(last_command_started.output.to_i).to eq(5)
+        expect(last_command_started.output.to_i).to eq(7)
       end
     end
 
     describe "cobra ls component --dependencies" do
+      it "can list only js dependencies" do
+        run_command_and_stop("cobra ls --js --dependencies -a #{@root} h", fail_on_error: true)
+
+        expect(last_command_started.output.strip.split("\n")).to match_array %w[b e f]
+      end
+
+      it "can list only ruby dependencies" do
+        run_command_and_stop("cobra ls --ruby --dependencies -a #{@root} h", fail_on_error: true)
+
+        expect(last_command_started.output.strip.split("\n")).to match_array %w[b]
+      end
+
       it "lists a component's direct dependency" do
         run_command_and_stop("cobra ls --dependencies -a #{@root} g", fail_on_error: true)
 
-        expect(last_command_started.output.strip.split("\n")).to match_array %w[e f]
+        expect(last_command_started.output.strip.split("\n")).to match_array %w[b e f]
       end
 
       it "lists a component's transient dependency" do
         run_command_and_stop("cobra ls --dependencies -a #{@root} b", fail_on_error: true)
 
-        expect(last_command_started.output.strip.split("\n")).to match_array %w[g e f]
+        expect(last_command_started.output.strip.split("\n")).to match_array %w[e]
       end
 
       it "counts a component's transient dependency" do
-        run_command_and_stop("cobra ls --dependencies -a #{@root} -t b", fail_on_error: true)
+        run_command_and_stop("cobra ls --dependencies -a #{@root} -t h", fail_on_error: true)
 
         expect(last_command_started.output.strip.to_i).to eq(3)
       end

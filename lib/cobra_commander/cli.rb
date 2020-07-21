@@ -14,6 +14,8 @@ module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
     class_option :app, default: Dir.pwd, aliases: "-a", type: :string
+    class_option :js, default: false, type: :boolean, desc: "Consider only the JS dependency graph"
+    class_option :ruby, default: false, type: :boolean, desc: "Consider only the Ruby dependency graph"
 
     desc "version", "Prints version"
     def version
@@ -65,7 +67,7 @@ module CobraCommander
   private
 
     def umbrella(path = options.app)
-      @umbrella ||= CobraCommander.umbrella(path)
+      @umbrella ||= CobraCommander.umbrella(path, yarn: options.js, bundler: options.ruby)
     end
 
     def find_component(name)

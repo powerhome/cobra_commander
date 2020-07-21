@@ -7,6 +7,6 @@
   "author": "Garett Arrowood",
   "license": "UNLICENSED",
   "dependencies": {
-    "g": "link:../g"
+    "e": "link:../e"
   }
 }

@@ -48,7 +48,7 @@ RSpec.describe CobraCommander::Change do
           change = CobraCommander::Change.new(umbrella, "json", "master")
 
           expect { change.run! }.to output(<<~OUTPUT
-            {"changed_files":["#{umbrella.path}/components/e"],"directly_affected_components":[{"name":"e","path":["#{umbrella.path}/components/e"],"type":"Yarn"}],"transitively_affected_components":[{"name":"a","path":["#{umbrella.path}/components/a"],"type":"Bundler"},{"name":"b","path":["#{umbrella.path}/components/b"],"type":"Yarn & Bundler"},{"name":"c","path":["#{umbrella.path}/components/c"],"type":"Bundler"},{"name":"d","path":["#{umbrella.path}/components/d"],"type":"Bundler"},{"name":"g","path":["#{umbrella.path}/components/g"],"type":"Yarn"},{"name":"node_manifest","path":["#{umbrella.path}/node_manifest"],"type":"Yarn"}],"test_scripts":["#{umbrella.path}/components/a/test.sh","#{umbrella.path}/components/b/test.sh","#{umbrella.path}/components/c/test.sh","#{umbrella.path}/components/d/test.sh","#{umbrella.path}/components/e/test.sh","#{umbrella.path}/components/g/test.sh","#{umbrella.path}/node_manifest/test.sh"],"component_names":["a","b","c","d","e","g","node_manifest"],"languages":{"ruby":true,"javascript":true}}
+            {"changed_files":["#{umbrella.path}/components/e"],"directly_affected_components":[{"name":"e","path":["#{umbrella.path}/components/e"],"type":"Yarn"}],"transitively_affected_components":[{"name":"a","path":["#{umbrella.path}/components/a"],"type":"Bundler"},{"name":"b","path":["#{umbrella.path}/components/b"],"type":"Yarn & Bundler"},{"name":"c","path":["#{umbrella.path}/components/c"],"type":"Bundler"},{"name":"d","path":["#{umbrella.path}/components/d"],"type":"Bundler"},{"name":"f","path":["#{umbrella.path}/components/f"],"type":"Yarn"},{"name":"g","path":["#{umbrella.path}/components/g"],"type":"Yarn"},{"name":"h","path":["#{umbrella.path}/components/h"],"type":"Yarn & Bundler"},{"name":"node_manifest","path":["#{umbrella.path}/node_manifest"],"type":"Yarn"}],"test_scripts":["#{umbrella.path}/components/a/test.sh","#{umbrella.path}/components/b/test.sh","#{umbrella.path}/components/c/test.sh","#{umbrella.path}/components/d/test.sh","#{umbrella.path}/components/e/test.sh","#{umbrella.path}/components/f/test.sh","#{umbrella.path}/components/g/test.sh","#{umbrella.path}/components/h/test.sh","#{umbrella.path}/node_manifest/test.sh"],"component_names":["a","b","c","d","e","f","g","h","node_manifest"],"languages":{"ruby":true,"javascript":true}}
             OUTPUT
                                           ).to_stdout
         end
@@ -148,6 +148,9 @@ RSpec.describe CobraCommander::Change do
             a - Bundler
             c - Bundler
             d - Bundler
+            f - Yarn
+            g - Yarn
+            h - Yarn & Bundler
             node_manifest - Yarn
 
             <<< Test scripts to run >>>
@@ -155,6 +158,9 @@ RSpec.describe CobraCommander::Change do
             #{umbrella.path}/components/b/test.sh
             #{umbrella.path}/components/c/test.sh
             #{umbrella.path}/components/d/test.sh
+            #{umbrella.path}/components/f/test.sh
+            #{umbrella.path}/components/g/test.sh
+            #{umbrella.path}/components/h/test.sh
             #{umbrella.path}/node_manifest/test.sh
             OUTPUT
                        ).to_stdout
@@ -183,7 +189,9 @@ RSpec.describe CobraCommander::Change do
             b - Yarn & Bundler
             c - Bundler
             d - Bundler
+            f - Yarn
             g - Yarn
+            h - Yarn & Bundler
             node_manifest - Yarn
 
             <<< Test scripts to run >>>
@@ -192,7 +200,9 @@ RSpec.describe CobraCommander::Change do
             #{umbrella.path}/components/c/test.sh
             #{umbrella.path}/components/d/test.sh
             #{umbrella.path}/components/e/test.sh
+            #{umbrella.path}/components/f/test.sh
             #{umbrella.path}/components/g/test.sh
+            #{umbrella.path}/components/h/test.sh
             #{umbrella.path}/node_manifest/test.sh
             OUTPUT
                        ).to_stdout
