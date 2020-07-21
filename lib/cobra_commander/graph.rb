@@ -5,33 +5,27 @@ require "graphviz"
 module CobraCommander
   # Generates graphs of components
   class Graph
-    def initialize(node, format)
-      @format = format
-      @node = node
+    def initialize(component)
+      @component = component
     end
 
-    def generate!
-      return unless valid_format?
-
+    def generate!(output)
       g = GraphViz.new(:G, type: :digraph, concentrate: true)
-      ([@node] + @node.deep_dependencies).each do |component|
+      ([@component] + @component.deep_dependencies).each do |component|
         g.add_nodes component.name
         g.add_edges component.name, component.dependencies.map(&:name)
       end
 
-      output(g)
+      g.output(extract_format(output) => output)
     end
 
-    def output(g)
-      graph = "graph.#{@format}"
-      g.output(@format => graph)
-      puts "Graph generated at #{`pwd`.chomp}/#{graph}"
-    end
+  private
 
-    def valid_format?
-      return true if @format == "png" || @format == "dot"
-      puts "FORMAT must be 'png' or 'dot'"
-      false
+    def extract_format(output)
+      format = output[-3..-1]
+      return format if format == "png" || format == "dot"
+
+      raise ArgumentError, "output format must be 'png' or 'dot'"
     end
   end
 end

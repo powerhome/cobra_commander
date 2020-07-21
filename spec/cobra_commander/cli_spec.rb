@@ -4,7 +4,7 @@ require "spec_helper"
 
 require "securerandom"
 
-RSpec.describe "cli", type: :aruba do
+RSpec.describe "cobra cli", type: :aruba do
   before(:all) { @root = AppHelper.root }
 
   describe "cobra do" do
@@ -22,6 +22,47 @@ RSpec.describe "cli", type: :aruba do
         c
         d
       ]
+    end
+  end
+
+  describe "cobra graph" do
+    context "with default output" do
+      before do
+        run_command_and_stop("cobra graph -a #{@root}", fail_on_error: true)
+      end
+
+      it "outputs explanation" do
+        expect(last_command_started.output).to match /Graph generated at #{`pwd`.chomp}.*\/output.png/
+      end
+
+      it "creates file" do
+        expect(exist?("output.png")).to be true
+      end
+    end
+
+    context "with specified component" do
+      it "creates the file" do
+        run_command_and_stop("cobra graph -a #{@root} b", fail_on_error: true)
+        expect(exist?("output.png")).to be true
+      end
+    end
+
+    context "with specified output" do
+      it "accepts 'png'" do
+        run_command_and_stop("cobra graph -a #{@root} -o output.png", fail_on_error: true)
+        expect(last_command_started.output).to include("Graph generated")
+      end
+
+      it "accepts 'dot'" do
+        run_command_and_stop("cobra graph -a #{@root} -o output.dot", fail_on_error: true)
+        expect(last_command_started.output).to include("Graph generated")
+      end
+
+      it "rejects everything else" do
+        run_command_and_stop("cobra graph -a #{@root} -o output.pdf", fail_on_error: false)
+        expect(last_command_started.output).to_not include("Graph generated")
+        expect(last_command_started).to have_output "output format must be 'png' or 'dot'"
+      end
     end
   end
 
@@ -78,40 +119,6 @@ RSpec.describe "cli", type: :aruba do
       expected_output = expected_output.strip.tr("\u00a0", " ")
 
       expect(last_command_started.output.strip.tr("\u00a0", " ")).to eq(expected_output)
-    end
-  end
-
-  describe "generating a graph" do
-    context "with default format" do
-      before do
-        run_command_and_stop("cobra graph #{@root}", fail_on_error: true)
-      end
-
-      it "outputs explanation" do
-        expect(last_command_started.output).to include("Graph generated at #{`pwd`.chomp}")
-      end
-
-      it "creates file" do
-        expect(exist?("./graph.png")).to be true
-      end
-    end
-
-    context "with specified format" do
-      it "accepts 'png'" do
-        run_command_and_stop("cobra graph #{@root} -f png", fail_on_error: true)
-        expect(last_command_started.output).to include("Graph generated")
-      end
-
-      it "accepts 'dot'" do
-        run_command_and_stop("cobra graph #{@root} -f dot", fail_on_error: true)
-        expect(last_command_started.output).to include("Graph generated")
-      end
-
-      it "rejects everything else" do
-        run_command_and_stop("cobra graph #{@root} -f pdf", fail_on_error: true)
-        expect(last_command_started.output).to_not include("Graph generated")
-        expect(last_command_started).to have_output "FORMAT must be 'png' or 'dot'"
-      end
     end
   end
 

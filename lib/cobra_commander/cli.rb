@@ -54,10 +54,14 @@ module CobraCommander
       puts CobraCommander::VERSION
     end
 
-    desc "graph APP_PATH [--format=FORMAT] [--cache=nil] [--component]", "Outputs graph"
-    method_option :format, default: "png", aliases: "-f", desc: "Accepts png or dot"
-    def graph(app_path)
-      Graph.new(umbrella(app_path).root, options.format).generate!
+    desc "graph", "Outputs a graph of a given component or umbrella"
+    method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o", desc: "Output file, accepts .png or .dot"
+    def graph(component = nil)
+      component = component ? umbrella.find(component) : umbrella.root
+      Graph.new(component).generate!(options.output)
+      puts "Graph generated at #{options.output}"
+    rescue ArgumentError => error
+      error error.message
     end
 
     desc "changes APP_PATH [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
@@ -69,8 +73,8 @@ module CobraCommander
 
   private
 
-    def umbrella(path)
-      CobraCommander.umbrella(path)
+    def umbrella(path = options.app)
+      @umbrella ||= CobraCommander.umbrella(path)
     end
   end
 end
