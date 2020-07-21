@@ -74,9 +74,9 @@ RSpec.describe "cobra cli", type: :aruba do
     end
   end
 
-  describe "listing components in the tree" do
-    it "outputs the tree of components" do
-      run_command_and_stop("cobra ls #{@root}", fail_on_error: true)
+  describe "cobra tree" do
+    it "outputs the tree of components from umbrella when no component is specified" do
+      run_command_and_stop("cobra tree -a #{@root}", fail_on_error: true)
 
       expected_output = <<~OUTPUT
         App
@@ -112,6 +112,29 @@ RSpec.describe "cobra cli", type: :aruba do
             └── g
                 ├── e
                 └── f
+      OUTPUT
+
+      # This converts a unicode non-breaking space with
+      # a normal space because editors.
+      expected_output = expected_output.strip.tr("\u00a0", " ")
+
+      expect(last_command_started.output.strip.tr("\u00a0", " ")).to eq(expected_output)
+    end
+
+    it "outputs the tree of components from the specified component" do
+      run_command_and_stop("cobra tree -a #{@root} a", fail_on_error: true)
+
+      expected_output = <<~OUTPUT
+        a
+        ├── b
+        │   └── g
+        │       ├── e
+        │       └── f
+        └── c
+            └── b
+                └── g
+                    ├── e
+                    └── f
       OUTPUT
 
       # This converts a unicode non-breaking space with

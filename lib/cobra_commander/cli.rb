@@ -54,6 +54,12 @@ module CobraCommander
       puts CobraCommander::VERSION
     end
 
+    desc "tree", "Prints the dependency tree of a given component or umbrella"
+    def tree(component = nil)
+      component = component ? umbrella.find(component) : umbrella.root
+      puts CobraCommander::Output::AsciiTree.new(component).to_s
+    end
+
     desc "graph", "Outputs a graph of a given component or umbrella"
     method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o", desc: "Output file, accepts .png or .dot"
     def graph(component = nil)
