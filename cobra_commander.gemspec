@@ -34,6 +34,7 @@ DESCRIPTION
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
+  spec.add_dependency "bundler", "~> 1.17"
   spec.add_dependency "thor", ["< 2.0", ">= 0.18.1"]
   spec.add_dependency "ruby-graphviz", "~> 1.2.3"
 
