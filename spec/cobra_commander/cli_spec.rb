@@ -197,10 +197,10 @@ RSpec.describe "cobra cli", type: :aruba do
     end
   end
 
-  describe "printing changes" do
+  describe "cobra changes" do
     context "with defaults (-r test -b master)" do
       before do
-        run_command_and_stop("cobra changes #{@root}", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{@root}", fail_on_error: true)
       end
 
       it "does not output 'Test scripts to run' header" do
@@ -210,7 +210,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with full results" do
       before do
-        run_command_and_stop("cobra changes #{@root} -r full", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{@root} -r full", fail_on_error: true)
       end
 
       it "outputs all headers" do
@@ -223,7 +223,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with incorrect results specified" do
       it "outputs error message" do
-        run_command_and_stop("cobra changes #{@root} -r partial", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{@root} -r partial", fail_on_error: true)
 
         expect(last_command_started).to have_output "--results must be 'test', 'full', 'name' or 'json'"
       end
@@ -232,7 +232,7 @@ RSpec.describe "cobra cli", type: :aruba do
     context "with branch specified" do
       it "outputs specified branch in 'Changes since' header" do
         branch = "origin/master"
-        run_command_and_stop("cobra changes #{@root} -r full -b #{branch}", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{@root} -r full -b #{branch}", fail_on_error: true)
 
         expect(last_command_started.output).to include("Changes since last commit on #{branch}")
       end
@@ -240,7 +240,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with nonexistent branch specified" do
       it "outputs error message" do
-        run_command_and_stop("cobra changes #{@root} -b oak_branch", fail_on_error: false)
+        run_command_and_stop("cobra changes -a #{@root} -b oak_branch", fail_on_error: false)
 
         expect(last_command_started.output).to include("Specified --branch could not be found")
         expect(last_command_started.output).to_not include("Test scripts to run")

@@ -57,17 +57,17 @@ module CobraCommander
       error error.message
     end
 
-    desc "changes APP_PATH [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
+    desc "changes [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
     method_option :results, default: "test", aliases: "-r", desc: "Accepts test, full, name or json"
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
-    def changes(app_path)
-      Change.new(umbrella(app_path), options.results, options.branch).run!
+    def changes
+      Change.new(umbrella, options.results, options.branch).run!
     end
 
   private
 
-    def umbrella(path = options.app)
-      @umbrella ||= CobraCommander.umbrella(path, yarn: options.js, bundler: options.ruby)
+    def umbrella
+      @umbrella ||= CobraCommander.umbrella(options.app, yarn: options.js, bundler: options.ruby)
     end
 
     def find_component(name)
