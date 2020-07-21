@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "cobra_commander/change"
 
 RSpec.describe CobraCommander::Change do
   let :umbrella do

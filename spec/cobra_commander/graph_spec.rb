@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "cobra_commander/graph"
 
 RSpec.describe CobraCommander::Graph do
   describe "#generate!" do

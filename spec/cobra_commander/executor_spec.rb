@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor do
   let(:umbrella) { CobraCommander.umbrella(AppHelper.root) }

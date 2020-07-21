@@ -3,6 +3,13 @@
 require "thor"
 require "fileutils"
 
+require "cobra_commander"
+require "cobra_commander/graph"
+require "cobra_commander/change"
+require "cobra_commander/affected"
+require "cobra_commander/output"
+require "cobra_commander/executor"
+
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
