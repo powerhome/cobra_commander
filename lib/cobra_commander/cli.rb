@@ -22,8 +22,10 @@ module CobraCommander
     end
 
     desc "ls", "Lists the components in the context of a given component or umbrella"
-    method_option :dependencies, type: :boolean, aliases: "-d", desc: "Run the command on each dependency of a given component"
-    method_option :dependents, type: :boolean, aliases: "-D", desc: "Run the command on each dependency of a given component"
+    method_option :dependencies, type: :boolean, aliases: "-d",
+                                 desc: "Run the command on each dependency of a given component"
+    method_option :dependents, type: :boolean, aliases: "-D",
+                               desc: "Run the command on each dependency of a given component"
     method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
     def ls(component = nil)
       components = components_filtered(component)
@@ -47,7 +49,8 @@ module CobraCommander
     end
 
     desc "graph", "Outputs a graph of a given component or umbrella"
-    method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o", desc: "Output file, accepts .png or .dot"
+    method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o",
+                           desc: "Output file, accepts .png or .dot"
     def graph(component = nil)
       CobraCommander::Output::GraphViz.generate(
         find_component(component),
@@ -78,18 +81,12 @@ module CobraCommander
     end
 
     def components_filtered(component_name)
-      if component_name
-        component = find_component(component_name)
-        if options.dependencies
-          component.deep_dependencies
-        elsif options.dependents
-          component.deep_dependents
-        else
-          [component]
-        end
-      else
-        umbrella.components
-      end
+      return umbrella.components unless component_name
+      component = find_component(component_name)
+
+      return component.deep_dependencies if options.dependencies
+      return component.deep_dependents if options.dependents
+      [component]
     end
   end
 end
