@@ -51,6 +51,14 @@ module CobraCommander
       )
     end
 
+    desc "on_dependent_of [component] [command] #{COMMON_OPTIONS}", "Executes [command] on [component]"
+    method_option :app, default: Dir.pwd, aliases: "-a", desc: "Path to the root app where the component is mounted"
+    def on_dependent_of(component, command)
+      dependents = umbrella(options.app).dependents_of(component)
+      executor = Executor.new(dependents)
+      executor.exec(command)
+    end
+
     desc "version", "Prints version"
     def version
       puts CobraCommander::VERSION
