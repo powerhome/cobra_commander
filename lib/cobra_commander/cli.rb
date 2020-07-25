@@ -21,7 +21,7 @@ module CobraCommander
       puts CobraCommander::VERSION
     end
 
-    desc "ls", "Lists the components in the context of a given component or umbrella"
+    desc "ls [component]", "Lists the components in the context of a given component or umbrella"
     method_option :dependencies, type: :boolean, aliases: "-d",
                                  desc: "Run the command on each dependency of a given component"
     method_option :dependents, type: :boolean, aliases: "-D",
@@ -32,7 +32,7 @@ module CobraCommander
       puts options.total ? components.size : CobraCommander::Output::FlatList.new(components).to_s
     end
 
-    desc "exec", "Executes the command in the context of a given component or set of components"
+    desc "exec [component] <command>", "Executes the command in the context of a given component or set of components"
     method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
     method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
     def exec(command_or_component, command = nil)
@@ -42,13 +42,13 @@ module CobraCommander
       )
     end
 
-    desc "tree", "Prints the dependency tree of a given component or umbrella"
+    desc "tree [component]", "Prints the dependency tree of a given component or umbrella"
     def tree(component = nil)
       component = find_component(component)
       puts CobraCommander::Output::AsciiTree.new(component).to_s
     end
 
-    desc "graph", "Outputs a graph of a given component or umbrella"
+    desc "graph [component]", "Outputs a graph of a given component or umbrella"
     method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o",
                            desc: "Output file, accepts .png or .dot"
     def graph(component = nil)
