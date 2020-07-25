@@ -32,7 +32,8 @@ module CobraCommander
       puts options.total ? components.size : CobraCommander::Output::FlatList.new(components).to_s
     end
 
-    desc "exec [component] <command>", "Executes the command in the context of a given component or set of components"
+    desc "exec [component] <command>", "Executes the command in the context of a given component or set of components. " \
+                                       "If no component is given executes the command in all components."
     method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
     method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
     def exec(command_or_component, command = nil)
