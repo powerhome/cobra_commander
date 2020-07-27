@@ -23,6 +23,8 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler: 1
         bundler-cache: true
+    - name: Install dependencies
+      run: bundle install
     - name: Rubocop Linter Action
       uses: andrewmcodes/rubocop-linter-action@v3.2.0
       env:
