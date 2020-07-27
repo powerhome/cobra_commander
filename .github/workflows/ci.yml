@@ -34,4 +34,5 @@ jobs:
       uses: reviewdog/action-rubocop@v1
       with:
         rubocop_version: 0.48.1
+        filter_mode: nofilter
         github_token: ${{ secrets.github_token }}
