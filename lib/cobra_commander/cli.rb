@@ -3,86 +3,91 @@
 require "thor"
 require "fileutils"
 
+require "cobra_commander"
+require "cobra_commander/affected"
+require "cobra_commander/change"
+require "cobra_commander/executor"
+require "cobra_commander/output"
+
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
-    CACHE_DESCRIPTION = "[DEPRECATED] Path to a cache file to use (default: nil). If specified, this file will " \
-      "be used to store the component tree for the app to speed up subsequent invocations. Must be rotated any time " \
-      "the component dependency structure changes."
-    COMMON_OPTIONS = "[--app=pwd] [--format=FORMAT] [--cache=nil]"
-
-    desc "do [command] [--app=pwd] [--cache=nil]", "Executes the command in the context of each component in [app]"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
-    method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
-    def do(command)
-      executor = Executor.new(umbrella(options.app).components)
-      executor.exec(command)
-    end
-
-    desc "ls [app_path] #{COMMON_OPTIONS}", "Prints tree of components for an app"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
-    method_option :format, default: "tree", aliases: "-f", desc: "Format (list or tree, default: list)"
-    method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
-    def ls(app_path = Dir.pwd)
-      Output.print(
-        umbrella(app_path).root,
-        options.format
-      )
-    end
-
-    desc "dependents_of [component] #{COMMON_OPTIONS}", "Outputs count of components in [app] dependent on [component]"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "Path to the root app where the component is mounted"
-    method_option :format, default: "count", aliases: "-f", desc: "count or list"
-    method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
-    def dependents_of(component)
-      dependents = umbrella(options.app).dependents_of(component)
-      return unless dependents
-      puts "list" == options.format ? dependents.map(&:name) : dependents.size
-    end
-
-    desc "dependencies_of [component] #{COMMON_OPTIONS}", "Outputs a list of components that [component] depends on"
-    method_option :app, default: Dir.pwd, aliases: "-a", desc: "App path (default: CWD)"
-    method_option :format, default: "list", aliases: "-f", desc: "Format (list or tree, default: list)"
-    method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
-    def dependencies_of(component)
-      Output.print(
-        umbrella(options.app).find(component),
-        options.format
-      )
-    end
+    class_option :app, default: Dir.pwd, aliases: "-a", type: :string
+    class_option :js, default: false, type: :boolean, desc: "Consider only the JS dependency graph"
+    class_option :ruby, default: false, type: :boolean, desc: "Consider only the Ruby dependency graph"
 
     desc "version", "Prints version"
     def version
       puts CobraCommander::VERSION
     end
 
-    desc "graph APP_PATH [--format=FORMAT] [--cache=nil] [--component]", "Outputs graph"
-    method_option :format, default: "png", aliases: "-f", desc: "Accepts png or dot"
-    method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
-    def graph(app_path)
-      Graph.new(umbrella(app_path).root, options.format).generate!
+    desc "ls [component]", "Lists the components in the context of a given component or umbrella"
+    method_option :dependencies, type: :boolean, aliases: "-d",
+                                 desc: "Run the command on each dependency of a given component"
+    method_option :dependents, type: :boolean, aliases: "-D",
+                               desc: "Run the command on each dependency of a given component"
+    method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
+    def ls(component = nil)
+      components = components_filtered(component)
+      puts options.total ? components.size : CobraCommander::Output::FlatList.new(components).to_s
     end
 
-    desc "changes APP_PATH [--results=RESULTS] [--branch=BRANCH] [--cache=nil]", "Prints list of changed files"
+    desc "exec [component] <command>", "Executes the command in the context of a given component or set of components. " \
+                                       "If no component is given executes the command in all components."
+    method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
+    method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
+    def exec(command_or_component, command = nil)
+      CobraCommander::Executor.exec(
+        components_filtered(command && command_or_component),
+        command ? command : command_or_component
+      )
+    end
+
+    desc "tree [component]", "Prints the dependency tree of a given component or umbrella"
+    def tree(component = nil)
+      component = find_component(component)
+      puts CobraCommander::Output::AsciiTree.new(component).to_s
+    end
+
+    desc "graph [component]", "Outputs a graph of a given component or umbrella"
+    method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o",
+                           desc: "Output file, accepts .png or .dot"
+    def graph(component = nil)
+      CobraCommander::Output::GraphViz.generate(
+        find_component(component),
+        options.output
+      )
+      puts "Graph generated at #{options.output}"
+    rescue ArgumentError => error
+      error error.message
+    end
+
+    desc "changes [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
     method_option :results, default: "test", aliases: "-r", desc: "Accepts test, full, name or json"
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
-    method_option :cache, default: nil, aliases: "-c", desc: CACHE_DESCRIPTION
-    def changes(app_path)
-      Change.new(umbrella(app_path), options.results, options.branch).run!
-    end
-
-    desc "cache APP_PATH CACHE_PATH", "[DEPRECATED] Caches a representation of the component structure of the app"
-    def cache(app_path, cache_path)
-      tree = CobraCommander.umbrella_tree(app_path)
-      FileUtils.mkdir_p(File.dirname(cache_path))
-      File.write(cache_path, tree.to_json)
-      puts "Created cache of component tree at #{cache_path}"
+    def changes
+      Change.new(umbrella, options.results, options.branch).run!
     end
 
   private
 
-    def umbrella(path)
-      CobraCommander.umbrella(path)
+    def umbrella
+      @umbrella ||= CobraCommander.umbrella(options.app, yarn: options.js, bundler: options.ruby)
+    end
+
+    def find_component(name)
+      return umbrella.root unless name
+
+      umbrella.find(name) || error("Component #{name} not found, try one of `cobra ls`") || exit(1)
+    end
+
+    def components_filtered(component_name)
+      return umbrella.components unless component_name
+      component = find_component(component_name)
+
+      return component.deep_dependencies if options.dependencies
+      return component.deep_dependents if options.dependents
+      [component]
     end
   end
 end

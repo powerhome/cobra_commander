@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "cobra_commander/affected"
 
 RSpec.describe CobraCommander::Affected do
   let(:umbrella) { CobraCommander.umbrella(AppHelper.root) }
@@ -93,6 +94,21 @@ RSpec.describe CobraCommander::Affected do
             type: "Bundler",
           },
           {
+            name: "f",
+            path: ["#{umbrella.path}/components/f"],
+            type: "Yarn",
+          },
+          {
+            name: "g",
+            path: ["#{umbrella.path}/components/g"],
+            type: "Yarn",
+          },
+          {
+            name: "h",
+            path: ["#{umbrella.path}/components/h"],
+            type: "Yarn & Bundler",
+          },
+          {
             name: "node_manifest",
             path: ["#{umbrella.path}/node_manifest"],
             type: "Yarn",
@@ -139,26 +155,6 @@ RSpec.describe CobraCommander::Affected do
       expect(with_change_to_f.transitively).to eq(
         [
           {
-            name: "a",
-            path: ["#{umbrella.path}/components/a"],
-            type: "Bundler",
-          },
-          {
-            name: "b",
-            path: ["#{umbrella.path}/components/b"],
-            type: "Yarn & Bundler",
-          },
-          {
-            name: "c",
-            path: ["#{umbrella.path}/components/c"],
-            type: "Bundler",
-          },
-          {
-            name: "d",
-            path: ["#{umbrella.path}/components/d"],
-            type: "Bundler",
-          },
-          {
             name: "g",
             path: ["#{umbrella.path}/components/g"],
             type: "Yarn",
@@ -166,7 +162,7 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "h",
             path: ["#{umbrella.path}/components/h"],
-            type: "Yarn",
+            type: "Yarn & Bundler",
           },
           {
             name: "node_manifest",
@@ -178,25 +174,16 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/a/test.sh")
-      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/b/test.sh")
-      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/c/test.sh")
-      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/d/test.sh")
-      expect(with_change_to_f.scripts).to_not include("#{umbrella.path}/components/e/test.sh")
-      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/f/test.sh")
-      expect(with_change_to_f.scripts).to include("#{umbrella.path}/components/g/test.sh")
-      expect(with_change_to_f.scripts).to include("#{umbrella.path}/node_manifest/test.sh")
+      expect(with_change_to_f.scripts).to match_array [
+        "#{umbrella.path}/components/f/test.sh",
+        "#{umbrella.path}/components/g/test.sh",
+        "#{umbrella.path}/components/h/test.sh",
+        "#{umbrella.path}/node_manifest/test.sh",
+      ]
     end
 
     it "correctly reports component names" do
-      expect(with_change_to_f.names).to include("a")
-      expect(with_change_to_f.names).to include("b")
-      expect(with_change_to_f.names).to include("c")
-      expect(with_change_to_f.names).to include("d")
-      expect(with_change_to_f.names).to_not include("e")
-      expect(with_change_to_f.names).to include("f")
-      expect(with_change_to_f.names).to include("g")
-      expect(with_change_to_f.names).to include("node_manifest")
+      expect(with_change_to_f.names).to match_array %w[f g h node_manifest]
     end
   end
 end

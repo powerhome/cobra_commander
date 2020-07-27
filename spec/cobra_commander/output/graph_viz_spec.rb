@@ -1,18 +1,15 @@
 # frozen_string_literal: true
 
 require "spec_helper"
+require "cobra_commander/output/graph_viz"
 
-RSpec.describe CobraCommander::Graph do
+RSpec.describe CobraCommander::Output::GraphViz do
   describe "#generate!" do
-    let(:root) do
-      File.expand_path(
-        "../..",
-        File.dirname(__FILE__)
-      )
-    end
+    let(:native_dot) { Tempfile.new(["native_graph", ".dot"]).path }
+    let(:generated_dot) { Tempfile.new(["generated_graph", ".dot"]).path }
 
     let!(:native_graph) do
-      graph = GraphViz.new(:G, type: :digraph, concentrate: true)
+      graph = ::GraphViz.new(:G, type: :digraph, concentrate: true)
 
       # Add 3 nodes
       app = graph.add_nodes("App")
@@ -27,7 +24,7 @@ RSpec.describe CobraCommander::Graph do
       graph.add_edges(a, c)
 
       # Create graph
-      graph.output(dot: "native_graph.dot")
+      graph.output(dot: native_dot)
     end
 
     let(:umbrella) do
@@ -45,18 +42,14 @@ RSpec.describe CobraCommander::Graph do
     end
 
     it "correctly generates graph.dot" do
-      CobraCommander::Graph.new(umbrella.root, "dot").generate!
-
-      native_dot = File.join(root, "native_graph.dot")
-      generated_dot = File.join(root, "graph.dot")
+      CobraCommander::Output::GraphViz.generate(umbrella.root, generated_dot)
 
       expect(IO.readlines(native_dot)).to eq(IO.readlines(generated_dot))
     end
 
     after do
-      # Cleanup extra files
-      `rm -f native_graph.dot`
-      `rm -f graph.dot`
+      `rm -f #{native_dot}`
+      `rm -f #{generated_dot}`
     end
   end
 end
