@@ -84,7 +84,7 @@ RSpec.describe "cobra cli", type: :aruba do
       end
 
       it "outputs explanation" do
-        expect(last_command_started.output).to match(/Graph generated at #{`pwd`.chomp}.*\/output.png/)
+        expect(last_command_started.output).to match(%r{Graph generated at #{`pwd`.chomp}.*/output.png})
       end
 
       it "creates file" do
