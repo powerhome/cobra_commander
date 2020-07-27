@@ -24,19 +24,110 @@ Or install it yourself as:
 
     $ gem install cobra_commander
 
-## Usage
+## Usage (cobra help)
 
 ```bash
 Commands:
-  cobra cache APP_PATH CACHE_PATH                                                # Caches a representation of the component structure of the app
-  cobra changes APP_PATH [--results=RESULTS] [--branch=BRANCH] [--cache=nil]     # Prints list of changed files
-  cobra dependencies_of [component] [--app=pwd] [--format=FORMAT] [--cache=nil]  # Outputs a list of components that [component] depends on within [app] context
-  cobra dependents_of [component] [--app=pwd] [--format=FORMAT] [--cache=nil]    # Outputs count of components in [app] dependent on [component]
-  cobra do [command] [--app=pwd] [--cache=nil]                                   # Executes the command in the context of each component in [app]
-  cobra graph APP_PATH [--format=FORMAT] [--cache=nil]                           # Outputs graph
-  cobra help [COMMAND]                                                           # Describe available commands or one specific command
-  cobra ls [app_path] [--app=pwd] [--format=FORMAT] [--cache=nil]                # Prints tree of components for an app
-  cobra version                                                                  # Prints version
+  cobra changes [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
+  cobra exec [component] <command>                     # Executes the command in the context of a given component or set of components. If no component is given executes the command in all components.
+  cobra graph [component]                              # Outputs a graph of a given component or umbrella
+  cobra help [COMMAND]                                 # Describe available commands or one specific command
+  cobra ls [component]                                 # Lists the components in the context of a given component or umbrella
+  cobra tree [component]                               # Prints the dependency tree of a given component or umbrella
+  cobra version                                        # Prints version
+
+Options:
+  -a, [--app=APP]
+                             # Default: /Users/chjunior/workspace/power/cobra_commander
+      [--js], [--no-js]      # Consider only the JS dependency graph
+      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+```
+
+### cobra changes
+
+```sh
+➜  nitro git:(nova/remove-cobra-commander) be cobra help changes
+Usage:
+  cobra changes [--results=RESULTS] [--branch=BRANCH]
+
+Options:
+  -r, [--results=RESULTS]    # Accepts test, full, name or json
+                             # Default: test
+  -b, [--branch=BRANCH]      # Specified target to calculate against
+                             # Default: master
+  -a, [--app=APP]
+                             # Default: /Users/chjunior/workspace/power/nitro
+      [--js], [--no-js]      # Consider only the JS dependency graph
+      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+
+Prints list of changed files
+```
+
+### cobra exec
+
+```sh
+Usage:
+  cobra exec [component] <command>
+
+Options:
+      [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
+      [--dependents], [--no-dependents]      # Run the command on each dependency of a given component
+  -a, [--app=APP]
+                                             # Default: /Users/chjunior/workspace/power/cobra_commander
+      [--js], [--no-js]                      # Consider only the JS dependency graph
+      [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
+
+Executes the command in the context of a given component or set of components. If no component is given executes the command in all components.
+```
+
+### cobra graph
+
+```sh
+Usage:
+  cobra graph [component]
+
+Options:
+  -o, [--output=OUTPUT]      # Output file, accepts .png or .dot
+                             # Default: /Users/chjunior/workspace/power/cobra_commander/output.png
+  -a, [--app=APP]
+                             # Default: /Users/chjunior/workspace/power/cobra_commander
+      [--js], [--no-js]      # Consider only the JS dependency graph
+      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+
+Outputs a graph of a given component or umbrella
+```
+
+### cobra ls
+
+```sh
+Usage:
+  cobra ls [component]
+
+Options:
+  -d, [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
+  -D, [--dependents], [--no-dependents]      # Run the command on each dependency of a given component
+  -t, [--total], [--no-total]                # Prints the total count of components
+  -a, [--app=APP]
+                                             # Default: /Users/chjunior/workspace/power/cobra_commander
+      [--js], [--no-js]                      # Consider only the JS dependency graph
+      [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
+
+Lists the components in the context of a given component or umbrella
+```
+
+### cobra tree
+
+```sh
+Usage:
+  cobra tree [component]
+
+Options:
+  -a, [--app=APP]
+                             # Default: /Users/chjunior/workspace/power/cobra_commander
+      [--js], [--no-js]      # Consider only the JS dependency graph
+      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+
+Prints the dependency tree of a given component or umbrella
 ```
 
 ## Development
