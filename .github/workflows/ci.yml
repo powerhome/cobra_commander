@@ -23,8 +23,9 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler: 1
         bundler-cache: true
-    - name: rubocop
-      uses: reviewdog/action-rubocop@v1
-      with:
-        rubocop_version: 0.48.1
-        github_token: ${{ secrets.github_token }}
+    - name: Install dependencies
+      run: bundle install
+    - name: Rubocop Linter Action
+      uses: andrewmcodes/rubocop-linter-action@v3.2.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
