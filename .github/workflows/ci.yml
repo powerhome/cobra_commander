@@ -35,4 +35,5 @@ jobs:
       with:
         rubocop_version: 0.48.1
         filter_mode: nofilter
+        fail_on_error: true
         github_token: ${{ secrets.github_token }}
