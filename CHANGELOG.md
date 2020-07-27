@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## Version 0.8 - 2020-07-21
+
+* Standardize Cobra CLI options
+* More powerful filters to all cobra commands (--js, --ruby)
+* More powerful filters to cobra ls and exec (--dependencies, --dependents)
+* Graphs for components, not just umbrella
+
 ## Version 0.7 - 2020-07-08
 
 * Introduces CobraCommander::Umbrella with optimizations for dependency resolution
