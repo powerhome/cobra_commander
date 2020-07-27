@@ -1,10 +1,6 @@
 name: CI
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push, pull_request]
 
 jobs:
   test:
@@ -36,5 +32,5 @@ jobs:
         rubocop_version: 0.48.1
         filter_mode: nofilter
         fail_on_error: true
-        rubocop_extensions:  
+        rubocop_extensions: []
         github_token: ${{ secrets.github_token }}
