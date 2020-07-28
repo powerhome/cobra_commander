@@ -3,17 +3,15 @@
 require "spec_helper"
 
 RSpec.describe "cobra cli", type: :aruba do
-  before(:all) { @root = AppHelper.root }
-
   describe "cobra exec" do
     it "errors gently if component doesn't exist" do
-      run_command_and_stop("cobra exec -a #{@root} non_existent pwd", fail_on_error: false)
+      run_command_and_stop("cobra exec -a #{fixture_app} non_existent pwd", fail_on_error: false)
 
       expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     it "executes the given command on all components" do
-      run_command_and_stop("cobra exec -a #{@root} 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[
         e
@@ -29,43 +27,43 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command a given component" do
-      run_command_and_stop("cobra exec -a #{@root} b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} b 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b]
     end
 
     it "executes the given command a given component's dependents" do
-      run_command_and_stop("cobra exec -a #{@root} --dependents b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --dependents b 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[a c d f g h node_manifest]
     end
 
     it "executes the given command a given component's js dependents" do
-      run_command_and_stop("cobra exec -a #{@root} --js --dependents b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependents b 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[f g h node_manifest]
     end
 
     it "executes the given command a given component's ruby dependents" do
-      run_command_and_stop("cobra exec -a #{@root} --ruby --dependents b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependents b 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[a c d h]
     end
 
     it "executes the given command a given component's dependencies" do
-      run_command_and_stop("cobra exec -a #{@root} --dependencies b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --dependencies b 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[e]
     end
 
     it "executes the given command a given component's js dependencies" do
-      run_command_and_stop("cobra exec -a #{@root} --js --dependencies h 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependencies h 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b e f]
     end
 
     it "executes the given command a given component's ruby dependencies" do
-      run_command_and_stop("cobra exec -a #{@root} --ruby --dependencies h 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependencies h 'basename $PWD'", fail_on_error: true)
 
       expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b]
     end
@@ -73,14 +71,14 @@ RSpec.describe "cobra cli", type: :aruba do
 
   describe "cobra graph" do
     it "errors gently if component doesn't exist" do
-      run_command_and_stop("cobra graph -a #{@root} non_existent", fail_on_error: false)
+      run_command_and_stop("cobra graph -a #{fixture_app} non_existent", fail_on_error: false)
 
       expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     context "with default output" do
       before do
-        run_command_and_stop("cobra graph -a #{@root}", fail_on_error: true)
+        run_command_and_stop("cobra graph -a #{fixture_app}", fail_on_error: true)
       end
 
       it "outputs explanation" do
@@ -94,24 +92,24 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with specified component" do
       it "creates the file" do
-        run_command_and_stop("cobra graph -a #{@root} b", fail_on_error: true)
+        run_command_and_stop("cobra graph -a #{fixture_app} b", fail_on_error: true)
         expect(exist?("output.png")).to be true
       end
     end
 
     context "with specified output" do
       it "accepts 'png'" do
-        run_command_and_stop("cobra graph -a #{@root} -o output.png", fail_on_error: true)
+        run_command_and_stop("cobra graph -a #{fixture_app} -o output.png", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "accepts 'dot'" do
-        run_command_and_stop("cobra graph -a #{@root} -o output.dot", fail_on_error: true)
+        run_command_and_stop("cobra graph -a #{fixture_app} -o output.dot", fail_on_error: true)
         expect(last_command_started.output).to include("Graph generated")
       end
 
       it "rejects everything else" do
-        run_command_and_stop("cobra graph -a #{@root} -o output.pdf", fail_on_error: false)
+        run_command_and_stop("cobra graph -a #{fixture_app} -o output.pdf", fail_on_error: false)
         expect(last_command_started.output).to_not include("Graph generated")
         expect(last_command_started).to have_output "output format must be 'png' or 'dot'"
       end
@@ -128,13 +126,13 @@ RSpec.describe "cobra cli", type: :aruba do
 
   describe "cobra tree" do
     it "errors gently if component doesn't exist" do
-      run_command_and_stop("cobra tree -a #{@root} non_existent", fail_on_error: false)
+      run_command_and_stop("cobra tree -a #{fixture_app} non_existent", fail_on_error: false)
 
       expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     it "outputs the tree of components from umbrella when no component is specified" do
-      run_command_and_stop("cobra tree -a #{@root}", fail_on_error: true)
+      run_command_and_stop("cobra tree -a #{fixture_app}", fail_on_error: true)
 
       expected_output = <<~OUTPUT
         App
@@ -178,7 +176,7 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "outputs the tree of components from the specified component" do
-      run_command_and_stop("cobra tree -a #{@root} a", fail_on_error: true)
+      run_command_and_stop("cobra tree -a #{fixture_app} a", fail_on_error: true)
 
       expected_output = <<~OUTPUT
         a
@@ -200,7 +198,7 @@ RSpec.describe "cobra cli", type: :aruba do
   describe "cobra changes" do
     context "with defaults (-r test -b master)" do
       before do
-        run_command_and_stop("cobra changes -a #{@root}", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{fixture_app}", fail_on_error: true)
       end
 
       it "does not output 'Test scripts to run' header" do
@@ -210,7 +208,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with full results" do
       before do
-        run_command_and_stop("cobra changes -a #{@root} -r full", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{fixture_app} -r full", fail_on_error: true)
       end
 
       it "outputs all headers" do
@@ -223,7 +221,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with incorrect results specified" do
       it "outputs error message" do
-        run_command_and_stop("cobra changes -a #{@root} -r partial", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{fixture_app} -r partial", fail_on_error: true)
 
         expect(last_command_started).to have_output "--results must be 'test', 'full', 'name' or 'json'"
       end
@@ -232,7 +230,7 @@ RSpec.describe "cobra cli", type: :aruba do
     context "with branch specified" do
       it "outputs specified branch in 'Changes since' header" do
         branch = "origin/master"
-        run_command_and_stop("cobra changes -a #{@root} -r full -b #{branch}", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{fixture_app} -r full -b #{branch}", fail_on_error: true)
 
         expect(last_command_started.output).to include("Changes since last commit on #{branch}")
       end
@@ -240,7 +238,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with nonexistent branch specified" do
       it "outputs error message" do
-        run_command_and_stop("cobra changes -a #{@root} -b oak_branch", fail_on_error: false)
+        run_command_and_stop("cobra changes -a #{fixture_app} -b oak_branch", fail_on_error: false)
 
         expect(last_command_started.output).to include("Specified --branch could not be found")
         expect(last_command_started.output).to_not include("Test scripts to run")
@@ -250,26 +248,26 @@ RSpec.describe "cobra cli", type: :aruba do
 
   describe "cobra ls" do
     it "errors gently if component doesn't exist" do
-      run_command_and_stop("cobra ls -a #{@root} non_existent", fail_on_error: false)
+      run_command_and_stop("cobra ls -a #{fixture_app} non_existent", fail_on_error: false)
 
       expect(last_command_started.output).to match(/Component non_existent not found/)
     end
 
     describe "cobra ls component --dependents" do
       it "lists a component's direct dependents" do
-        run_command_and_stop("cobra ls -a #{@root} --dependents node_manifest", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{fixture_app} --dependents node_manifest", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match([])
       end
 
       it "lists a component's transient dependents" do
-        run_command_and_stop("cobra ls -a #{@root} --dependents b", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{fixture_app} --dependents b", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match(%w[a c d f g h node_manifest])
       end
 
       it "counts a component's transient dependents" do
-        run_command_and_stop("cobra ls -a #{@root} --dependents -t b", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{fixture_app} --dependents -t b", fail_on_error: true)
 
         expect(last_command_started.output.to_i).to eq(7)
       end
@@ -277,31 +275,31 @@ RSpec.describe "cobra cli", type: :aruba do
 
     describe "cobra ls component --dependencies" do
       it "can list only js dependencies" do
-        run_command_and_stop("cobra ls --js --dependencies -a #{@root} h", fail_on_error: true)
+        run_command_and_stop("cobra ls --js --dependencies -a #{fixture_app} h", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match_array %w[b e f]
       end
 
       it "can list only ruby dependencies" do
-        run_command_and_stop("cobra ls --ruby --dependencies -a #{@root} h", fail_on_error: true)
+        run_command_and_stop("cobra ls --ruby --dependencies -a #{fixture_app} h", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match_array %w[b]
       end
 
       it "lists a component's direct dependency" do
-        run_command_and_stop("cobra ls --dependencies -a #{@root} g", fail_on_error: true)
+        run_command_and_stop("cobra ls --dependencies -a #{fixture_app} g", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match_array %w[b e f]
       end
 
       it "lists a component's transient dependency" do
-        run_command_and_stop("cobra ls --dependencies -a #{@root} b", fail_on_error: true)
+        run_command_and_stop("cobra ls --dependencies -a #{fixture_app} b", fail_on_error: true)
 
         expect(last_command_started.output.strip.split("\n")).to match_array %w[e]
       end
 
       it "counts a component's transient dependency" do
-        run_command_and_stop("cobra ls --dependencies -a #{@root} -t h", fail_on_error: true)
+        run_command_and_stop("cobra ls --dependencies -a #{fixture_app} -t h", fail_on_error: true)
 
         expect(last_command_started.output.strip.to_i).to eq(3)
       end

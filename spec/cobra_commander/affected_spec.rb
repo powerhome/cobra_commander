@@ -4,15 +4,13 @@ require "spec_helper"
 require "cobra_commander/affected"
 
 RSpec.describe CobraCommander::Affected do
-  let(:umbrella) { CobraCommander.umbrella(AppHelper.root) }
-
   it "successfully instantiates" do
-    expect(CobraCommander::Affected.new(umbrella, [])).to be_truthy
+    expect(CobraCommander::Affected.new(fixture_umbrella, [])).to be_truthy
   end
 
   context "with no changes" do
     let(:no_changes) do
-      CobraCommander::Affected.new(umbrella, [])
+      CobraCommander::Affected.new(fixture_umbrella, [])
     end
 
     it "reports no directly affected components" do
@@ -30,7 +28,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to top level dependency" do
     let(:with_change_to_a) do
-      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/a/Gemfile"])
+      CobraCommander::Affected.new(fixture_umbrella, ["#{fixture_app}/components/a/Gemfile"])
     end
 
     it "correctly reports directly affected components" do
@@ -38,7 +36,7 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "a",
-            path: ["#{umbrella.path}/components/a"],
+            path: ["#{fixture_app}/components/a"],
             type: "Bundler",
           },
         ]
@@ -50,7 +48,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_a.scripts).to eq(["#{umbrella.path}/components/a/test.sh"])
+      expect(with_change_to_a.scripts).to eq(["#{fixture_app}/components/a/test.sh"])
     end
 
     it "correctly reports component names" do
@@ -60,7 +58,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to lower level dependency" do
     let(:with_change_to_b) do
-      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/b/Gemfile"])
+      CobraCommander::Affected.new(fixture_umbrella, ["#{fixture_app}/components/b/Gemfile"])
     end
 
     it "correctly reports directly affected components" do
@@ -68,7 +66,7 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "b",
-            path: ["#{umbrella.path}/components/b"],
+            path: ["#{fixture_app}/components/b"],
             type: "Yarn & Bundler",
           },
         ]
@@ -80,37 +78,37 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "a",
-            path: ["#{umbrella.path}/components/a"],
+            path: ["#{fixture_app}/components/a"],
             type: "Bundler",
           },
           {
             name: "c",
-            path: ["#{umbrella.path}/components/c"],
+            path: ["#{fixture_app}/components/c"],
             type: "Bundler",
           },
           {
             name: "d",
-            path: ["#{umbrella.path}/components/d"],
+            path: ["#{fixture_app}/components/d"],
             type: "Bundler",
           },
           {
             name: "f",
-            path: ["#{umbrella.path}/components/f"],
+            path: ["#{fixture_app}/components/f"],
             type: "Yarn",
           },
           {
             name: "g",
-            path: ["#{umbrella.path}/components/g"],
+            path: ["#{fixture_app}/components/g"],
             type: "Yarn",
           },
           {
             name: "h",
-            path: ["#{umbrella.path}/components/h"],
+            path: ["#{fixture_app}/components/h"],
             type: "Yarn & Bundler",
           },
           {
             name: "node_manifest",
-            path: ["#{umbrella.path}/node_manifest"],
+            path: ["#{fixture_app}/node_manifest"],
             type: "Yarn",
           },
         ]
@@ -118,11 +116,11 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/a/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/b/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/c/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/d/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/node_manifest/test.sh")
+      expect(with_change_to_b.scripts).to include("#{fixture_app}/components/a/test.sh")
+      expect(with_change_to_b.scripts).to include("#{fixture_app}/components/b/test.sh")
+      expect(with_change_to_b.scripts).to include("#{fixture_app}/components/c/test.sh")
+      expect(with_change_to_b.scripts).to include("#{fixture_app}/components/d/test.sh")
+      expect(with_change_to_b.scripts).to include("#{fixture_app}/node_manifest/test.sh")
     end
 
     it "correctly reports component names" do
@@ -136,7 +134,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to lowest level dependency" do
     let(:with_change_to_f) do
-      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/f/package.json"])
+      CobraCommander::Affected.new(fixture_umbrella, ["#{fixture_app}/components/f/package.json"])
     end
 
     it "correctly reports directly affected components" do
@@ -144,7 +142,7 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "f",
-            path: ["#{umbrella.path}/components/f"],
+            path: ["#{fixture_app}/components/f"],
             type: "Yarn",
           },
         ]
@@ -156,17 +154,17 @@ RSpec.describe CobraCommander::Affected do
         [
           {
             name: "g",
-            path: ["#{umbrella.path}/components/g"],
+            path: ["#{fixture_app}/components/g"],
             type: "Yarn",
           },
           {
             name: "h",
-            path: ["#{umbrella.path}/components/h"],
+            path: ["#{fixture_app}/components/h"],
             type: "Yarn & Bundler",
           },
           {
             name: "node_manifest",
-            path: ["#{umbrella.path}/node_manifest"],
+            path: ["#{fixture_app}/node_manifest"],
             type: "Yarn",
           },
         ]
@@ -175,10 +173,10 @@ RSpec.describe CobraCommander::Affected do
 
     it "correctly reports test scripts" do
       expect(with_change_to_f.scripts).to match_array [
-        "#{umbrella.path}/components/f/test.sh",
-        "#{umbrella.path}/components/g/test.sh",
-        "#{umbrella.path}/components/h/test.sh",
-        "#{umbrella.path}/node_manifest/test.sh",
+        "#{fixture_app}/components/f/test.sh",
+        "#{fixture_app}/components/g/test.sh",
+        "#{fixture_app}/components/h/test.sh",
+        "#{fixture_app}/node_manifest/test.sh",
       ]
     end
 
