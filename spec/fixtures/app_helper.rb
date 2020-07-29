@@ -13,7 +13,7 @@ module AppHelper
     config.include AppHelper
 
     config.before :all do
-      @fixture_app = Dir.mktmpdir
+      @fixture_app = Pathname.new(Dir.mktmpdir).realpath
       system(`tar xfz #{tgz_file} -C #{fixture_app}`)
     end
 
