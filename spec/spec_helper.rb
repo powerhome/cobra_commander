@@ -3,9 +3,12 @@
 require "aruba/rspec"
 require "fixtures/app_helper"
 require "pry"
+
 require "cobra_commander"
 
 RSpec.configure do |config|
+  AppHelper.configure(config, File.join(__dir__, "fixtures", "app.tgz"))
+
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`
     # and `failure_message` of custom matchers include text for helper methods
