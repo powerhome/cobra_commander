@@ -49,8 +49,16 @@ module CobraCommander
       @directly = @directly.sort_by(&:name)
     end
 
+    def component_changed?(component)
+      component.root_paths.any? do |component_path|
+        @changes.any? do |file_path|
+          file_path.start_with?(component_path)
+        end
+      end
+    end
+
     def add_if_changed(component)
-      return if component.root_paths.uniq.none? { |path| @changes.any?(Regexp.new(path)) }
+      return unless component_changed?(component)
 
       @directly << component
       @transitively.merge(component.deep_dependents)
