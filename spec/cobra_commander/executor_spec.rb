@@ -19,18 +19,11 @@ RSpec.describe CobraCommander::Executor do
     expect(output.string).to include("===> node_manifest (#{fixture_app}/node_manifest)")
   end
 
-  it "executes with clean environment" do
+  it "cleans BUNDLE environment so a nested bundle call can succeed" do
     output = StringIO.new
-    CobraCommander::Executor.exec(fixture_umbrella.components, "env", output)
 
-    expect(output.string).to include("===> a (#{fixture_app}/components/a)")
-    expect(output.string).to include("===> b (#{fixture_app}/components/b)")
-    expect(output.string).to include("===> c (#{fixture_app}/components/c)")
-    expect(output.string).to include("===> d (#{fixture_app}/components/d)")
-    expect(output.string).to include("===> e (#{fixture_app}/components/e)")
-    expect(output.string).to include("===> f (#{fixture_app}/components/f)")
-    expect(output.string).to include("===> g (#{fixture_app}/components/g)")
-    expect(output.string).to include("===> h (#{fixture_app}/components/h)")
-    expect(output.string).to include("===> node_manifest (#{fixture_app}/node_manifest)")
+    CobraCommander::Executor.exec([fixture_umbrella.find("e")], "bundle exec env", output)
+
+    expect(output.string).to_not include("Install missing gem executables with")
   end
 end
