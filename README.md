@@ -136,6 +136,14 @@ After checking out the repo, run `bin/setup` to install dependencies. You will a
 
 To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
+### Bundled App
+
+In order to maintain the features around umbrella apps and specially `changes`, a bundled [`umbrella app repo`](spec/fixtures/app.tgz) is included in this repository. This repo is compacted by `tar`/`gzip` in order to keep isolation, the format was chosen to avoid issues described in https://github.com/swcarpentry/git-novice/issues/272. To avoid the same issues, the workflow for this fixture app is the following:
+
+1. unpack it somewhere outside your repo
+1. do your changes and commit (locally only, it doesn't have a remote)
+1. from within the app run `tar cfz path/to/cobra/spec/fixtures/app.tgz .`
+
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at https://github.com/powerhome/cobra_commander. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
