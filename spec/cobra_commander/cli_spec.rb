@@ -229,7 +229,8 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with branch specified" do
       it "outputs specified branch in 'Changes since' header" do
-        branch = "origin/master"
+        branch = "test-branch"
+
         run_command_and_stop("cobra changes -a #{fixture_app} -r full -b #{branch}", fail_on_error: true)
 
         expect(last_command_started.output).to include("Changes since last commit on #{branch}")
