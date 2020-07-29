@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.8.1 - 2020-07-29
+
 * Fix CobraCommander::Executor when running [`bundler`](https://bundler.io/) based commands (i.e.: `bundle exec rspec`)
 
 ## Version 0.8 - 2020-07-21
