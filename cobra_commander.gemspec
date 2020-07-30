@@ -37,6 +37,8 @@ DESCRIPTION
   spec.add_dependency "bundler", "~> 1.17"
   spec.add_dependency "thor", ["< 2.0", ">= 0.18.1"]
   spec.add_dependency "ruby-graphviz", "~> 1.2.3"
+  spec.add_dependency "tty-command", "~> 0.9.0"
+  spec.add_dependency "tty-spinner", "~> 0.9.3"
 
   spec.add_development_dependency "bundler", "~> 1.17"
   spec.add_development_dependency "rake", "~> 10.0"
