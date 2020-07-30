@@ -11,13 +11,17 @@ module CobraCommander
         @components = components
       end
 
-      def run(command, spin_output: $stderr, **cmd_options)
+      def run(command, output: $stdout, spin_output: $stderr, **cmd_options)
+        cmmd_output = StringIO.new
         multi = TTY::Spinner::Multi.new("Running #{command}", output: spin_output)
         @components.each do |component|
           component_exec(multi, component, command, only_output_on_error: true,
+                                                    stderr: :stdout,
+                                                    output: cmmd_output,
                                                     **cmd_options)
         end
         multi.auto_spin
+        output << cmmd_output.string
         true
       end
 
