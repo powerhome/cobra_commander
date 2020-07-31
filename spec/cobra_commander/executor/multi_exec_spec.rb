@@ -15,9 +15,9 @@ RSpec.describe CobraCommander::Executor::MultiExec do
   it "executes in the context of each given component" do
     subject.run("echo 'I am at' $PWD", output: cmmd_output, spin_output: spin_output, only_output_on_error: false)
 
-    expect(cmmd_output.string).to match(/I am at .*components\/b$/)
+    expect(cmmd_output.string).to match(%r{I am at .*components/b$})
     expect(cmmd_output.string).to match(/I am at .*node_manifest$/)
-    expect(cmmd_output.string).to match(/I am at .*components\/g$/)
+    expect(cmmd_output.string).to match(%r{I am at .*components/g$})
   end
 
   it "prints the status of each component" do

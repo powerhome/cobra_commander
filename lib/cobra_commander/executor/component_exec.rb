@@ -4,7 +4,7 @@ require "tty-command"
 
 module CobraCommander
   module Executor
-      # Execute commands on all components of a ComponentTree
+    # Execute a command on a single component
     class ComponentExec
       def initialize(component)
         @component = component
@@ -19,5 +19,5 @@ module CobraCommander
         end
       end
     end
-   end
- end
+  end
+end

@@ -6,6 +6,7 @@ require_relative "component_exec"
 
 module CobraCommander
   module Executor
+    # Executes a command on multiple components simultaniously
     class MultiExec
       def initialize(components)
         @components = components
@@ -16,8 +17,7 @@ module CobraCommander
         multi = TTY::Spinner::Multi.new("Running #{command}", output: spin_output)
         @components.each do |component|
           component_exec(multi, component, command, only_output_on_error: true,
-                                                    stderr: :stdout,
-                                                    output: cmmd_output,
+                                                    stderr: :stdout, output: cmmd_output,
                                                     **cmd_options)
         end
         multi.auto_spin
@@ -25,7 +25,7 @@ module CobraCommander
         true
       end
 
-      private
+    private
 
       def component_exec(multi, component, command, **options)
         exec = ComponentExec.new(component)
@@ -37,8 +37,8 @@ module CobraCommander
       def spinner(title)
         pastel = Pastel.new
         [":spinner #{title}", format: :bouncing,
-        success_mark: pastel.green("[DONE]"),
-        error_mark: pastel.red("[ERROR]")]
+                              success_mark: pastel.green("[DONE]"),
+                              error_mark: pastel.red("[ERROR]")]
       end
     end
   end
