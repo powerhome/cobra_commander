@@ -49,7 +49,8 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command a given component's ruby dependents" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependents b 'touch cobra-rocks'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependents b 'touch cobra-rocks'",
+                           fail_on_error: true)
 
       expect(components_affected).to match_array %w[a c d h]
     end
@@ -61,13 +62,15 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command a given component's js dependencies" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependencies h 'touch cobra-rocks'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependencies h 'touch cobra-rocks'",
+                           fail_on_error: true)
 
       expect(components_affected).to match_array %w[b e f]
     end
 
     it "executes the given command a given component's ruby dependencies" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependencies h 'echo \"hello from\" `pwd`'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependencies h 'echo \"hello from\" `pwd`'",
+                           fail_on_error: true)
 
       expect(last_command_started.output).to include("hello from #{fixture_app}/components/b")
     end
