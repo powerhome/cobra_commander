@@ -4,6 +4,10 @@ require "spec_helper"
 
 RSpec.describe "cobra cli", type: :aruba do
   describe "cobra exec" do
+    let(:components_affected) do
+      Dir["#{fixture_app}/{**/**/,}cobra-rocks"].map(&File.method(:dirname)).map(&File.method(:basename))
+    end
+
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra exec -a #{fixture_app} non_existent pwd", fail_on_error: false)
 
@@ -11,9 +15,9 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command on all components" do
-      run_command_and_stop("cobra exec -a #{fixture_app} 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} 'touch cobra-rocks'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[
+      expect(components_affected).to match_array %w[
         e
         f
         g
@@ -27,45 +31,45 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command a given component" do
-      run_command_and_stop("cobra exec -a #{fixture_app} b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} b 'echo \"hello from\" `pwd`'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b]
+      expect(last_command_started.output).to include("hello from #{fixture_app}/components/b")
     end
 
     it "executes the given command a given component's dependents" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --dependents b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --dependents b 'touch cobra-rocks'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[a c d f g h node_manifest]
+      expect(components_affected).to match_array %w[a c d f g h node_manifest]
     end
 
     it "executes the given command a given component's js dependents" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependents b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependents b 'touch cobra-rocks'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[f g h node_manifest]
+      expect(components_affected).to match_array %w[f g h node_manifest]
     end
 
     it "executes the given command a given component's ruby dependents" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependents b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependents b 'touch cobra-rocks'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[a c d h]
+      expect(components_affected).to match_array %w[a c d h]
     end
 
     it "executes the given command a given component's dependencies" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --dependencies b 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --dependencies b 'touch cobra-rocks'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[e]
+      expect(components_affected).to match_array %w[e]
     end
 
     it "executes the given command a given component's js dependencies" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependencies h 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependencies h 'touch cobra-rocks'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b e f]
+      expect(components_affected).to match_array %w[b e f]
     end
 
     it "executes the given command a given component's ruby dependencies" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependencies h 'basename $PWD'", fail_on_error: true)
+      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependencies h 'echo \"hello from\" `pwd`'", fail_on_error: true)
 
-      expect(last_command_started.output.split("\n").grep(/^[^=]/)).to match_array %w[b]
+      expect(last_command_started.output).to include("hello from #{fixture_app}/components/b")
     end
   end
 
