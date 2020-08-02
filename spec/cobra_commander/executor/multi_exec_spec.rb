@@ -23,8 +23,8 @@ RSpec.describe CobraCommander::Executor::MultiExec do
   it "prints the status of each component" do
     subject.run("echo 'I am at' $PWD", output: cmmd_output, spin_output: spin_output)
 
-    expect(spin_output.string).to match(/\[DONE\]\e\[0m b/)
-    expect(spin_output.string).to match(/\[DONE\]\e\[0m node_manifest/)
-    expect(spin_output.string).to match(/\[DONE\]\e\[0m g/)
+    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? b/)
+    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? node_manifest/)
+    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? g/)
   end
 end
