@@ -1,23 +1,20 @@
 # frozen_string_literal: true
 
+require "bundler/lockfile_parser"
+
 module CobraCommander
   module Dependencies
     # Calculates ruby bundler dependencies
     class Bundler
-      def initialize(root)
-        @definition = ::Bundler::Definition.build(
-          Pathname.new(File.join(root, "Gemfile")).realpath,
-          Pathname.new(File.join(root, "Gemfile.lock")).realpath,
-          false
-        )
-      end
+      attr_reader :path
 
-      def path
-        @definition.lockfile
+      def initialize(root)
+        @root = root
+        @path = Pathname.new(File.join(root, "Gemfile.lock")).realpath
       end
 
       def dependencies
-        @definition.dependencies.map(&:name)
+        lockfile.dependencies.values.map(&:name)
       end
 
       def components
@@ -28,9 +25,14 @@ module CobraCommander
 
     private
 
+      def lockfile
+        @lockfile ||= ::Bundler::LockfileParser.new(::Bundler.read_file(path))
+      end
+
       def components_source
-        @components_source ||= @definition.send(:sources).path_sources.find do |source|
-          source.path.to_s.eql?("components")
+        @components_source ||= begin
+          source = @lockfile.sources.find {|source| source.path.to_s.eql?("components") }
+          ::Bundler::Source::Path.new(source.options.merge("root_path" => @root))
         end
       end
     end
