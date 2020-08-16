@@ -31,7 +31,7 @@ module CobraCommander
 
       def components_source
         @components_source ||= begin
-          source = @lockfile.sources.find {|source| source.path.to_s.eql?("components") }
+          source = @lockfile.sources.find { |s| s.path.to_s.eql?("components") }
           ::Bundler::Source::Path.new(source.options.merge("root_path" => @root))
         end
       end
