@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.9.0 - 2020-08-26
+
 * Add support for parallel task execution to `cobra exec`.
 
 ## Version 0.8.1 - 2020-07-29
