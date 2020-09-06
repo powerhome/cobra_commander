@@ -12,12 +12,12 @@ module AppHelper
   def self.configure(config, tgz_file)
     config.include AppHelper
 
-    config.before :all do
+    config.before :each do
       @fixture_app = Pathname.new(Dir.mktmpdir).realpath
       system(`tar xfz #{tgz_file} -C #{fixture_app}`)
     end
 
-    config.after :all do
+    config.after :each do
       FileUtils.rm_r fixture_app
     end
   end
