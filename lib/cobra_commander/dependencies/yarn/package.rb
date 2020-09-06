@@ -14,7 +14,7 @@ module CobraCommander
         end
 
         def project_tag
-          name.match(%r{^@[\w-]+\/}).to_s
+          name.match(%r{^@[\w-]+/}).to_s
         end
 
         def name
