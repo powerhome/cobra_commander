@@ -21,6 +21,7 @@ module CobraCommander
 
     def resolve(component_root_path)
       return root if root.root_paths.include?(component_root_path)
+
       components.find do |component|
         component.root_paths.include?(component_root_path)
       end

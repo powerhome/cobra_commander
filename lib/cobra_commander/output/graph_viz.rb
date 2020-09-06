@@ -18,7 +18,7 @@ module CobraCommander
 
       private_class_method def self.extract_format(output)
         format = output[-3..-1]
-        return format if format == "png" || format == "dot"
+        return format if %w[png dot].include?(format)
 
         raise ArgumentError, "output format must be 'png' or 'dot'"
       end

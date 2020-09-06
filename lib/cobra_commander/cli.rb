@@ -39,7 +39,7 @@ module CobraCommander
     def exec(command_or_component, command = nil)
       CobraCommander::Executor.exec(
         components_filtered(command && command_or_component),
-        command ? command : command_or_component
+        command || command_or_component
       )
     end
 
@@ -58,8 +58,8 @@ module CobraCommander
         options.output
       )
       puts "Graph generated at #{options.output}"
-    rescue ArgumentError => error
-      error error.message
+    rescue ArgumentError => e
+      error e.message
     end
 
     desc "changes [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
@@ -83,10 +83,12 @@ module CobraCommander
 
     def components_filtered(component_name)
       return umbrella.components unless component_name
+
       component = find_component(component_name)
 
       return component.deep_dependencies if options.dependencies
       return component.deep_dependents if options.dependents
+
       [component]
     end
   end

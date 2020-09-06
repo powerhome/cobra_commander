@@ -17,7 +17,7 @@ RSpec.describe CobraCommander::Change do
 
           expect { changes.run! }.to output(<<~OUTPUT
             {"changed_files":[],"directly_affected_components":[],"transitively_affected_components":[],"test_scripts":[],"component_names":[],"languages":{"ruby":false,"javascript":false}}
-            OUTPUT
+          OUTPUT
                                            ).to_stdout
         end
       end
@@ -31,7 +31,7 @@ RSpec.describe CobraCommander::Change do
 
           expect { change.run! }.to output(<<~OUTPUT
             {"changed_files":["#{fixture_app}/components/a"],"directly_affected_components":[{"name":"a","path":["#{fixture_app}/components/a"],"type":"Bundler"}],"transitively_affected_components":[],"test_scripts":["#{fixture_app}/components/a/test.sh"],"component_names":["a"],"languages":{"ruby":true,"javascript":false}}
-            OUTPUT
+          OUTPUT
                                           ).to_stdout
         end
       end
@@ -45,7 +45,7 @@ RSpec.describe CobraCommander::Change do
 
           expect { change.run! }.to output(<<~OUTPUT
             {"changed_files":["#{fixture_app}/components/e"],"directly_affected_components":[{"name":"e","path":["#{fixture_app}/components/e"],"type":"Yarn"}],"transitively_affected_components":[{"name":"a","path":["#{fixture_app}/components/a"],"type":"Bundler"},{"name":"b","path":["#{fixture_app}/components/b"],"type":"Yarn & Bundler"},{"name":"c","path":["#{fixture_app}/components/c"],"type":"Bundler"},{"name":"d","path":["#{fixture_app}/components/d"],"type":"Bundler"},{"name":"f","path":["#{fixture_app}/components/f"],"type":"Yarn"},{"name":"g","path":["#{fixture_app}/components/g"],"type":"Yarn"},{"name":"h","path":["#{fixture_app}/components/h"],"type":"Yarn & Bundler"},{"name":"node_manifest","path":["#{fixture_app}/node_manifest"],"type":"Yarn"}],"test_scripts":["#{fixture_app}/components/a/test.sh","#{fixture_app}/components/b/test.sh","#{fixture_app}/components/c/test.sh","#{fixture_app}/components/d/test.sh","#{fixture_app}/components/e/test.sh","#{fixture_app}/components/f/test.sh","#{fixture_app}/components/g/test.sh","#{fixture_app}/components/h/test.sh","#{fixture_app}/node_manifest/test.sh"],"component_names":["a","b","c","d","e","f","g","h","node_manifest"],"languages":{"ruby":true,"javascript":true}}
-            OUTPUT
+          OUTPUT
                                           ).to_stdout
         end
       end
@@ -65,7 +65,7 @@ RSpec.describe CobraCommander::Change do
             <<< Transitively affected components >>>
 
             <<< Test scripts to run >>>
-            OUTPUT
+          OUTPUT
                                            ).to_stdout
         end
       end
@@ -89,7 +89,7 @@ RSpec.describe CobraCommander::Change do
             <<< Transitively affected components >>>
 
             <<< Test scripts to run >>>
-            OUTPUT
+          OUTPUT
                        ).to_stdout
         end
       end
@@ -115,7 +115,7 @@ RSpec.describe CobraCommander::Change do
 
             <<< Test scripts to run >>>
             #{fixture_app}/components/a/test.sh
-            OUTPUT
+          OUTPUT
                        ).to_stdout
         end
       end
@@ -158,7 +158,7 @@ RSpec.describe CobraCommander::Change do
             #{fixture_app}/components/g/test.sh
             #{fixture_app}/components/h/test.sh
             #{fixture_app}/node_manifest/test.sh
-            OUTPUT
+          OUTPUT
                        ).to_stdout
         end
       end
@@ -200,7 +200,7 @@ RSpec.describe CobraCommander::Change do
             #{fixture_app}/components/g/test.sh
             #{fixture_app}/components/h/test.sh
             #{fixture_app}/node_manifest/test.sh
-            OUTPUT
+          OUTPUT
                        ).to_stdout
         end
       end

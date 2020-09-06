@@ -36,9 +36,9 @@ module CobraCommander
 
       def spinner(title)
         pastel = Pastel.new
-        [":spinner #{title}", format: :bouncing,
-                              success_mark: pastel.green("[DONE]"),
-                              error_mark: pastel.red("[ERROR]")]
+        [":spinner #{title}", { format: :bouncing,
+                                success_mark: pastel.green("[DONE]"),
+                                error_mark: pastel.red("[ERROR]") },]
       end
     end
   end

@@ -42,16 +42,16 @@ module CobraCommander
           Open3.capture3("git", "diff", "--name-only", @branch)
         end
 
-        if result.exitstatus == 128
-          raise InvalidSelectionError, "Specified --branch could not be found"
-        end
+        raise InvalidSelectionError, "Specified --branch could not be found" if result.exitstatus == 128
 
         diff.split("\n").map { |f| File.join(@root_dir, f) }
       end
     end
 
     def assert_valid_result_choice
-      raise InvalidSelectionError, "--results must be 'test', 'full', 'name' or 'json'" unless %w[test full name json].include?(@results) # rubocop:disable Metrics/LineLength
+      return if %w[test full name json].include?(@results)
+
+      raise InvalidSelectionError, "--results must be 'test', 'full', 'name' or 'json'"
     end
 
     def selected_result?(result)

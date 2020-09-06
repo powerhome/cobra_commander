@@ -1,50 +1,27 @@
-AllCops:
-  TargetRubyVersion: 2.3
-
-Metrics/LineLength:
-  Max: 120
+# The behavior of RuboCop can be controlled via the .rubocop.yml
+# configuration file. It makes it possible to enable/disable
+# certain cops (checks) and to alter their behavior if they accept
+# any parameters. The file can be placed either in your home
+# directory or in some project directory.
+#
+# RuboCop will start looking for the configuration file in the directory
+# where the inspected file is and continue its way up to the root directory.
+#
+# See https://docs.rubocop.org/rubocop/configuration
 
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
     - cobra_commander.gemspec
 
-Metrics/ClassLength:
-  Exclude:
-    - spec/**/*.rb
-    - cobra_commander.gemspec
-
-Style/AccessModifierIndentation:
+Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
 
-Style/Documentation:
-  Enabled: true
+AllCops:
+  NewCops: enable
 
-Style/ExtraSpacing:
-  Exclude:
-    - cobra_commander.gemspec
-
-Style/SpaceAroundOperators:
-  Exclude:
-    - cobra_commander.gemspec
-
-Style/Lambda:
-  EnforcedStyle: literal
-
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    default: ()
-    '%i': '[]'
-    '%I': '[]'
-    '%r': '{}'
-    '%w': '[]'
-    '%W': '[]'
-
-# Single quotes being faster is hardly measurable and only affects parse time.
-# Enforcing double quotes reduces the times where you need to change them when introducing an interpolation.
-# Use single quotes only if their semantics are needed.
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Style/TrailingCommaInLiteral:
-  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
