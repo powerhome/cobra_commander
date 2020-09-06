@@ -3,7 +3,7 @@
 module CobraCommander
   # Represents a component withing an Umbrella
   class Component
-    attr_reader :name, :dependencies, :sources
+    attr_reader :name, :sources
 
     def initialize(umbrella, name)
       @umbrella = umbrella
