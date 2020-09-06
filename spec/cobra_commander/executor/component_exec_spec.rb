@@ -26,16 +26,9 @@ RSpec.describe CobraCommander::Executor::ComponentExec do
       Pathname.new(__FILE__).realpath
     )
 
-    subject.run("bundle list", output: output)
+    subject.run("bundle lock", output: output)
 
-    expect(output.string).to eql <<~OUT
-      Gems included by the bundle:
-        * b (0.0.1)
-        * bundler (1.17.3)
-        * c (0.0.1)
-        * d (0.0.1)
-        * rake (12.0.0)
-    OUT
+    expect(output.string).to match %r{^Writing lockfile to .*\/components\/d\/Gemfile.lock$}
   end
 
   it "allows to override cmd options" do
