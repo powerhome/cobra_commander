@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+require "bundler"
 require "bundler/lockfile_parser"
+require "pathname"
 
 module CobraCommander
   module Dependencies
