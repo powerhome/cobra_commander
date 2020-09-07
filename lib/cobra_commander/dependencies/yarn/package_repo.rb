@@ -6,7 +6,7 @@ module CobraCommander
       # Yarn package repository to load and cache package.json files
       class PackageRepo
         def initialize
-          @specs ||= {}
+          @specs = {}
         end
 
         def specs
@@ -14,8 +14,9 @@ module CobraCommander
         end
 
         def load_linked_specs(package)
-          package.dependencies.values.each do |spec|
+          package.dependencies.each_value do |spec|
             next unless spec =~ /link:(.+)/
+
             load_spec(File.join(package.path, "..", Regexp.last_match(1)))
           end
         end

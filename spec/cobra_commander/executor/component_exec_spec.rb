@@ -28,7 +28,7 @@ RSpec.describe CobraCommander::Executor::ComponentExec do
 
     subject.run("bundle lock", output: output)
 
-    expect(output.string).to match %r{^Writing lockfile to .*\/components\/d\/Gemfile.lock$}
+    expect(output.string).to match %r{^Writing lockfile to .*/components/d/Gemfile.lock$}
   end
 
   it "allows to override cmd options" do

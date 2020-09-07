@@ -1,50 +1,20 @@
 AllCops:
-  TargetRubyVersion: 2.3
-
-Metrics/LineLength:
-  Max: 120
+  TargetRubyVersion: 2.5
+  NewCops: enable
 
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
     - cobra_commander.gemspec
 
-Metrics/ClassLength:
-  Exclude:
-    - spec/**/*.rb
-    - cobra_commander.gemspec
-
-Style/AccessModifierIndentation:
+Layout/AccessModifierIndentation:
   EnforcedStyle: outdent
 
-Style/Documentation:
-  Enabled: true
-
-Style/ExtraSpacing:
-  Exclude:
-    - cobra_commander.gemspec
-
-Style/SpaceAroundOperators:
-  Exclude:
-    - cobra_commander.gemspec
-
-Style/Lambda:
-  EnforcedStyle: literal
-
-Style/PercentLiteralDelimiters:
-  PreferredDelimiters:
-    default: ()
-    '%i': '[]'
-    '%I': '[]'
-    '%r': '{}'
-    '%w': '[]'
-    '%W': '[]'
-
-# Single quotes being faster is hardly measurable and only affects parse time.
-# Enforcing double quotes reduces the times where you need to change them when introducing an interpolation.
-# Use single quotes only if their semantics are needed.
 Style/StringLiterals:
   EnforcedStyle: double_quotes
 
-Style/TrailingCommaInLiteral:
-  EnforcedStyleForMultiline: comma
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: consistent_comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
