@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "json"
+require "pathname"
 
 module CobraCommander
   module Dependencies
@@ -10,7 +11,7 @@ module CobraCommander
         attr_reader :path
 
         def initialize(path)
-          @path = Pathname.new(File.join(path, "package.json")).realpath
+          @path = ::Pathname.new(File.join(path, "package.json")).realpath
         end
 
         def project_tag

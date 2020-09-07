@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "pathname"
+require "bundler"
+
 module CobraCommander
   module Dependencies
     # Calculates ruby bundler dependencies
