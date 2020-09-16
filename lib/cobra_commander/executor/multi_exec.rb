@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "tty-spinner"
+require "stringio"
 
 require_relative "component_exec"
 
