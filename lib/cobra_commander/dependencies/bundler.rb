@@ -11,7 +11,7 @@ module CobraCommander
       attr_reader :path
 
       def initialize(root)
-        @root = root
+        @root = Pathname.new(root)
         @path = Pathname.new(File.join(root, "Gemfile.lock")).realpath
       end
 
