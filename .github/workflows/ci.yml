@@ -26,6 +26,8 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler: ${{ matrix.bundler }}
         bundler-cache: true
+    - name: Install alternative versions of bundler
+      run: gem install bundler -v ~> 1 --no-document; gem install bundler -v ~> 2 --no-document
     - name: Install Graphviz
       run: sudo apt -qq install graphviz
     - name: Run tests
