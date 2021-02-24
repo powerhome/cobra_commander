@@ -12,7 +12,7 @@ module CobraCommander
 
       def initialize(root)
         @root = Pathname.new(root)
-        @path = Pathname.new(File.join(root, "Gemfile.lock")).realpath
+        @path = @root.join("Gemfile.lock").realpath
       end
 
       def dependencies
