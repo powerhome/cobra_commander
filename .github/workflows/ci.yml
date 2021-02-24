@@ -26,8 +26,8 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler: ${{ matrix.bundler }}
         bundler-cache: true
-    - name: Install alternative versions of bundler
-      run: gem install bundler -v ~> 1 --no-document; gem install bundler -v ~> 2 --no-document
+    - name: Install bundler v1 # Even if we're testing bundler v2, we need v1 available because the fixture components have it in their Gemfile.locks
+      run: gem install bundler -v ~> 1 --no-document
     - name: Install Graphviz
       run: sudo apt -qq install graphviz
     - name: Run tests
