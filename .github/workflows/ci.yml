@@ -12,18 +12,18 @@ jobs:
         ruby:
           - "2.5"
           - "2.6"
-        gemfile:
-          - "bundler1"
-          - "bundler2"
+        bundler:
+          - "1"
+          - "2"
     env:
-      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
+      BUNDLE_GEMFILE: gemfiles/bundler${{ matrix.bundler }}.gemfile
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
-        bundler: 1
+        bundler: ${{ matrix.bundler }}
         bundler-cache: true
     - name: Install Graphviz
       run: sudo apt -qq install graphviz
