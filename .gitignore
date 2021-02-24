@@ -13,3 +13,6 @@
 /spec/fixtures/app/node_manifest/node_modules/
 /spec/fixtures/app/components/*/node_modules/
 /tmp/
+
+.bundle
+gemfiles/*.lock

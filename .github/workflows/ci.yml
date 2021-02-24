@@ -11,6 +11,11 @@ jobs:
         ruby:
           - "2.5"
           - "2.6"
+        gemfile:
+          - "bundler1"
+          - "bundler2"
+    env:
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.gemfile }}.gemfile
     steps:
     - uses: actions/checkout@v2
     - name: Set up Ruby
