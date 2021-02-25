@@ -2,4 +2,6 @@
 
 source "https://rubygems.org"
 
-gemspec
+gemspec path: "../"
+
+gem "bundler", "~> 1.17.3"
