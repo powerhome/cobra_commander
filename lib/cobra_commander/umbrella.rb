@@ -29,9 +29,9 @@ module CobraCommander
 
     def add_source(key, source)
       @root_component.add_source key, source.path, source.dependencies
-      source.components.each do |path:, name:, dependencies:|
-        @components[name] ||= Component.new(self, name)
-        @components[name].add_source key, path, dependencies
+      source.components.each do |component|
+        @components[component[:name]] ||= Component.new(self, component[:name])
+        @components[component[:name]].add_source key, component[:path], component[:dependencies]
       end
     end
 

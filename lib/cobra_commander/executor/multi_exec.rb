@@ -30,16 +30,13 @@ module CobraCommander
 
       def component_exec(multi, component, command, **options)
         exec = ComponentExec.new(component)
-        multi.register(*spinner(component.name)) do |spin|
+        pastel = Pastel.new
+        multi.register(":spinner #{component.name}",
+                       format: :bouncing,
+                       success_mark: pastel.green("[DONE]"),
+                       error_mark: pastel.red("[ERROR]")) do |spin|
           exec.run(command, **options) ? spin.success : spin.error
         end
-      end
-
-      def spinner(title)
-        pastel = Pastel.new
-        [":spinner #{title}", { format: :bouncing,
-                                success_mark: pastel.green("[DONE]"),
-                                error_mark: pastel.red("[ERROR]"), },]
       end
     end
   end

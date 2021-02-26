@@ -66,13 +66,13 @@ module CobraCommander
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      @affected.directly.each { |component| puts display(component) }
+      @affected.directly.each { |component| puts display(**component) }
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      @affected.transitively.each { |component| puts display(component) }
+      @affected.transitively.each { |component| puts display(**component) }
       puts blank_line
     end
 
