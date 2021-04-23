@@ -36,10 +36,12 @@ module CobraCommander
                                        "Defaults to all components."
     method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
     method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
+    method_option :concurrency, type: :numeric, default: 3, aliases: "-c", desc: "Max number of jobs to run concurrently"
     def exec(command_or_component, command = nil)
       CobraCommander::Executor.exec(
-        components_filtered(command && command_or_component),
-        command || command_or_component
+        components: components_filtered(command && command_or_component),
+        command: command || command_or_component,
+        concurrency: options.concurrency
       )
     end
 

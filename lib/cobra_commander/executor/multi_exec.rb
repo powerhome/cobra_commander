@@ -2,40 +2,57 @@
 
 require "tty-spinner"
 require "stringio"
+require "concurrent-ruby"
 
 require_relative "component_exec"
 
 module CobraCommander
   module Executor
-    # Executes a command on multiple components simultaniously
+    # Execute a command on multiple components
     class MultiExec
-      def initialize(components)
+      def initialize(components, concurrency:, spin_output: $stderr)
         @components = components
+        @multi = TTY::Spinner::Multi.new(":spinner :task", output: spin_output)
+        @semaphore = Concurrent::Semaphore.new(concurrency)
       end
 
-      def run(command, output: $stdout, spin_output: $stderr, only_output_on_error: true, **cmd_options)
-        cmmd_output = StringIO.new
-        multi = TTY::Spinner::Multi.new("Running #{command}", output: spin_output)
+      def run(command, output: $stdout, **kwargs)
+        buffer = StringIO.new
+        @multi.top_spinner.update(task: "Running #{command}")
         @components.each do |component|
-          component_exec(multi, component, command, only_output_on_error: only_output_on_error,
-                                                    stderr: :stdout, output: cmmd_output,
-                                                    **cmd_options)
+          register_job(command: command, component: component,
+                       output: buffer, stderr: :stdout,
+                       only_output_on_error: true,
+                       **kwargs)
         end
-        multi.auto_spin
-        output << cmmd_output.string
-        true
+        @multi.auto_spin
+        output << buffer.string
       end
 
     private
 
-      def component_exec(multi, component, command, **options)
-        exec = ComponentExec.new(component)
-        pastel = Pastel.new
-        multi.register(":spinner #{component.name}",
-                       format: :bouncing,
-                       success_mark: pastel.green("[DONE]"),
-                       error_mark: pastel.red("[ERROR]")) do |spin|
-          exec.run(command, **options) ? spin.success : spin.error
+      def pastel
+        @pastel ||= Pastel.new
+      end
+
+      def spinner_options
+        @spinner_options ||= {
+          format: :bouncing,
+          success_mark: pastel.green("[DONE]"),
+          error_mark: pastel.red("[ERROR]"),
+        }
+      end
+
+      def register_job(component:, command:, **kwargs)
+        @multi.register(":spinner #{component.name}", **spinner_options) do |spinner|
+          @semaphore.acquire
+          exec = ComponentExec.new(component)
+          if exec.run(command, **kwargs)
+            spinner.success
+          else
+            spinner.error
+          end
+          @semaphore.release
         end
       end
     end
