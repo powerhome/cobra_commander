@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.11.0 - 2021-04-23
+
 * Add concurrency limit to multi exec [#57](https://github.com/powerhome/cobra_commander/pull/57)
 * Ruby 3.0 compatibility [#55](https://github.com/powerhome/cobra_commander/pull/55)
 
