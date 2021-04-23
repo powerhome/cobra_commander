@@ -27,4 +27,12 @@ RSpec.describe CobraCommander::Executor::MultiExec do
     expect(spin_output.string).to match(/\[DONE\](\e\[0m)? node_manifest/)
     expect(spin_output.string).to match(/\[DONE\](\e\[0m)? g/)
   end
+
+  it "fails when the command fail" do
+    expect(subject.run("lol", output: cmmd_output)).to_not be true
+  end
+
+  it "succeeds when it succeed" do
+    expect(subject.run("true", output: cmmd_output)).to be true
+  end
 end

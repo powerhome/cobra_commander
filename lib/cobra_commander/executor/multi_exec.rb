@@ -22,11 +22,11 @@ module CobraCommander
         @components.each do |component|
           register_job(command: command, component: component,
                        output: buffer, stderr: :stdout,
-                       only_output_on_error: true,
-                       **kwargs)
+                       only_output_on_error: true, **kwargs)
         end
         @multi.auto_spin
         output << buffer.string
+        @multi.success?
       end
 
     private
