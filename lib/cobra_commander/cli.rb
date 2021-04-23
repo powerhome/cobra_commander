@@ -2,6 +2,7 @@
 
 require "thor"
 require "fileutils"
+require "concurrent-ruby"
 
 require "cobra_commander"
 require "cobra_commander/affected"
@@ -12,6 +13,8 @@ require "cobra_commander/output"
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
+    DEFAULT_CONCURRENCY = (Concurrent.processor_count / 2.0).ceil
+
     class_option :app, default: Dir.pwd, aliases: "-a", type: :string
     class_option :js, default: false, type: :boolean, desc: "Consider only the JS dependency graph"
     class_option :ruby, default: false, type: :boolean, desc: "Consider only the Ruby dependency graph"
@@ -36,7 +39,8 @@ module CobraCommander
                                        "Defaults to all components."
     method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
     method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
-    method_option :concurrency, type: :numeric, default: 3, aliases: "-c", desc: "Max number of jobs to run concurrently"
+    method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
+                                desc: "Max number of jobs to run concurrently"
     def exec(command_or_component, command = nil)
       CobraCommander::Executor.exec(
         components: components_filtered(command && command_or_component),
