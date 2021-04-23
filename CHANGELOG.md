@@ -2,9 +2,26 @@
 
 ## Unreleased
 
+* Add concurrency limit to multi exec [#57](https://github.com/powerhome/cobra_commander/pull/57)
+* Ruby 3.0 compatibility [#55](https://github.com/powerhome/cobra_commander/pull/55)
+
+## Version 0.10.0 - 2021-02-25
+
+* Add support for Bundler 2 [#54](https://github.com/powerhome/cobra_commander/pull/54)
+* Add support for Ruby 2.7 [#53](https://github.com/powerhome/cobra_commander/pull/53)
+
+## Version 0.9.2 -
+
+* Another fix for binstubs [#51](https://github.com/powerhome/cobra_commander/pull/51)
+
+## Version 0.9.1 -
+
+* Replace bundler encapsulation violation by LockfileParser [#48](https://github.com/powerhome/cobra_commander/pull/48)
+* Fix bundle binstubs [#50](https://github.com/powerhome/cobra_commander/pull/50)
+
 ## Version 0.9.0 - 2020-08-26
 
-* Add support for parallel task execution to `cobra exec`.
+* Add support for parallel task execution to `cobra exec` [#49](https://github.com/powerhome/cobra_commander/pull/49)
 
 ## Version 0.8.1 - 2020-07-29
 
