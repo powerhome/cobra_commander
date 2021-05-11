@@ -25,10 +25,8 @@ module CobraCommander
     end
 
     desc "ls [component]", "Lists the components in the context of a given component or umbrella"
-    method_option :dependencies, type: :boolean, aliases: "-d",
-                                 desc: "Run the command on each dependency of a given component"
-    method_option :dependents, type: :boolean, aliases: "-D",
-                               desc: "Run the command on each dependency of a given component"
+    filter_options dependents: "Lists all dependents of a given component",
+                   dependencies: "Lists all dependencies of a given component"
     method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
     def ls(component = nil)
       components = components_filtered(component)
@@ -37,8 +35,8 @@ module CobraCommander
 
     desc "exec [component] <command>", "Executes the command in the context of a given component or set thereof. " \
                                        "Defaults to all components."
-    method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
-    method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
+    filter_options dependents: "Run the command on each dependent of a given component",
+                   dependencies: "Run the command on each dependency of a given component"
     method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
                                 desc: "Max number of jobs to run concurrently"
     def exec(command_or_component, command = nil)
@@ -73,6 +71,11 @@ module CobraCommander
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
     def changes
       Change.new(umbrella, options.results, options.branch).run!
+    end
+
+    private_class_method def self.filter_options(dependents:, dependencies:)
+      method_option :dependencies, type: :boolean, aliases: "-d", desc: dependencies
+      method_option :dependents, type: :boolean, aliases: "-D", desc: dependents
     end
 
   private
