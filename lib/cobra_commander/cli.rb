@@ -13,6 +13,8 @@ require "cobra_commander/output"
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
+    require "cobra_commander/cli/filters"
+
     DEFAULT_CONCURRENCY = (Concurrent.processor_count / 2.0).ceil
 
     class_option :app, default: Dir.pwd, aliases: "-a", type: :string
@@ -73,32 +75,10 @@ module CobraCommander
       Change.new(umbrella, options.results, options.branch).run!
     end
 
-    private_class_method def self.filter_options(dependents:, dependencies:)
-      method_option :dependencies, type: :boolean, aliases: "-d", desc: dependencies
-      method_option :dependents, type: :boolean, aliases: "-D", desc: dependents
-    end
-
   private
 
     def umbrella
       @umbrella ||= CobraCommander.umbrella(options.app, yarn: options.js, bundler: options.ruby)
-    end
-
-    def find_component(name)
-      return umbrella.root unless name
-
-      umbrella.find(name) || error("Component #{name} not found, try one of `cobra ls`") || exit(1)
-    end
-
-    def components_filtered(component_name)
-      return umbrella.components unless component_name
-
-      component = find_component(component_name)
-
-      return component.deep_dependencies if options.dependencies
-      return component.deep_dependents if options.dependents
-
-      [component]
     end
   end
 end
