@@ -6,7 +6,7 @@ module CobraCommander
     private_class_method def self.filter_options(dependents:, dependencies:)
       method_option :dependencies, type: :boolean, aliases: "-d", desc: dependencies
       method_option :dependents, type: :boolean, aliases: "-D", desc: dependents
-      method_option :self, type: :boolean, desc: "Include the own component"
+      method_option :self, type: :boolean, default: true, desc: "Include the own component"
     end
 
   private
