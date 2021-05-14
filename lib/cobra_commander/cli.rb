@@ -13,6 +13,8 @@ require "cobra_commander/output"
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
+    require "cobra_commander/cli/filters"
+
     DEFAULT_CONCURRENCY = (Concurrent.processor_count / 2.0).ceil
 
     class_option :app, default: Dir.pwd, aliases: "-a", type: :string
@@ -25,10 +27,8 @@ module CobraCommander
     end
 
     desc "ls [component]", "Lists the components in the context of a given component or umbrella"
-    method_option :dependencies, type: :boolean, aliases: "-d",
-                                 desc: "Run the command on each dependency of a given component"
-    method_option :dependents, type: :boolean, aliases: "-D",
-                               desc: "Run the command on each dependency of a given component"
+    filter_options dependents: "Lists all dependents of a given component",
+                   dependencies: "Lists all dependencies of a given component"
     method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
     def ls(component = nil)
       components = components_filtered(component)
@@ -37,8 +37,8 @@ module CobraCommander
 
     desc "exec [component] <command>", "Executes the command in the context of a given component or set thereof. " \
                                        "Defaults to all components."
-    method_option :dependencies, type: :boolean, desc: "Run the command on each dependency of a given component"
-    method_option :dependents, type: :boolean, desc: "Run the command on each dependency of a given component"
+    filter_options dependents: "Run the command on each dependent of a given component",
+                   dependencies: "Run the command on each dependency of a given component"
     method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
                                 desc: "Max number of jobs to run concurrently"
     def exec(command_or_component, command = nil)
@@ -79,23 +79,6 @@ module CobraCommander
 
     def umbrella
       @umbrella ||= CobraCommander.umbrella(options.app, yarn: options.js, bundler: options.ruby)
-    end
-
-    def find_component(name)
-      return umbrella.root unless name
-
-      umbrella.find(name) || error("Component #{name} not found, try one of `cobra ls`") || exit(1)
-    end
-
-    def components_filtered(component_name)
-      return umbrella.components unless component_name
-
-      component = find_component(component_name)
-
-      return component.deep_dependencies if options.dependencies
-      return component.deep_dependents if options.dependents
-
-      [component]
     end
   end
 end

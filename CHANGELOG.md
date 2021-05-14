@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Add `--self` and `--no-self` filters to `cobra exec` and `cobra ls`, defaults to `--self` [#61](https://github.com/powerhome/cobra_commander/pull/61)
+
 ## Version 0.11.0 - 2021-04-23
 
 * Add concurrency limit to multi exec [#57](https://github.com/powerhome/cobra_commander/pull/57)
