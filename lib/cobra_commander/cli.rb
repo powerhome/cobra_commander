@@ -53,9 +53,7 @@ module CobraCommander
       if options.interactive && results.size > 1
         CobraCommander::Output::InteractivePrinter.run(results, $stdout)
       else
-        results.each do |context|
-          $stdout.puts context.output
-        end
+        CobraCommander::Output::MarkdownPrinter.run(results, $stdout)
       end
     end
 
