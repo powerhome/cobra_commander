@@ -16,15 +16,14 @@ module CobraCommander
         @semaphore = Concurrent::Semaphore.new(concurrency)
       end
 
-      def run(command, output: $stdout, **)
-        buffer = StringIO.new
+      def run(command)
+        @results = []
         @multi.top_spinner.update(task: "Running #{command}")
         @components.each do |component|
           register_job(command: command, component: component)
         end
         @multi.auto_spin
-        output << buffer.string
-        @multi.success?
+        @results
       end
 
     private
@@ -47,6 +46,7 @@ module CobraCommander
           context = Context.new(component, command)
           exec.success? ? spinner.success
                         : spinner.error
+          @results << context
           @semaphore.release
         end
       end

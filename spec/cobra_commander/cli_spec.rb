@@ -7,19 +7,19 @@ RSpec.describe "cobra cli", type: :aruba do
     last_command_started.output.strip.split("\n").grep_v(/warning/).join("\n")
   end
 
-  describe "cobra exec" do
+  describe "cobra exec --no-interactive" do
     let(:components_affected) do
       Dir["#{fixture_app}/{**/**/,}cobra-rocks"].map(&File.method(:dirname)).map(&File.method(:basename))
     end
 
     it "errors gently if component doesn't exist" do
-      run_command_and_stop("cobra exec -a #{fixture_app} non_existent pwd", fail_on_error: false)
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} non_existent pwd", fail_on_error: false)
 
       expect(last_command_output).to match(/Component non_existent not found/)
     end
 
     it "executes the given command on all components" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --no-self 'touch cobra-rocks'", fail_on_error: true)
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --no-self 'touch cobra-rocks'", fail_on_error: true)
 
       expect(components_affected).to match_array %w[
         e
@@ -35,52 +35,52 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command a given component" do
-      run_command_and_stop("cobra exec -a #{fixture_app} b 'echo \"hello from\" `pwd`'", fail_on_error: true)
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} b 'echo \"hello from\" `pwd`'", fail_on_error: true)
 
       expect(last_command_output).to include("hello from #{fixture_app}/components/b")
     end
 
     it "executes the given command a given component's dependents" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --dependents b 'touch cobra-rocks'", fail_on_error: true)
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --dependents b 'touch cobra-rocks'", fail_on_error: true)
 
       expect(components_affected).to match_array %w[a b c d f g h node_manifest]
     end
 
     it "executes the given command a given component's js dependents" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependents b 'touch cobra-rocks'", fail_on_error: true)
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --js --dependents b 'touch cobra-rocks'", fail_on_error: true)
 
       expect(components_affected).to match_array %w[b f g h node_manifest]
     end
 
     it "executes the given command a given component's ruby dependents" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependents b 'touch cobra-rocks'",
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --ruby --dependents b 'touch cobra-rocks'",
                            fail_on_error: true)
 
       expect(components_affected).to match_array %w[a b c d h]
     end
 
     it "executes the given command a given component's dependencies" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --dependencies b 'touch cobra-rocks'", fail_on_error: true)
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --dependencies b 'touch cobra-rocks'", fail_on_error: true)
 
       expect(components_affected).to match_array %w[b e]
     end
 
     it "executes the given command a given component's js dependencies without self optionally" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependencies --no-self h 'touch cobra-rocks'",
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --js --dependencies --no-self h 'touch cobra-rocks'",
                            fail_on_error: true)
 
       expect(components_affected).to match_array %w[b e f]
     end
 
     it "executes the given command a given component's js dependencies including own component by default" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --js --dependencies h 'touch cobra-rocks'",
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --js --dependencies h 'touch cobra-rocks'",
                            fail_on_error: true)
 
       expect(components_affected).to match_array %w[b e f h]
     end
 
     it "executes the given command a given component's ruby dependencies" do
-      run_command_and_stop("cobra exec -a #{fixture_app} --ruby --dependencies --no-self h 'echo \"hello from\" `pwd`'",
+      run_command_and_stop("cobra exec --no-interactive -a #{fixture_app} --ruby --dependencies --no-self h 'echo \"hello from\" `pwd`'",
                            fail_on_error: true)
 
       expect(last_command_output).to include("hello from #{fixture_app}/components/b")

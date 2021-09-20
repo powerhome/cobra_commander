@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "tty-command"
+
 module CobraCommander
   module Executor
     class Context
