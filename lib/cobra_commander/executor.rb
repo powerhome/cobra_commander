@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "executor/component_exec"
+require_relative "executor/context"
 require_relative "executor/multi_exec"
 
 module CobraCommander
