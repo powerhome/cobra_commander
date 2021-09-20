@@ -10,7 +10,7 @@ module CobraCommander
   module Executor
     # Execute a command on multiple components
     class MultiExec
-      def initialize(components, concurrency:, spin_output: $stderr)
+      def initialize(components, concurrency:, spin_output:)
         @components = components
         @multi = TTY::Spinner::Multi.new(":spinner :task", output: spin_output)
         @semaphore = Concurrent::Semaphore.new(concurrency)
