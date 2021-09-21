@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.12.0 - 2021-09-21
+
 * Add interactive UI and Markdown output to `cobra exec` [#63](https://github.com/powerhome/cobra_commander/pull/63)
 * Add `--self` and `--no-self` filters to `cobra exec` and `cobra ls`, defaults to `--self` [#61](https://github.com/powerhome/cobra_commander/pull/61)
 
