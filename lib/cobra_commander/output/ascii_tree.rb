@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "stringio"
+
 module CobraCommander
   module Output
     # Prints the tree in a nice tree form

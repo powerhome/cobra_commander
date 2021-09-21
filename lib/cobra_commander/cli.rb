@@ -41,12 +41,20 @@ module CobraCommander
                    dependencies: "Run the command on each dependency of a given component"
     method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
                                 desc: "Max number of jobs to run concurrently"
+    method_option :interactive, type: :boolean, default: true, aliases: "-i",
+                                desc: "Runs in interactive mode to allow the user to inspect the output of each component"
     def exec(command_or_component, command = nil)
-      CobraCommander::Executor.exec(
+      results = CobraCommander::Executor.exec(
         components: components_filtered(command && command_or_component),
         command: command || command_or_component,
-        concurrency: options.concurrency
+        concurrency: options.concurrency,
+        status_output: $stderr
       )
+      if options.interactive && results.size > 1
+        CobraCommander::Output::InteractivePrinter.run(results, $stdout)
+      else
+        CobraCommander::Output::MarkdownPrinter.run(results, $stdout)
+      end
     end
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"
