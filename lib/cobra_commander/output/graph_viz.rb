@@ -17,7 +17,7 @@ module CobraCommander
       end
 
       private_class_method def self.extract_format(output)
-        format = output[-3..]
+        format = output[-3..-1] # standard:disable Style/SlicingWithRange
         return format if %w[png dot].include?(format)
 
         raise ArgumentError, "output format must be 'png' or 'dot'"
