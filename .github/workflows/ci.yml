@@ -35,6 +35,8 @@ jobs:
   lint:
     name: Lint Ruby
     runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: gemfiles/bundler2.gemfile
     steps:
     - uses: actions/checkout@v2
     - uses: ruby/setup-ruby@v1
