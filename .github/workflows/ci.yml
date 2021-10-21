@@ -40,10 +40,5 @@ jobs:
     - uses: ruby/setup-ruby@v1
       with:
         ruby-version: 3.0
-    - uses: reviewdog/action-rubocop@v1
-      with:
-        rubocop_version: 0.88.0
-        filter_mode: nofilter
-        fail_on_error: true
-        rubocop_extensions: ""
-        github_token: ${{ secrets.github_token }}
+    - name: Run tests
+      run: bundle exec rake standard
