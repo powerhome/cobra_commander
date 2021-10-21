@@ -43,5 +43,7 @@ jobs:
       with:
         ruby-version: 3.0
         bundler: 2
+    - name: Bundle
+      run: bundle
     - name: Run tests
       run: bundle exec rake standard
