@@ -21,11 +21,11 @@ module CobraCommander
 
       def components
         components_source.specs.map do |spec|
-          { path: spec.loaded_from, name: spec.name, dependencies: spec.dependencies.map(&:name) }
+          {path: spec.loaded_from, name: spec.name, dependencies: spec.dependencies.map(&:name)}
         end
       end
 
-    private
+      private
 
       def lockfile
         @lockfile ||= ::Bundler::LockfileParser.new(::Bundler.read_file(path))

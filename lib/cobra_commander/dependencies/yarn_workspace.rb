@@ -28,11 +28,11 @@ module CobraCommander
 
       def components
         @repo.specs.map do |spec|
-          { path: spec.path, name: untag(spec.name), dependencies: spec.dependencies.keys.map(&method(:untag)) }
+          {path: spec.path, name: untag(spec.name), dependencies: spec.dependencies.keys.map(&method(:untag))}
         end
       end
 
-    private
+      private
 
       def load_workspace_packages
         workspace_spec.map do |_name, spec|

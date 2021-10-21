@@ -37,8 +37,8 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "a",
             path: ["#{fixture_app}/components/a"],
-            type: "Bundler",
-          },
+            type: "Bundler"
+          }
         ]
       )
     end
@@ -67,8 +67,8 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "b",
             path: ["#{fixture_app}/components/b"],
-            type: "Yarn & Bundler",
-          },
+            type: "Yarn & Bundler"
+          }
         ]
       )
     end
@@ -79,38 +79,38 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "a",
             path: ["#{fixture_app}/components/a"],
-            type: "Bundler",
+            type: "Bundler"
           },
           {
             name: "c",
             path: ["#{fixture_app}/components/c"],
-            type: "Bundler",
+            type: "Bundler"
           },
           {
             name: "d",
             path: ["#{fixture_app}/components/d"],
-            type: "Bundler",
+            type: "Bundler"
           },
           {
             name: "f",
             path: ["#{fixture_app}/components/f"],
-            type: "Yarn",
+            type: "Yarn"
           },
           {
             name: "g",
             path: ["#{fixture_app}/components/g"],
-            type: "Yarn",
+            type: "Yarn"
           },
           {
             name: "h",
             path: ["#{fixture_app}/components/h"],
-            type: "Yarn & Bundler",
+            type: "Yarn & Bundler"
           },
           {
             name: "node_manifest",
             path: ["#{fixture_app}/node_manifest"],
-            type: "Yarn",
-          },
+            type: "Yarn"
+          }
         ]
       )
     end
@@ -143,8 +143,8 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "f",
             path: ["#{fixture_app}/components/f"],
-            type: "Yarn",
-          },
+            type: "Yarn"
+          }
         ]
       )
     end
@@ -155,18 +155,18 @@ RSpec.describe CobraCommander::Affected do
           {
             name: "g",
             path: ["#{fixture_app}/components/g"],
-            type: "Yarn",
+            type: "Yarn"
           },
           {
             name: "h",
             path: ["#{fixture_app}/components/h"],
-            type: "Yarn & Bundler",
+            type: "Yarn & Bundler"
           },
           {
             name: "node_manifest",
             path: ["#{fixture_app}/node_manifest"],
-            type: "Yarn",
-          },
+            type: "Yarn"
+          }
         ]
       )
     end
@@ -176,7 +176,7 @@ RSpec.describe CobraCommander::Affected do
         "#{fixture_app}/components/f/test.sh",
         "#{fixture_app}/components/g/test.sh",
         "#{fixture_app}/components/h/test.sh",
-        "#{fixture_app}/node_manifest/test.sh",
+        "#{fixture_app}/node_manifest/test.sh"
       ]
     end
 

@@ -34,12 +34,12 @@ module CobraCommander
         component_names: names,
         languages: {
           ruby: contains_ruby?,
-          javascript: contains_js?,
-        },
+          javascript: contains_js?
+        }
       }.to_json
     end
 
-  private
+    private
 
     def run!
       @transitively = Set.new
@@ -68,7 +68,7 @@ module CobraCommander
       {
         name: component.name,
         path: component.root_paths,
-        type: component.sources.keys.map(&:to_s).map(&:capitalize).join(" & "),
+        type: component.sources.keys.map(&:to_s).map(&:capitalize).join(" & ")
       }
     end
 

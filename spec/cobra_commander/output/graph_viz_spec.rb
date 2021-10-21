@@ -33,9 +33,9 @@ RSpec.describe CobraCommander::Output::GraphViz do
           path: "a.path",
           dependencies: %w[a b],
           components: [
-            { name: "a", path: "a.path", dependencies: %w[b c] },
-            { name: "b", path: "b.path", dependencies: [] },
-            { name: "c", path: "c.path", dependencies: [] },
+            {name: "a", path: "a.path", dependencies: %w[b c]},
+            {name: "b", path: "b.path", dependencies: []},
+            {name: "c", path: "c.path", dependencies: []}
           ]
         )
       end

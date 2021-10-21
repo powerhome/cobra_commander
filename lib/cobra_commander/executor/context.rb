@@ -4,6 +4,8 @@ require "tty-command"
 
 module CobraCommander
   module Executor
+    # Represents a component context to execute a command
+    # @private
     class Context
       attr_reader :component, :command
 
@@ -33,7 +35,7 @@ module CobraCommander
         results.join("\n")
       end
 
-    private
+      private
 
       def isolate_bundle(&block)
         if Bundler.respond_to?(:with_unbundled_env)

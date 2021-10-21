@@ -21,7 +21,7 @@ RSpec.describe CobraCommander::Executor::Concurrent do
   end
 
   it "prints the status of each component" do
-    contexts = subject.exec("echo 'I am at' $PWD")
+    subject.exec("echo 'I am at' $PWD")
 
     expect(spin_output.string).to match(/\[DONE\](\e\[0m)? b/)
     expect(spin_output.string).to match(/\[DONE\](\e\[0m)? node_manifest/)
