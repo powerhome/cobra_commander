@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+*  Sorts the interactive UI alphabetically with failures first [#66](https://github.com/powerhome/cobra_commander/pull/66)
+
 ## Version 0.12.0 - 2021-09-21
 
 * Add interactive UI and Markdown output to `cobra exec` [#63](https://github.com/powerhome/cobra_commander/pull/63)
