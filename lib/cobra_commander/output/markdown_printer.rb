@@ -7,9 +7,9 @@ module CobraCommander
   module Output
     # Prints the given CobraCommander::Executor::Context to [output] collection in markdown
     module MarkdownPrinter
-      SUCCESS = "\n## ✔ %s\n".freeze
-      ERROR = "\n## ✖ %s\n".freeze
-      OUTPUT = "\n```\n$ %s\n\n%s\n```\n".freeze
+      SUCCESS = "\n## ✔ %s\n"
+      ERROR = "\n## ✖ %s\n"
+      OUTPUT = "\n```\n$ %s\n\n%s\n```\n"
 
       def self.run(contexts, output)
         contexts.each do |context|
