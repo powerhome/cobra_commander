@@ -2,7 +2,10 @@
 
 ## Unreleased
 
-*  Sorts the interactive UI alphabetically with failures first [#66](https://github.com/powerhome/cobra_commander/pull/66)
+## Version 0.13.0 - 2021-10-21
+
+* Sorts the interactive UI alphabetically with failures first [#66](https://github.com/powerhome/cobra_commander/pull/66)
+* Switch linter to standardrb [#67](https://github.com/powerhome/cobra_commander/pull/67)
 
 ## Version 0.12.0 - 2021-09-21
 
