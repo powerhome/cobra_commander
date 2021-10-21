@@ -8,7 +8,7 @@ module CobraCommander
   module Executor
     def self.exec(components:, command:, concurrency:, status_output:)
       Concurrent.new(components, concurrency: concurrency, spin_output: status_output)
-                .exec(command)
+        .exec(command)
     end
   end
 end

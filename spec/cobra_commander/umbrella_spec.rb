@@ -9,9 +9,9 @@ RSpec.describe CobraCommander::Umbrella do
         path: "/a/b/a.path",
         dependencies: %w[a b],
         components: [
-          { name: "x", path: "/a/b/c/x/x.path", dependencies: %w[b c] },
-          { name: "y", path: "/a/b/c/y/y.path", dependencies: [] },
-          { name: "z", path: "/a/b/c/z/z.path", dependencies: [] },
+          {name: "x", path: "/a/b/c/x/x.path", dependencies: %w[b c]},
+          {name: "y", path: "/a/b/c/y/y.path", dependencies: []},
+          {name: "z", path: "/a/b/c/z/z.path", dependencies: []}
         ]
       )
     end

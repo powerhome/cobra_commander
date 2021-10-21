@@ -28,7 +28,7 @@ module CobraCommander
 
     desc "ls [component]", "Lists the components in the context of a given component or umbrella"
     filter_options dependents: "Lists all dependents of a given component",
-                   dependencies: "Lists all dependencies of a given component"
+      dependencies: "Lists all dependencies of a given component"
     method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
     def ls(component = nil)
       components = components_filtered(component)
@@ -38,17 +38,17 @@ module CobraCommander
     desc "exec [component] <command>", "Executes the command in the context of a given component or set thereof. " \
                                        "Defaults to all components."
     filter_options dependents: "Run the command on each dependent of a given component",
-                   dependencies: "Run the command on each dependency of a given component"
+      dependencies: "Run the command on each dependency of a given component"
     method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
                                 desc: "Max number of jobs to run concurrently"
     method_option :interactive, type: :boolean, default: true, aliases: "-i",
-                                desc: "Runs in interactive mode to allow the user to inspect the output of each component"
+                                desc: "Runs in interactive mode to allow the user to inspect the output of each " \
+                                      "component"
     def exec(command_or_component, command = nil)
       results = CobraCommander::Executor.exec(
         components: components_filtered(command && command_or_component),
         command: command || command_or_component,
-        concurrency: options.concurrency,
-        status_output: $stderr
+        concurrency: options.concurrency, status_output: $stderr
       )
       if options.interactive && results.size > 1
         CobraCommander::Output::InteractivePrinter.run(results, $stdout)
@@ -83,7 +83,7 @@ module CobraCommander
       Change.new(umbrella, options.results, options.branch).run!
     end
 
-  private
+    private
 
     def umbrella
       @umbrella ||= CobraCommander.umbrella(options.app, yarn: options.js, bundler: options.ruby)

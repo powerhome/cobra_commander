@@ -6,9 +6,9 @@ module CobraCommander
   module Output
     # Prints the tree in a nice tree form
     class AsciiTree
-      SPACE  = "    "
-      BAR    = "│   "
-      TEE    = "├── "
+      SPACE = "    "
+      BAR = "│   "
+      TEE = "├── "
       CORNER = "└── "
 
       def initialize(component)
@@ -22,7 +22,7 @@ module CobraCommander
         end.string
       end
 
-    private
+      private
 
       def list_dependencies(io, component, outdents = [])
         component.dependencies.each do |dep|

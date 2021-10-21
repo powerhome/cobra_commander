@@ -25,21 +25,18 @@ module CobraCommander
       @transitively.map(&method(:affected_component))
     end
 
-    def json_representation # rubocop:disable Metrics/MethodLength
+    def json_representation
       {
         changed_files: @changes,
         directly_affected_components: directly,
         transitively_affected_components: transitively,
         test_scripts: scripts,
         component_names: names,
-        languages: {
-          ruby: contains_ruby?,
-          javascript: contains_js?,
-        },
+        languages: {ruby: contains_ruby?, javascript: contains_js?}
       }.to_json
     end
 
-  private
+    private
 
     def run!
       @transitively = Set.new
@@ -68,7 +65,7 @@ module CobraCommander
       {
         name: component.name,
         path: component.root_paths,
-        type: component.sources.keys.map(&:to_s).map(&:capitalize).join(" & "),
+        type: component.sources.keys.map(&:to_s).map(&:capitalize).join(" & ")
       }
     end
 
