@@ -269,7 +269,13 @@ RSpec.describe "cobra cli", type: :aruba do
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra ls -a #{fixture_app} non_existent", fail_on_error: false)
 
-      expect(last_command_output).to match(/Component non_existent not found/)
+      expect(last_command_output).to match(/Component non_existent not found, maybe one of "cobra ls"/)
+    end
+
+    it "suggests when there's any DidYouMean match" do
+      run_command_and_stop("cobra ls -a #{fixture_app} node_manifeast", fail_on_error: false)
+
+      expect(last_command_output).to match(/Component node_manifeast not found, maybe node_manifest, one of "cobra ls"/)
     end
 
     describe "cobra ls component --dependents" do
