@@ -2,6 +2,8 @@
 
 require "spec_helper"
 
+RUBY_2_7 = Gem::Version.new(RUBY_VERSION) > Gem::Version.new("2.7.0")
+
 RSpec.describe "cobra cli", type: :aruba do
   let(:last_command_output) do
     last_command_started.output.strip.split("\n").grep_v(/warning/).join("\n")
@@ -272,10 +274,16 @@ RSpec.describe "cobra cli", type: :aruba do
       expect(last_command_output).to match(/Component non_existent not found, maybe one of "cobra ls"/)
     end
 
-    it "suggests when there's any DidYouMean match" do
+    it "suggests when there's any DidYouMean match", if: RUBY_2_7 do
       run_command_and_stop("cobra ls -a #{fixture_app} node_manifeast", fail_on_error: false)
 
       expect(last_command_output).to match(/Component node_manifeast not found, maybe node_manifest, one of "cobra ls"/)
+    end
+
+    it "has a default suggestion when there isn't DidYouMean", unless: RUBY_2_7 do
+      run_command_and_stop("cobra ls -a #{fixture_app} node_manifeast", fail_on_error: false)
+
+      expect(last_command_output).to match(/Component node_manifeast not found, maybe one of "cobra ls"/)
     end
 
     describe "cobra ls component --dependents" do

@@ -18,8 +18,14 @@ module CobraCommander
     end
 
     def suggestion(name)
+      [*suggestions(name), 'one of "cobra ls"'].join(", ")
+    end
+
+    def suggestions(name)
       spell_checker = DidYouMean::SpellChecker.new(dictionary: umbrella.components.map(&:name))
-      [*spell_checker.correct(name), 'one of "cobra ls"'].join(", ")
+      spell_checker.correct(name)
+    rescue NameError
+      []
     end
 
     def components_filtered(component_name)
