@@ -14,7 +14,18 @@ module CobraCommander
     def find_component(name)
       return umbrella.root unless name
 
-      umbrella.find(name) || error("Component #{name} not found, try one of `cobra ls`") || exit(1)
+      umbrella.find(name) || error("Component #{name} not found, maybe #{suggestion(name)}") || exit(1)
+    end
+
+    def suggestion(name)
+      [*suggestions(name), 'one of "cobra ls"'].join(", ")
+    end
+
+    def suggestions(name)
+      spell_checker = DidYouMean::SpellChecker.new(dictionary: umbrella.components.map(&:name))
+      spell_checker.correct(name)
+    rescue NameError
+      []
     end
 
     def components_filtered(component_name)
