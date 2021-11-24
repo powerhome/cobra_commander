@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 0.14.0 - 2021-11-24
+
 * Retain selection on Interactive Printer [#69](https://github.com/powerhome/cobra_commander/pull/69)
 * Sorts the interactive UI alphabetically with failures first [#68](https://github.com/powerhome/cobra_commander/pull/68)
 * Switch from Rubocop to Standardrb [#67](https://github.com/powerhome/cobra_commander/pull/67)
