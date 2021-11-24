@@ -35,10 +35,10 @@ module CobraCommander
 
       def map_options(contexts)
         contexts.sort(&method(:sort_contexts))
-                .reduce({}) do |options, context|
-                  template = context.success? ? SUCCESS : ERROR
-                  options.merge format(template, context.component_name) => context
-                end
+          .reduce({}) do |options, context|
+          template = context.success? ? SUCCESS : ERROR
+          options.merge format(template, context.component_name) => context
+        end
       end
 
       def sort_contexts(context_a, context_b)
