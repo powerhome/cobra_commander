@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
   ]
   spec.summary = "Tools for working with Component Based Rails Apps"
   spec.description = <<~DESCRIPTION
-    Tools for working with Component Based Rails Apps (see http://shageman.github.io/cbra.info/).
+    Tools for working with Component Based Rails Apps (see https://cbra.info).
     Includes tools for graphing the components of an app and their relationships, as well as selectively
     testing components based on changes made.
   DESCRIPTION
