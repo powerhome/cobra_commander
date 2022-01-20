@@ -5,7 +5,7 @@
 [![CI](https://github.com/powerhome/cobra_commander/actions/workflows/ci.yml/badge.svg)](https://github.com/powerhome/cobra_commander/actions/workflows/ci.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7fe0781c18f6923ab753/maintainability)](https://codeclimate.com/github/powerhome/cobra_commander/maintainability)
 
-Tools for working with Component Based Rails Apps (see https://cbra.info/). Includes tools for graphing both Ruby and Javascript components in an application and their relationships, as well as selectively testing components based on changes made.
+Tools for working with Component Based Rails Apps (see https://cbra.info). Includes tools for graphing both Ruby and Javascript components in an application and their relationships, as well as selectively testing components based on changes made.
 
 ## Installation
 
