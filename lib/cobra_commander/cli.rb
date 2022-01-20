@@ -40,9 +40,9 @@ module CobraCommander
     filter_options dependents: "Run the command on each dependent of a given component",
       dependencies: "Run the command on each dependency of a given component"
     method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
-                                desc: "Max number of jobs to run concurrently"
+      desc: "Max number of jobs to run concurrently"
     method_option :interactive, type: :boolean, default: true, aliases: "-i",
-                                desc: "Runs in interactive mode to allow the user to inspect the output of each " \
+      desc: "Runs in interactive mode to allow the user to inspect the output of each " \
                                       "component"
     def exec(command_or_component, command = nil)
       results = CobraCommander::Executor.exec(
@@ -65,7 +65,7 @@ module CobraCommander
 
     desc "graph [component]", "Outputs a graph of a given component or umbrella"
     method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o",
-                           desc: "Output file, accepts .png or .dot"
+      desc: "Output file, accepts .png or .dot"
     def graph(component = nil)
       CobraCommander::Output::GraphViz.generate(
         find_component(component),
