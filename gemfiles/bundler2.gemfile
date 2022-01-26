@@ -4,4 +4,4 @@ source "https://rubygems.org"
 
 gemspec path: "../"
 
-gem "bundler", "2.3.5"
+gem "bundler", "~> 2.3.5"
