@@ -1,0 +1,8 @@
+site_name: Cobra Commander
+site_description: Cobra Commander Documentation
+nav:
+  - "Home": "README.md"
+  - "Changelog": "CHANGELOG.md"
+  - "Code of Conduct": "CODE_OF_CONDUCT.md"
+plugins:
+  - techdocs-core

@@ -1,0 +1,12 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cobra-commander
+  title: Cobra Commander
+  description: Tools for working with Component Based Rails Apps
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+spec:
+  type: library
+  owner: heroes-for-hire
+  lifecycle: production
