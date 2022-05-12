@@ -37,7 +37,7 @@ Commands:
 
 Options:
   -a, [--app=APP]
-                             # Default: /Users/chjunior/workspace/power/cobra_commander
+                             # Default: /Users/me/myapp
       [--js], [--no-js]      # Consider only the JS dependency graph
       [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
 ```
@@ -45,7 +45,6 @@ Options:
 ### cobra changes
 
 ```sh
-➜  nitro git:(nova/remove-cobra-commander) be cobra help changes
 Usage:
   cobra changes [--results=RESULTS] [--branch=BRANCH]
 
@@ -55,7 +54,7 @@ Options:
   -b, [--branch=BRANCH]      # Specified target to calculate against
                              # Default: master
   -a, [--app=APP]
-                             # Default: /Users/chjunior/workspace/power/nitro
+                             # Default: /Users/me/myapp
       [--js], [--no-js]      # Consider only the JS dependency graph
       [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
 
@@ -72,7 +71,7 @@ Options:
       [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
       [--dependents], [--no-dependents]      # Run the command on each dependency of a given component
   -a, [--app=APP]
-                                             # Default: /Users/chjunior/workspace/power/cobra_commander
+                                             # Default: /Users/me/myapp
       [--js], [--no-js]                      # Consider only the JS dependency graph
       [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
 
@@ -87,9 +86,9 @@ Usage:
 
 Options:
   -o, [--output=OUTPUT]      # Output file, accepts .png or .dot
-                             # Default: /Users/chjunior/workspace/power/cobra_commander/output.png
+                             # Default: /Users/me/myapp/output.png
   -a, [--app=APP]
-                             # Default: /Users/chjunior/workspace/power/cobra_commander
+                             # Default: /Users/me/myapp
       [--js], [--no-js]      # Consider only the JS dependency graph
       [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
 
@@ -107,7 +106,7 @@ Options:
   -D, [--dependents], [--no-dependents]      # Run the command on each dependency of a given component
   -t, [--total], [--no-total]                # Prints the total count of components
   -a, [--app=APP]
-                                             # Default: /Users/chjunior/workspace/power/cobra_commander
+                                             # Default: /Users/me/myapp
       [--js], [--no-js]                      # Consider only the JS dependency graph
       [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
 
@@ -122,7 +121,7 @@ Usage:
 
 Options:
   -a, [--app=APP]
-                             # Default: /Users/chjunior/workspace/power/cobra_commander
+                             # Default: /Users/me/myapp
       [--js], [--no-js]      # Consider only the JS dependency graph
       [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
 
