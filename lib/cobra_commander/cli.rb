@@ -7,6 +7,7 @@ require "concurrent-ruby"
 require "cobra_commander"
 require "cobra_commander/affected"
 require "cobra_commander/change"
+require "cobra_commander/git_changed"
 require "cobra_commander/executor"
 require "cobra_commander/output"
 

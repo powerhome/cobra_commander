@@ -271,7 +271,7 @@ RSpec.describe "cobra cli", type: :aruba do
       it "outputs error message" do
         run_command_and_stop("cobra changes -a #{umbrella.path} -b oak_branch", fail_on_error: false)
 
-        expect(last_command_output).to include("Specified --branch could not be found")
+        expect(last_command_output).to include("Specified branch oak_branch could not be found")
         expect(last_command_output).to_not include("Test scripts to run")
       end
     end
