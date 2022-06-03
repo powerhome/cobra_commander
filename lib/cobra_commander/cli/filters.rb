@@ -4,6 +4,7 @@ module CobraCommander
   # @private
   class CLI
     private_class_method def self.filter_options(dependents:, dependencies:)
+      method_option :affected, type: :string, desc: "Components affected since given branch [default: main]"
       method_option :dependencies, type: :boolean, aliases: "-d", desc: dependencies
       method_option :dependents, type: :boolean, aliases: "-D", desc: dependents
       method_option :self, type: :boolean, default: true, desc: "Include the own component"
@@ -28,18 +29,32 @@ module CobraCommander
       []
     end
 
-    def components_filtered(component_names)
-      return umbrella.components unless component_names
-
-      component_names.split(",")
-                     .each_with_object(Set.new) { |name, set| filter_component(name, set) }
+    def affected_by_changes(origin_branch)
+      changes = GitChanged.new(umbrella.path, origin_branch)
+      Affected.new(umbrella, changes).all_affected
     end
 
-    def filter_component(component_name, set)
+    def filter_component(component_name)
       component = find_component(component_name)
-      set.add component if options.self
-      set.merge component.deep_dependencies if options.dependencies
-      set.merge component.deep_dependents if options.dependents
+      components = []
+      components << component if options.self
+      components += component.deep_dependencies if options.dependencies
+      components += component.deep_dependents if options.dependents
+      components
+    end
+
+    def filter_components(component_names)
+      component_names.reduce(Set.new) do |set, name|
+        set | filter_component(name)
+      end
+    end
+
+  protected
+
+    def components_filtered(names)
+      components = names ? filter_components(names.split(",")) : umbrella.components
+      components &= affected_by_changes(options.affected) if options.affected
+      components
     end
   end
 end
