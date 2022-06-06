@@ -4,8 +4,7 @@ require "spec_helper"
 require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor::Context do
-  let(:output) { StringIO.new }
-  let(:component_d) { fixture_umbrella.find("d") }
+  let(:component_d) { fixture_umbrella("app").find("d") }
 
   it "executes in the context of the given component" do
     context = CobraCommander::Executor::Context.new(component_d, "echo 'I am at' $PWD")

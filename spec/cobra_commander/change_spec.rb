@@ -4,8 +4,10 @@ require "spec_helper"
 require "cobra_commander/change"
 
 RSpec.describe CobraCommander::Change do
+  let(:umbrella) { fixture_umbrella("app") }
+
   it "successfully instantiates" do
-    expect(CobraCommander::Change.new(fixture_umbrella, "full", "master")).to be_truthy
+    expect(CobraCommander::Change.new(umbrella, "full", "master")).to be_truthy
   end
 
   describe ".run!" do
@@ -13,7 +15,7 @@ RSpec.describe CobraCommander::Change do
       context "with no changes" do
         it "lists no files" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return([])
-          changes = CobraCommander::Change.new(fixture_umbrella, "json", "master")
+          changes = CobraCommander::Change.new(umbrella, "json", "master")
 
           expect { changes.run! }.to output(<<~OUTPUT
             {"changed_files":[],"directly_affected_components":[],"transitively_affected_components":[],"test_scripts":[],"component_names":[],"languages":{"ruby":false,"javascript":false}}
@@ -25,12 +27,12 @@ RSpec.describe CobraCommander::Change do
       context "with a change inside a component" do
         it "lists change, affected component, and test" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
-            ["#{fixture_app}/components/a"]
+            ["#{umbrella.path}/components/a"]
           )
-          change = CobraCommander::Change.new(fixture_umbrella, "json", "master")
+          change = CobraCommander::Change.new(umbrella, "json", "master")
 
           expect { change.run! }.to output(<<~OUTPUT
-            {"changed_files":["#{fixture_app}/components/a"],"directly_affected_components":[{"name":"a","path":["#{fixture_app}/components/a"],"type":"Bundler"}],"transitively_affected_components":[],"test_scripts":["#{fixture_app}/components/a/test.sh"],"component_names":["a"],"languages":{"ruby":true,"javascript":false}}
+            {"changed_files":["#{umbrella.path}/components/a"],"directly_affected_components":[{"name":"a","path":["#{umbrella.path}/components/a"],"type":"Bundler"}],"transitively_affected_components":[],"test_scripts":["#{umbrella.path}/components/a/test.sh"],"component_names":["a"],"languages":{"ruby":true,"javascript":false}}
           OUTPUT
                                           ).to_stdout
         end
@@ -39,12 +41,12 @@ RSpec.describe CobraCommander::Change do
       context "with change inside a very utilized component" do
         it "lists changes, affected components, and tests" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
-            ["#{fixture_app}/components/e"]
+            ["#{umbrella.path}/components/e"]
           )
-          change = CobraCommander::Change.new(fixture_umbrella, "json", "master")
+          change = CobraCommander::Change.new(umbrella, "json", "master")
 
           expect { change.run! }.to output(<<~OUTPUT
-            {"changed_files":["#{fixture_app}/components/e"],"directly_affected_components":[{"name":"e","path":["#{fixture_app}/components/e"],"type":"Yarn"}],"transitively_affected_components":[{"name":"a","path":["#{fixture_app}/components/a"],"type":"Bundler"},{"name":"b","path":["#{fixture_app}/components/b"],"type":"Yarn & Bundler"},{"name":"c","path":["#{fixture_app}/components/c"],"type":"Bundler"},{"name":"d","path":["#{fixture_app}/components/d"],"type":"Bundler"},{"name":"f","path":["#{fixture_app}/components/f"],"type":"Yarn"},{"name":"g","path":["#{fixture_app}/components/g"],"type":"Yarn"},{"name":"h","path":["#{fixture_app}/components/h"],"type":"Yarn & Bundler"},{"name":"node_manifest","path":["#{fixture_app}/node_manifest"],"type":"Yarn"}],"test_scripts":["#{fixture_app}/components/a/test.sh","#{fixture_app}/components/b/test.sh","#{fixture_app}/components/c/test.sh","#{fixture_app}/components/d/test.sh","#{fixture_app}/components/e/test.sh","#{fixture_app}/components/f/test.sh","#{fixture_app}/components/g/test.sh","#{fixture_app}/components/h/test.sh","#{fixture_app}/node_manifest/test.sh"],"component_names":["a","b","c","d","e","f","g","h","node_manifest"],"languages":{"ruby":true,"javascript":true}}
+            {"changed_files":["#{umbrella.path}/components/e"],"directly_affected_components":[{"name":"e","path":["#{umbrella.path}/components/e"],"type":"Yarn"}],"transitively_affected_components":[{"name":"a","path":["#{umbrella.path}/components/a"],"type":"Bundler"},{"name":"b","path":["#{umbrella.path}/components/b"],"type":"Yarn & Bundler"},{"name":"c","path":["#{umbrella.path}/components/c"],"type":"Bundler"},{"name":"d","path":["#{umbrella.path}/components/d"],"type":"Bundler"},{"name":"f","path":["#{umbrella.path}/components/f"],"type":"Yarn"},{"name":"g","path":["#{umbrella.path}/components/g"],"type":"Yarn"},{"name":"h","path":["#{umbrella.path}/components/h"],"type":"Yarn & Bundler"},{"name":"node_manifest","path":["#{umbrella.path}/node_manifest"],"type":"Yarn"}],"test_scripts":["#{umbrella.path}/components/a/test.sh","#{umbrella.path}/components/b/test.sh","#{umbrella.path}/components/c/test.sh","#{umbrella.path}/components/d/test.sh","#{umbrella.path}/components/e/test.sh","#{umbrella.path}/components/f/test.sh","#{umbrella.path}/components/g/test.sh","#{umbrella.path}/components/h/test.sh","#{umbrella.path}/node_manifest/test.sh"],"component_names":["a","b","c","d","e","f","g","h","node_manifest"],"languages":{"ruby":true,"javascript":true}}
           OUTPUT
                                           ).to_stdout
         end
@@ -55,7 +57,7 @@ RSpec.describe CobraCommander::Change do
       context "with no changes" do
         it "lists no files" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return([])
-          changes = CobraCommander::Change.new(fixture_umbrella, "full", "master")
+          changes = CobraCommander::Change.new(umbrella, "full", "master")
 
           expect { changes.run! }.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
@@ -79,7 +81,7 @@ RSpec.describe CobraCommander::Change do
           )
 
           expect do
-            CobraCommander::Change.new(fixture_umbrella, "full", "master").run!
+            CobraCommander::Change.new(umbrella, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
             /change
@@ -98,15 +100,15 @@ RSpec.describe CobraCommander::Change do
         it "lists change, affected component, and test" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
-              "#{fixture_app}/components/a",
+              "#{umbrella.path}/components/a",
             ]
           )
 
           expect do
-            CobraCommander::Change.new(fixture_umbrella, "full", "master").run!
+            CobraCommander::Change.new(umbrella, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
-            #{fixture_app}/components/a
+            #{umbrella.path}/components/a
 
             <<< Directly affected components >>>
             a - Bundler
@@ -114,7 +116,7 @@ RSpec.describe CobraCommander::Change do
             <<< Transitively affected components >>>
 
             <<< Test scripts to run >>>
-            #{fixture_app}/components/a/test.sh
+            #{umbrella.path}/components/a/test.sh
           OUTPUT
                        ).to_stdout
         end
@@ -124,17 +126,17 @@ RSpec.describe CobraCommander::Change do
         it "lists changes, affected components, and tests" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
-              "#{fixture_app}/components/a",
-              "#{fixture_app}/components/b",
+              "#{umbrella.path}/components/a",
+              "#{umbrella.path}/components/b",
             ]
           )
 
           expect do
-            CobraCommander::Change.new(fixture_umbrella, "full", "master").run!
+            CobraCommander::Change.new(umbrella, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
-            #{fixture_app}/components/a
-            #{fixture_app}/components/b
+            #{umbrella.path}/components/a
+            #{umbrella.path}/components/b
 
             <<< Directly affected components >>>
             a - Bundler
@@ -150,14 +152,14 @@ RSpec.describe CobraCommander::Change do
             node_manifest - Yarn
 
             <<< Test scripts to run >>>
-            #{fixture_app}/components/a/test.sh
-            #{fixture_app}/components/b/test.sh
-            #{fixture_app}/components/c/test.sh
-            #{fixture_app}/components/d/test.sh
-            #{fixture_app}/components/f/test.sh
-            #{fixture_app}/components/g/test.sh
-            #{fixture_app}/components/h/test.sh
-            #{fixture_app}/node_manifest/test.sh
+            #{umbrella.path}/components/a/test.sh
+            #{umbrella.path}/components/b/test.sh
+            #{umbrella.path}/components/c/test.sh
+            #{umbrella.path}/components/d/test.sh
+            #{umbrella.path}/components/f/test.sh
+            #{umbrella.path}/components/g/test.sh
+            #{umbrella.path}/components/h/test.sh
+            #{umbrella.path}/node_manifest/test.sh
           OUTPUT
                        ).to_stdout
         end
@@ -167,15 +169,15 @@ RSpec.describe CobraCommander::Change do
         it "lists changes, affected components, and tests" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
-              "#{fixture_app}/components/e",
+              "#{umbrella.path}/components/e",
             ]
           )
 
           expect do
-            CobraCommander::Change.new(fixture_umbrella, "full", "master").run!
+            CobraCommander::Change.new(umbrella, "full", "master").run!
           end.to output(<<~OUTPUT
             <<< Changes since last commit on master >>>
-            #{fixture_app}/components/e
+            #{umbrella.path}/components/e
 
             <<< Directly affected components >>>
             e - Yarn
@@ -191,15 +193,15 @@ RSpec.describe CobraCommander::Change do
             node_manifest - Yarn
 
             <<< Test scripts to run >>>
-            #{fixture_app}/components/a/test.sh
-            #{fixture_app}/components/b/test.sh
-            #{fixture_app}/components/c/test.sh
-            #{fixture_app}/components/d/test.sh
-            #{fixture_app}/components/e/test.sh
-            #{fixture_app}/components/f/test.sh
-            #{fixture_app}/components/g/test.sh
-            #{fixture_app}/components/h/test.sh
-            #{fixture_app}/node_manifest/test.sh
+            #{umbrella.path}/components/a/test.sh
+            #{umbrella.path}/components/b/test.sh
+            #{umbrella.path}/components/c/test.sh
+            #{umbrella.path}/components/d/test.sh
+            #{umbrella.path}/components/e/test.sh
+            #{umbrella.path}/components/f/test.sh
+            #{umbrella.path}/components/g/test.sh
+            #{umbrella.path}/components/h/test.sh
+            #{umbrella.path}/node_manifest/test.sh
           OUTPUT
                        ).to_stdout
         end
