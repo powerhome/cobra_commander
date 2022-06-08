@@ -23,9 +23,7 @@ module CobraCommander
         end
       end
 
-      def component_name
-        component.name
-      end
+      delegate :name, to: :component, prefix: true
 
       def success?
         results.all?(&:success?)
@@ -35,7 +33,7 @@ module CobraCommander
         results.join("\n")
       end
 
-      private
+    private
 
       def isolate_bundle(&block)
         if Bundler.respond_to?(:with_unbundled_env)

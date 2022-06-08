@@ -33,9 +33,9 @@ RSpec.describe CobraCommander::Output::GraphViz do
           path: "a.path",
           dependencies: %w[a b],
           components: [
-            {name: "a", path: "a.path", dependencies: %w[b c]},
-            {name: "b", path: "b.path", dependencies: []},
-            {name: "c", path: "c.path", dependencies: []}
+            { name: "a", path: "a.path", dependencies: %w[b c] },
+            { name: "b", path: "b.path", dependencies: [] },
+            { name: "c", path: "c.path", dependencies: [] },
           ]
         )
       end
@@ -44,7 +44,7 @@ RSpec.describe CobraCommander::Output::GraphViz do
     it "correctly generates graph.dot" do
       CobraCommander::Output::GraphViz.generate(umbrella.root, generated_dot)
 
-      expect(IO.readlines(native_dot)).to eq(IO.readlines(generated_dot))
+      expect(File.readlines(native_dot)).to eq(File.readlines(generated_dot))
     end
 
     after do

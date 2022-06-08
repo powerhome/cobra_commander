@@ -23,7 +23,7 @@ module CobraCommander
         @results
       end
 
-      private
+    private
 
       def pastel
         @pastel ||= Pastel.new
@@ -33,7 +33,7 @@ module CobraCommander
         @spinner_options ||= {
           format: :bouncing,
           success_mark: pastel.green("[DONE]"),
-          error_mark: pastel.red("[ERROR]")
+          error_mark: pastel.red("[ERROR]"),
         }
       end
 
