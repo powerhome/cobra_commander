@@ -47,5 +47,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rake", ">= 12.3.3"
   spec.add_development_dependency "rspec", "~> 3.5"
-  spec.add_development_dependency "standard", ">= 1.3.0"
+  spec.add_development_dependency "rubocop", "1.30.1"
+  spec.add_development_dependency "rubocop-powerhome", ">= 0.4.1"
 end

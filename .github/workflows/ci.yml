@@ -42,5 +42,5 @@ jobs:
         ruby-version: 3.0
     - name: Bundle
       run: bundle
-    - name: Run standard
-      run: bundle exec rake standard
+    - name: Run Rubocop
+      run: bundle exec rubocop
