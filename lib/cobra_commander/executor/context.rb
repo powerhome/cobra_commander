@@ -23,7 +23,9 @@ module CobraCommander
         end
       end
 
-      delegate :name, to: :component, prefix: true
+      def component_name
+        component.name
+      end
 
       def success?
         results.all?(&:success?)
