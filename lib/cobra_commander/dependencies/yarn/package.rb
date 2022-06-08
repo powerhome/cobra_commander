@@ -24,10 +24,10 @@ module CobraCommander
 
         def dependencies
           json.fetch("dependencies", {})
-            .merge(json.fetch("devDependencies", {}))
+              .merge(json.fetch("devDependencies", {}))
         end
 
-        private
+      private
 
         def json
           @json ||= JSON.parse(File.read(@path))

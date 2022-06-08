@@ -28,7 +28,7 @@ module CobraCommander
       puts e.message
     end
 
-    private
+  private
 
     def show_full
       changes_since_last_commit

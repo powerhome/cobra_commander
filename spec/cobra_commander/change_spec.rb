@@ -74,7 +74,7 @@ RSpec.describe CobraCommander::Change do
         it "just lists single change" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
-              "/change"
+              "/change",
             ]
           )
 
@@ -98,7 +98,7 @@ RSpec.describe CobraCommander::Change do
         it "lists change, affected component, and test" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
-              "#{fixture_app}/components/a"
+              "#{fixture_app}/components/a",
             ]
           )
 
@@ -125,7 +125,7 @@ RSpec.describe CobraCommander::Change do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
               "#{fixture_app}/components/a",
-              "#{fixture_app}/components/b"
+              "#{fixture_app}/components/b",
             ]
           )
 
@@ -167,7 +167,7 @@ RSpec.describe CobraCommander::Change do
         it "lists changes, affected components, and tests" do
           allow_any_instance_of(CobraCommander::Change).to receive(:changes).and_return(
             [
-              "#{fixture_app}/components/e"
+              "#{fixture_app}/components/e",
             ]
           )
 

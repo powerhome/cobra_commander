@@ -22,7 +22,7 @@ module CobraCommander
         end.string
       end
 
-      private
+    private
 
       def list_dependencies(io, component, outdents = [])
         component.dependencies.each do |dep|
@@ -32,10 +32,10 @@ module CobraCommander
       end
 
       def decide_on_line(io, parent, dep, outdents)
-        if parent.dependencies.last != dep
-          add_tee(io, outdents, dep)
-        else
+        if parent.dependencies.last == dep
           add_corner(io, outdents, dep)
+        else
+          add_tee(io, outdents, dep)
         end
       end
 

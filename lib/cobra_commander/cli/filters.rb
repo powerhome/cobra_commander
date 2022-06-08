@@ -9,7 +9,7 @@ module CobraCommander
       method_option :self, type: :boolean, default: true, desc: "Include the own component"
     end
 
-    private
+  private
 
     def find_component(name)
       return umbrella.root unless name

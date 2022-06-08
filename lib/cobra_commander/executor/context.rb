@@ -35,7 +35,7 @@ module CobraCommander
         results.join("\n")
       end
 
-      private
+    private
 
       def isolate_bundle(&block)
         if Bundler.respond_to?(:with_unbundled_env)
