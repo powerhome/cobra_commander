@@ -309,6 +309,12 @@ RSpec.describe "cobra cli", type: :aruba do
       expect(last_command_output.strip.split("\n")).to match(%w[a b node_manifest])
     end
 
+    it "lists components uniquely" do
+      run_command_and_stop("cobra ls -a #{fixture_app} node_manifest,a,a,b,b", fail_on_error: false)
+
+      expect(last_command_output.strip.split("\n")).to match(%w[a b node_manifest])
+    end
+
     describe "cobra ls component --dependents" do
       it "lists a component's direct dependents" do
         run_command_and_stop("cobra ls -a #{fixture_app} --dependents --no-self node_manifest", fail_on_error: true)
