@@ -31,12 +31,15 @@ module CobraCommander
     def components_filtered(component_names)
       return umbrella.components unless component_names
 
-      component_names.split(",").each_with_object(Set.new) do |component_name, set|
-        component = find_component(component_name)
-        set.add component if options.self
-        set.merge component.deep_dependencies if options.dependencies
-        set.merge component.deep_dependents if options.dependents
-      end
+      component_names.split(",")
+                     .each_with_object(Set.new) { |name, set| filter_component(name, set) }
+    end
+
+    def filter_component(component_name, set)
+      component = find_component(component_name)
+      set.add component if options.self
+      set.merge component.deep_dependencies if options.dependencies
+      set.merge component.deep_dependents if options.dependents
     end
   end
 end
