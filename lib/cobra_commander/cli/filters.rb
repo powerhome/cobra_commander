@@ -28,14 +28,16 @@ module CobraCommander
       []
     end
 
-    def components_filtered(component_name)
-      return umbrella.components unless component_name
+    def components_filtered(component_names)
+      return umbrella.components unless component_names
 
-      component = find_component(component_name)
-      components = options.self ? [component] : []
-      components.concat component.deep_dependencies if options.dependencies
-      components.concat component.deep_dependents if options.dependents
-      components
+      component_names.split(",").flat_map do |component_name|
+        component = find_component(component_name)
+        components = options.self ? [component] : []
+        components.concat component.deep_dependencies if options.dependencies
+        components.concat component.deep_dependents if options.dependents
+        components
+      end
     end
   end
 end

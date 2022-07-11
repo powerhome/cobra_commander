@@ -291,10 +291,22 @@ RSpec.describe "cobra cli", type: :aruba do
       expect(last_command_output).to match(/Component node_manifeast not found, maybe node_manifest, one of "cobra ls"/)
     end
 
+    it "suggests with DidYouMean when one of the list does not exist", if: RUBY_2_7 do
+      run_command_and_stop("cobra ls -a #{fixture_app} node_manifeast,a,b", fail_on_error: false)
+
+      expect(last_command_output).to match(/Component node_manifeast not found, maybe node_manifest, one of "cobra ls"/)
+    end
+
     it "has a default suggestion when there isn't DidYouMean", unless: RUBY_2_7 do
-      run_command_and_stop("cobra ls -a #{fixture_app} node_manifeast", fail_on_error: false)
+      run_command_and_stop("cobra ls -a #{fixture_app} node_manifest", fail_on_error: false)
 
       expect(last_command_output).to match(/Component node_manifeast not found, maybe one of "cobra ls"/)
+    end
+
+    it "lists a comma separated list of components" do
+      run_command_and_stop("cobra ls -a #{fixture_app} node_manifest,a,b", fail_on_error: false)
+
+      expect(last_command_output.strip.split("\n")).to match(%w[a b node_manifest])
     end
 
     describe "cobra ls component --dependents" do
