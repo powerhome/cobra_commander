@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Allows a comma separated list of components on `cobra ls` and `cobra exec` instead of a single component
+
 ## Version 0.14.0 - 2021-11-24
 
 * Retain selection on Interactive Printer [#69](https://github.com/powerhome/cobra_commander/pull/69)
