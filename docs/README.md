@@ -28,10 +28,10 @@ Or install it yourself as:
 ```bash
 Commands:
   cobra changes [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
-  cobra exec [component] <command>                     # Executes the command in the context of a given component or set of components. If no component is given executes the command in all components.
+  cobra exec [components] <command>                     # Executes the command in the context of a given component or set of components. If no component is given executes the command in all components.
   cobra graph [component]                              # Outputs a graph of a given component or umbrella
   cobra help [COMMAND]                                 # Describe available commands or one specific command
-  cobra ls [component]                                 # Lists the components in the context of a given component or umbrella
+  cobra ls [components]                                 # Lists the components in the context of a given component or umbrella
   cobra tree [component]                               # Prints the dependency tree of a given component or umbrella
   cobra version                                        # Prints version
 
@@ -65,7 +65,9 @@ Prints list of changed files
 
 ```sh
 Usage:
-  cobra exec [component] <command>
+  cobra exec [components] <command>
+
+[components] is all components by default, or a comma separated list of component names (no spaces between)
 
 Options:
       [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
@@ -99,7 +101,9 @@ Outputs a graph of a given component or umbrella
 
 ```sh
 Usage:
-  cobra ls [component]
+  cobra ls [components]
+
+[components] is all components by default, or a comma separated list of component names (no spaces between)
 
 Options:
   -d, [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
