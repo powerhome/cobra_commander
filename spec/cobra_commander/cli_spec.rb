@@ -12,7 +12,9 @@ RSpec.describe "cobra cli", type: :aruba do
 
   describe "cobra exec --no-interactive" do
     let(:components_affected) do
-      Dir["#{umbrella.path}/{**/**/,}cobra-rocks"].map(&File.method(:dirname)).map(&File.method(:basename))
+      Dir["#{umbrella.path}/{**/**/,}cobra-rocks"].map do |path|
+        File.basename File.dirname(path)
+      end
     end
 
     it "errors gently if component doesn't exist" do
