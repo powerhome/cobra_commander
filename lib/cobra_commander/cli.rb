@@ -27,16 +27,16 @@ module CobraCommander
       puts CobraCommander::VERSION
     end
 
-    desc "ls [component]", "Lists the components in the context of a given component or umbrella"
+    desc "ls [components]", "Lists the components in the context of a given component or umbrella"
     filter_options dependents: "Lists all dependents of a given component",
                    dependencies: "Lists all dependencies of a given component"
     method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
-    def ls(component = nil)
-      components = components_filtered(component)
+    def ls(components = nil)
+      components = components_filtered(components)
       puts options.total ? components.size : CobraCommander::Output::FlatList.new(components).to_s
     end
 
-    desc "exec [component] <command>", "Executes the command in the context of a given component or set thereof. " \
+    desc "exec [components] <command>", "Executes the command in the context of a given component or set thereof. " \
                                        "Defaults to all components."
     filter_options dependents: "Run the command on each dependent of a given component",
                    dependencies: "Run the command on each dependency of a given component"
@@ -45,10 +45,10 @@ module CobraCommander
     method_option :interactive, type: :boolean, default: true, aliases: "-i",
                                 desc: "Runs in interactive mode to allow the user to inspect the output of each " \
                                       "component"
-    def exec(command_or_component, command = nil)
+    def exec(command_or_components, command = nil)
       results = CobraCommander::Executor.exec(
-        components: components_filtered(command && command_or_component),
-        command: command || command_or_component,
+        components: components_filtered(command && command_or_components),
+        command: command || command_or_components,
         concurrency: options.concurrency, status_output: $stderr
       )
       if options.interactive && results.size > 1

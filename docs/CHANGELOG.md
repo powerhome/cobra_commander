@@ -2,7 +2,8 @@
 
 ## Unreleased
 
-* Allows a comma separated list of components on `cobra ls` and `cobra exec` instead of a single component
+* Add `--affected` filter to `cobra ls` and `cobra exec`, to target all components affected by changes since given branch [#80](https://github.com/powerhome/cobra_commander/pull/80)
+* Allows a comma separated list of components on `cobra ls` and `cobra exec` instead of a single component [#79](https://github.com/powerhome/cobra_commander/pull/79)
 
 ## Version 0.14.0 - 2021-11-24
 

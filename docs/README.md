@@ -28,10 +28,10 @@ Or install it yourself as:
 ```bash
 Commands:
   cobra changes [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
-  cobra exec [components] <command>                     # Executes the command in the context of a given component or set of components. If no component is given executes the command in all components.
+  cobra exec [components] <command>                    # Executes the command in the context of a given component or set thereof. Defaults to all components.
   cobra graph [component]                              # Outputs a graph of a given component or umbrella
   cobra help [COMMAND]                                 # Describe available commands or one specific command
-  cobra ls [components]                                 # Lists the components in the context of a given component or umbrella
+  cobra ls [components]                                # Lists the components in the context of a given component or umbrella
   cobra tree [component]                               # Prints the dependency tree of a given component or umbrella
   cobra version                                        # Prints version
 
@@ -70,14 +70,21 @@ Usage:
 [components] is all components by default, or a comma separated list of component names (no spaces between)
 
 Options:
-      [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
-      [--dependents], [--no-dependents]      # Run the command on each dependency of a given component
+      [--affected=AFFECTED]                  # Components affected since given branch [default: main]
+  -d, [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
+  -D, [--dependents], [--no-dependents]      # Run the command on each dependent of a given component
+      [--self], [--no-self]                  # Include the own component
+                                             # Default: true
+  -c, [--concurrency=N]                      # Max number of jobs to run concurrently
+                                             # Default: 5
+  -i, [--interactive], [--no-interactive]    # Runs in interactive mode to allow the user to inspect the output of each component
+                                             # Default: true
   -a, [--app=APP]
                                              # Default: /Users/me/myapp
       [--js], [--no-js]                      # Consider only the JS dependency graph
       [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
 
-Executes the command in the context of a given component or set of components. If no component is given executes the command in all components.
+Executes the command in the context of a given component or set thereof. Defaults to all components.
 ```
 
 ### cobra graph
@@ -106,8 +113,11 @@ Usage:
 [components] is all components by default, or a comma separated list of component names (no spaces between)
 
 Options:
-  -d, [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
-  -D, [--dependents], [--no-dependents]      # Run the command on each dependency of a given component
+      [--affected=AFFECTED]                  # Components affected since given branch [default: main]
+  -d, [--dependencies], [--no-dependencies]  # Lists all dependencies of a given component
+  -D, [--dependents], [--no-dependents]      # Lists all dependents of a given component
+      [--self], [--no-self]                  # Include the own component
+                                             # Default: true
   -t, [--total], [--no-total]                # Prints the total count of components
   -a, [--app=APP]
                                              # Default: /Users/me/myapp
