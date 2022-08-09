@@ -37,7 +37,7 @@ module CobraCommander
     end
 
     desc "exec [components] <command>", "Executes the command in the context of a given component or set thereof. " \
-                                       "Defaults to all components."
+                                        "Defaults to all components."
     filter_options dependents: "Run the command on each dependent of a given component",
                    dependencies: "Run the command on each dependency of a given component"
     method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
