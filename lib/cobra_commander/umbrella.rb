@@ -38,15 +38,5 @@ module CobraCommander
     def components
       @components.values
     end
-
-    def dependents_of(component)
-      find(component)&.deep_dependents
-                     &.sort_by(&:name)
-    end
-
-    def dependencies_of(name)
-      find(name)&.deep_dependencies
-                &.sort_by(&:name)
-    end
   end
 end
