@@ -5,17 +5,18 @@ require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor do
   let(:output) { StringIO.new }
+  let(:umbrella) { fixture_umbrella("app") }
 
   describe ".exec" do
     it "executes the given command with full output when its a single component" do
-      contexts = CobraCommander::Executor.exec(components: [fixture_umbrella.find("a")],
+      contexts = CobraCommander::Executor.exec(components: [umbrella.find("a")],
                                                command: "pwd", concurrency: 1, status_output: output)
 
-      expect(contexts.map(&:output)).to match_array ["#{fixture_app}/components/a\n\n"]
+      expect(contexts.map(&:output)).to match_array ["#{umbrella.path}/components/a\n\n"]
     end
 
     it "executes the given command with status output only when multiple components are given" do
-      CobraCommander::Executor.exec(components: fixture_umbrella.components, command: "pwd",
+      CobraCommander::Executor.exec(components: umbrella.components, command: "pwd",
                                     concurrency: 1, status_output: output)
 
       expect(output.string).to_not include("[DONE]")

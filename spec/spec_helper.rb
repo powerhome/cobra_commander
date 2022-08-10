@@ -7,7 +7,7 @@ require "pry"
 require "cobra_commander"
 
 RSpec.configure do |config|
-  AppHelper.configure(config, File.join(__dir__, "fixtures", "app.tgz"))
+  config.include AppHelper
 
   config.expect_with :rspec do |expectations|
     # This option will default to `true` in RSpec 4. It makes the `description`

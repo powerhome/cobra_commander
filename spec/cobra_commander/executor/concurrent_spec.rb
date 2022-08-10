@@ -5,7 +5,7 @@ require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor::Concurrent do
   let(:spin_output) { StringIO.new }
-  let(:component_e) { fixture_umbrella.find("e") }
+  let(:component_e) { fixture_umbrella("app").find("e") }
   subject { CobraCommander::Executor::Concurrent.new(component_e.dependents, concurrency: 1, spin_output: spin_output) }
   before do
     allow(spin_output).to receive(:tty?) { true }
