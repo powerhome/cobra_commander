@@ -23,7 +23,7 @@ module CobraCommander
       end
 
       def dependencies
-        (workspace_spec.keys | @root_package.dependencies.keys).map(&method(:untag))
+        workspace_spec.keys.map(&method(:untag))
       end
 
       def components
