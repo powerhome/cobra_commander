@@ -174,10 +174,21 @@ RSpec.describe "cobra cli", type: :aruba do
         │   └── c
         │       └── b
         │           └── e
+        ├── b
+        │   └── e
         ├── d
         │   ├── b
         │   │   └── e
         │   └── c
+        │       └── b
+        │           └── e
+        ├── e
+        ├── f
+        │   └── b
+        │       └── e
+        ├── g
+        │   ├── e
+        │   └── f
         │       └── b
         │           └── e
         ├── h
