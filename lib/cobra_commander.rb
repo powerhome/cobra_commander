@@ -13,7 +13,7 @@ module CobraCommander
 
   def self.umbrella(root_path, yarn: false, bundler: false, name: UMBRELLA_APP_NAME)
     umbrella = Umbrella.new(name, root_path)
-    umbrella.add_source(:yarn, Dependencies::YarnWorkspace.new(root_path)) unless bundler
+    umbrella.add_source(:yarn, Dependencies::Yarn.new(root_path)) unless bundler
     umbrella.add_source(:bundler, Dependencies::Bundler.new(root_path)) unless yarn
     umbrella
   end
