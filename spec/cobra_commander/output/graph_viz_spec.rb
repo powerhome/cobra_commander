@@ -30,12 +30,11 @@ RSpec.describe CobraCommander::Output::GraphViz do
     let(:umbrella) do
       CobraCommander::Umbrella.new("App", "fake/path").tap do |umbrella|
         umbrella.add_source :test, double(
-          path: "a.path",
-          dependencies: %w[a b],
-          components: [
-            { name: "a", path: "a.path", dependencies: %w[b c] },
-            { name: "b", path: "b.path", dependencies: [] },
-            { name: "c", path: "c.path", dependencies: [] },
+          root: double(:root_package, path: "a.path", dependencies: %w[a b]),
+          packages: [
+            double(:package, name: "a", path: "a.path", dependencies: %w[b c]),
+            double(:package, name: "b", path: "b.path", dependencies: []),
+            double(:package, name: "c", path: "c.path", dependencies: []),
           ]
         )
       end

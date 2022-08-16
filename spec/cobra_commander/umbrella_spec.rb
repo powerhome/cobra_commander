@@ -6,12 +6,11 @@ RSpec.describe CobraCommander::Umbrella do
   subject do
     CobraCommander::Umbrella.new("App", "/a/b").tap do |umbrella|
       umbrella.add_source :test, double(
-        path: "/a/b/a.path",
-        dependencies: %w[a b],
-        components: [
-          { name: "x", path: "/a/b/c/x/x.path", dependencies: %w[b c] },
-          { name: "y", path: "/a/b/c/y/y.path", dependencies: [] },
-          { name: "z", path: "/a/b/c/z/z.path", dependencies: [] },
+        root: double(:root_package, path: "/a/b/a.path", dependencies: %w[x y z]),
+        packages: [
+          double(:package, name: "x", path: "/a/b/c/x/x.path", dependencies: %w[b c]),
+          double(:package, name: "y", path: "/a/b/c/y/y.path", dependencies: []),
+          double(:package, name: "z", path: "/a/b/c/z/z.path", dependencies: []),
         ]
       )
     end

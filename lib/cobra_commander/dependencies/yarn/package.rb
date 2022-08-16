@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-require "pathname"
-
 module CobraCommander
   module Dependencies
     class Yarn::Package
       attr_reader :path, :name, :dependencies
 
-      def initialize(path, name, dependencies)
-        @path = ::Pathname.new(File.join(path, "package.json")).realpath
+      def initialize(path:, dependencies:, name: nil)
+        @path = path
         @name = untag(name)
         @dependencies = dependencies.map { |dep| untag(dep) }
       end
@@ -16,7 +14,7 @@ module CobraCommander
     private
 
       def untag(name)
-        name.gsub(%r{^@[\w-]+/}, "")
+        name&.gsub(%r{^@[\w-]+/}, "")
       end
     end
   end
