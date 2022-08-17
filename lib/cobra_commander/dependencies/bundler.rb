@@ -8,6 +8,8 @@ module CobraCommander
   module Dependencies
     # Calculates ruby bundler dependencies
     class Bundler
+      autoload :Package, "cobra_commander/dependencies/bundler/package"
+
       attr_reader :path
 
       def initialize(root)
@@ -15,13 +17,13 @@ module CobraCommander
         @path = @root.join("Gemfile.lock").realpath
       end
 
-      def dependencies
-        lockfile.dependencies.values.map(&:name)
+      def root
+        Package.new(path: path, dependencies: lockfile.dependencies.values)
       end
 
-      def components
-        components_source.specs.map do |spec|
-          { path: spec.loaded_from, name: spec.name, dependencies: spec.dependencies.map(&:name) }
+      def packages
+        @packages ||= components_source.specs.map do |spec|
+          Package.new(spec)
         end
       end
 

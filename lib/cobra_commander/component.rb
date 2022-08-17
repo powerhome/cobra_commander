@@ -3,22 +3,24 @@
 module CobraCommander
   # Represents a component withing an Umbrella
   class Component
-    attr_reader :name, :sources
+    attr_reader :name, :packages
 
     def initialize(umbrella, name)
       @umbrella = umbrella
       @name = name
       @dependency_names = []
-      @sources = {}
+      @packages = {}
     end
 
-    def add_source(key, path, dependency_names)
-      @sources[key] = path
-      @dependency_names |= dependency_names
+    def add_package(key, package)
+      @packages[key] = package
+      @dependency_names |= package.dependencies
     end
 
     def root_paths
-      @sources.values.map(&File.method(:dirname)).uniq
+      @packages.values.map do |package|
+        File.dirname(package.path)
+      end.uniq
     end
 
     def inspect

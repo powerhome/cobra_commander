@@ -8,3 +8,6 @@ Rails:
 
 Gemspec/RequireMFA:
   Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false

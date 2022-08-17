@@ -65,7 +65,7 @@ module CobraCommander
       {
         name: component.name,
         path: component.root_paths,
-        type: component.sources.keys.map(&:to_s).map(&:capitalize).join(" & "),
+        type: component.packages.keys.map(&:to_s).map(&:capitalize).join(" & "),
       }
     end
 
@@ -74,23 +74,23 @@ module CobraCommander
     end
 
     def paths
-      @paths ||= all_affected.map(&:root_paths).flatten.uniq
+      @paths ||= all_affected.map(&:root_paths).flatten
     end
 
-    def all_affected_sources
+    def all_affected_packages
       all_affected
-        .map(&:sources)
+        .map(&:packages)
         .map(&:keys)
         .flatten
         .uniq
     end
 
     def contains_ruby?
-      all_affected_sources.include?(:bundler)
+      all_affected_packages.include?(:bundler)
     end
 
     def contains_js?
-      all_affected_sources.include?(:yarn)
+      all_affected_packages.include?(:yarn)
     end
   end
 end

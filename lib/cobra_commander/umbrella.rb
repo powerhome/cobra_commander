@@ -28,25 +28,15 @@ module CobraCommander
     end
 
     def add_source(key, source)
-      @root_component.add_source key, source.path, source.dependencies
-      source.components.each do |component|
-        @components[component[:name]] ||= Component.new(self, component[:name])
-        @components[component[:name]].add_source key, component[:path], component[:dependencies]
+      @root_component.add_package key, source.root
+      source.packages.each do |packages|
+        @components[packages.name] ||= Component.new(self, packages.name)
+        @components[packages.name].add_package key, packages
       end
     end
 
     def components
       @components.values
-    end
-
-    def dependents_of(component)
-      find(component)&.deep_dependents
-                     &.sort_by(&:name)
-    end
-
-    def dependencies_of(name)
-      find(name)&.deep_dependencies
-                &.sort_by(&:name)
     end
   end
 end
