@@ -13,6 +13,10 @@ module CobraCommander
       @names ||= all_affected.map(&:name)
     end
 
+    def all_affected
+      @all_affected ||= (@directly | @transitively).sort_by(&:name)
+    end
+
     def scripts
       @scripts ||= paths.map { |path| File.join(path, "test.sh") }
     end
@@ -67,10 +71,6 @@ module CobraCommander
         path: component.root_paths,
         type: component.packages.keys.map(&:to_s).map(&:capitalize).join(" & "),
       }
-    end
-
-    def all_affected
-      @all_affected ||= (@directly | @transitively).sort_by(&:name)
     end
 
     def paths

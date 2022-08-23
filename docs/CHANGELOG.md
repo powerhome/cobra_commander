@@ -2,13 +2,17 @@
 
 ## Unreleased
 
+## Version 0.15.1 - 2022-08-23
+
+* Fix `--affected` filter [#82](https://github.com/powerhome/cobra_commander/pull/82)
+
 ## Version 0.15.0 - 2022-08-16
 
+* Resolve YARN dependencies based on yarn workspaces info workspaceDependencies [#81](https://github.com/powerhome/cobra_commander/pull/81)
 * Add `--affected` filter to `cobra ls` and `cobra exec`, to target all components affected by changes since given branch [#80](https://github.com/powerhome/cobra_commander/pull/80)
 * Allows a comma separated list of components on `cobra ls` and `cobra exec` instead of a single component [#79](https://github.com/powerhome/cobra_commander/pull/79)
-* Resolve YARN dependencies based on yarn workspaces info workspaceDependencies [#81](https://github.com/powerhome/cobra_commander/pull/81)
-* Fix cbra.info links [#70](https://github.com/powerhome/cobra_commander/pull/70)
 * Replace standardrb by rubocop-powerhome [#78](https://github.com/powerhome/cobra_commander/pull/78)
+* Fix cbra.info links [#70](https://github.com/powerhome/cobra_commander/pull/70)
 
 ## Version 0.14.0 - 2021-11-24
 
