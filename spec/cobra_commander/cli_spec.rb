@@ -5,7 +5,7 @@ require "spec_helper"
 RUBY_2_7 = Gem::Version.new(RUBY_VERSION) > Gem::Version.new("2.7.0")
 
 RSpec.describe "cobra cli", type: :aruba do
-  let!(:umbrella) { fixture_umbrella("app") }
+  let(:umbrella) { fixture_umbrella("app") }
   let(:last_command_output) do
     last_command_started.output.strip.split("\n").grep_v(/warning/).join("\n")
   end
@@ -291,6 +291,14 @@ RSpec.describe "cobra cli", type: :aruba do
   end
 
   describe "cobra ls" do
+    it "lists components affected by changes in a branch" do
+      umbrella = fixture_umbrella("modified-app")
+
+      run_command_and_stop("cobra ls -a #{umbrella.path} --affected master", fail_on_error: true)
+
+      expect(last_command_output).to eq("a\nc\nd")
+    end
+
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra ls -a #{umbrella.path} non_existent", fail_on_error: false)
 
