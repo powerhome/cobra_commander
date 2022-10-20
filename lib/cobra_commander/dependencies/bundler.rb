@@ -22,8 +22,8 @@ module CobraCommander
       end
 
       def packages
-        @packages ||= components_source.specs.map do |spec|
-          Package.new(spec)
+        @packages ||= components_sources.flat_map do |source|
+          source.specs.map { |spec| Package.new(spec) }
         end
       end
 
@@ -33,10 +33,12 @@ module CobraCommander
         @lockfile ||= ::Bundler::LockfileParser.new(::Bundler.read_file(path))
       end
 
-      def components_source
-        @components_source ||= begin
-          source = @lockfile.sources.find { |s| s.path.to_s.eql?("components") }
-          ::Bundler::Source::Path.new(source.options.merge("root_path" => @root))
+      def components_sources
+        @components_sources ||= @lockfile.sources.filter_map do |source|
+          next unless source.path?
+
+          options = source.options.merge!("root_path" => @root)
+          ::Bundler::Source::Path.new(options)
         end
       end
     end
