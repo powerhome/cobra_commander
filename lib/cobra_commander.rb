@@ -17,12 +17,4 @@ module CobraCommander
     umbrella.add_source(:bundler, Dependencies::Bundler.new(root_path)) unless yarn
     umbrella
   end
-
-  def self.umbrella_tree(path)
-    CalculatedComponentTree.new(UMBRELLA_APP_NAME, path)
-  end
-
-  def self.tree_from_cache(cache_file)
-    CachedComponentTree.from_cache_file(cache_file)
-  end
 end
