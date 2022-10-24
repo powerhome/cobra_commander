@@ -27,7 +27,7 @@ module CobraCommander
     def changes
       @changes ||= begin
         diff, _, result = Dir.chdir(@repo_root) do
-          Open3.capture3("git", "diff", "--name-only", "--merge-base", @base_branch)
+          Open3.capture3("git", "diff", "--name-only", @base_branch)
         end
 
         raise InvalidSelectionError, "Specified branch #{@base_branch} could not be found" if result.exitstatus == 128
