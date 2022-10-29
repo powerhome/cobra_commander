@@ -1,3 +1,4 @@
+---
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
@@ -10,3 +11,21 @@ spec:
   type: library
   owner: heroes-for-hire
   lifecycle: production
+  system: power-application-framework
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cobra_commander
+  title: Cobra Commander CLI
+  description: >-
+    CobraCommander is a powerful CLI for working with cbra (https://cbra.info/)
+    applications.
+  annotations:
+    backstage.io/techdocs-ref: dir:cobra_commander
+spec:
+  type: library
+  owner: heroes-for-hire
+  lifecycle: production
+  subcomponentOf: cobra-commander
+  system: power-application-framework
