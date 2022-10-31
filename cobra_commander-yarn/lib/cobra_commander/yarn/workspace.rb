@@ -5,9 +5,9 @@ require "open3"
 require "pathname"
 
 module CobraCommander
-  module Dependencies
+  module Yarn
     # Yarn workspace components source for an umbrella
-    class Yarn
+    class Workspace
       PACKAGE_FILE = "package.json"
 
       autoload :Package, "cobra_commander/dependencies/yarn/package"
