@@ -5,10 +5,10 @@ require "bundler/lockfile_parser"
 require "pathname"
 
 module CobraCommander
-  module Dependencies
+  module Ruby
     # Calculates ruby bundler dependencies
-    class Bundler
-      autoload :Package, "cobra_commander/dependencies/bundler/package"
+    class Bundle
+      autoload :Package, "cobra_commander/ruby/bundle/package"
 
       attr_reader :path
 

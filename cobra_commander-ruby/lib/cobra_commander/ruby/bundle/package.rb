@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module CobraCommander
-  module Dependencies
+  module Ruby
     # Calculates ruby bundler dependencies
-    class Bundler::Package
+    class Bundle::Package
       attr_reader :path, :name, :dependencies
 
       def initialize(spec = nil, path: spec&.loaded_from, name: spec&.name, dependencies: spec&.dependencies)
