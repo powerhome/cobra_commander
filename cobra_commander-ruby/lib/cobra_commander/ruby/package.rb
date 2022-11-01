@@ -3,7 +3,7 @@
 module CobraCommander
   module Ruby
     # Calculates ruby bundler dependencies
-    class Bundle::Package
+    class Package
       attr_reader :path, :name, :dependencies
 
       def initialize(spec = nil, path: spec&.loaded_from, name: spec&.name, dependencies: spec&.dependencies)

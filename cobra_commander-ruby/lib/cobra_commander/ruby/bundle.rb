@@ -8,8 +8,6 @@ module CobraCommander
   module Ruby
     # Calculates ruby bundler dependencies
     class Bundle
-      autoload :Package, "cobra_commander/ruby/bundle/package"
-
       attr_reader :path
 
       def initialize(root)

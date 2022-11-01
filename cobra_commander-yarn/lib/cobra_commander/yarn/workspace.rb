@@ -10,8 +10,6 @@ module CobraCommander
     class Workspace
       PACKAGE_FILE = "package.json"
 
-      autoload :Package, "cobra_commander/dependencies/yarn/package"
-
       def initialize(root_path)
         @root_path = Pathname.new(root_path)
       end
