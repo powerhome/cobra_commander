@@ -1,0 +1,10 @@
+digraph G {
+	App;
+	App -> a;
+	App -> b;
+	a;
+	a -> b;
+	a -> c;
+	b;
+	c;
+}
