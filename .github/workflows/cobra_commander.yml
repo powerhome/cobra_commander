@@ -1,0 +1,16 @@
+name: cobra_commander
+
+on:
+  push:
+
+jobs:
+  ruby:
+    uses: powerhome/power-tools/.github/workflows/_ruby-package.yml@bundler-build-matrix
+    with:
+      package: '${{ github.workflow }}'
+      workdir: '${{ github.workflow }}'
+      ruby: '["2.7", "3.0", "3.1"]'
+      rails: '["any"]'
+      bundler: '["1", "2"]'
+      before_build: 'gem install bundler -v "~> 1" --no-document && sudo apt -qq install graphviz'
+    secrets: inherit
