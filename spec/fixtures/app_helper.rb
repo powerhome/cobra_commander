@@ -1,6 +1,14 @@
 # frozen_string_literal: true
 
 module AppHelper
+  def fixture_file_path(name)
+    File.expand_path(name, __dir__)
+  end
+
+  def fixture_file(name)
+    File.open(fixture_file_path(name))
+  end
+
   def fixture_umbrella(name)
     unpacked_path = File.join(@tempdir, name)
     unless File.exist?(unpacked_path)

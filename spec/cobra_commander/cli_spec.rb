@@ -108,42 +108,29 @@ RSpec.describe "cobra cli", type: :aruba do
       expect(last_command_output).to match(/Component non_existent not found/)
     end
 
+    it "allows overriding the output path" do
+      run_command_and_stop("cobra graph -a #{umbrella.path} -o output.dot", fail_on_error: true)
+      expect(last_command_output).to match(/Graph generated.*output.dot/)
+    end
+
     context "with default output" do
       before do
         run_command_and_stop("cobra graph -a #{umbrella.path}", fail_on_error: true)
       end
 
       it "outputs explanation" do
-        expect(last_command_output).to match(%r{Graph generated at #{`pwd`.chomp}.*/output.png})
+        expect(last_command_output).to match(%r{Graph generated at #{`pwd`.chomp}.*/output.dot})
       end
 
       it "creates file" do
-        expect(exist?("output.png")).to be true
+        expect(exist?("output.dot")).to be true
       end
     end
 
     context "with specified component" do
       it "creates the file" do
         run_command_and_stop("cobra graph -a #{umbrella.path} b", fail_on_error: true)
-        expect(exist?("output.png")).to be true
-      end
-    end
-
-    context "with specified output" do
-      it "accepts 'png'" do
-        run_command_and_stop("cobra graph -a #{umbrella.path} -o output.png", fail_on_error: true)
-        expect(last_command_output).to include("Graph generated")
-      end
-
-      it "accepts 'dot'" do
-        run_command_and_stop("cobra graph -a #{umbrella.path} -o output.dot", fail_on_error: true)
-        expect(last_command_output).to include("Graph generated")
-      end
-
-      it "rejects everything else" do
-        run_command_and_stop("cobra graph -a #{umbrella.path} -o output.pdf", fail_on_error: false)
-        expect(last_command_output).to_not include("Graph generated")
-        expect(last_command_output).to eql "output format must be 'png' or 'dot'"
+        expect(exist?("output.dot")).to be true
       end
     end
   end

@@ -65,16 +65,18 @@ module CobraCommander
     end
 
     desc "graph [component]", "Outputs a graph of a given component or umbrella"
-    method_option :output, default: File.join(Dir.pwd, "output.png"), aliases: "-o",
-                           desc: "Output file, accepts .png or .dot"
+    method_option :output, default: File.join(Dir.pwd, "output.dot"), aliases: "-o"
     def graph(component = nil)
-      CobraCommander::Output::GraphViz.generate(
+      output = File.open(options.output, "w")
+      CobraCommander::Output::DotGraph.generate(
         find_component(component),
-        options.output
+        output
       )
       puts "Graph generated at #{options.output}"
     rescue ArgumentError => e
       error e.message
+    ensure
+      output&.close
     end
 
     desc "changes [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
