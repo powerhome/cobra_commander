@@ -43,6 +43,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "aruba", "~> 0.14.2"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "guard-rspec"
+  spec.add_development_dependency "license_finder", ">= 7.0"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rake", ">= 12.3.3"
   spec.add_development_dependency "rspec", "~> 3.5"

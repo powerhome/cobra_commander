@@ -1,0 +1,9 @@
+---
+- - :inherit_from
+  - https://raw.githubusercontent.com/powerhome/oss-guide/master/license_rules.yml
+- - :approve
+  - bundler
+  - :who: Carlos Palhares <carlos.palhares@powerhrg.com>
+    :why: 'Bundler <https://rubygems.org/gems/bundler/versions/1.17.3> is licensed under MIT, but license_finder sometimes fails to resolve that with 1.17.3.'
+    :versions: [1.17.3]
+    :when: 2022-11-02 20:36:55.617698000 Z
