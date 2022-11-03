@@ -6,11 +6,10 @@ module CobraCommander
     class Package
       attr_reader :path, :name, :dependencies
 
-      def initialize(spec = nil, path: spec&.loaded_from, name: spec&.name, dependencies: spec&.dependencies)
-        @spec = spec
+      def initialize(path:, dependencies:, name: nil)
         @path = path
         @name = name
-        @dependencies = dependencies&.map(&:name)
+        @dependencies = dependencies
       end
     end
   end

@@ -1,0 +1,11 @@
+# frozen_string_literal: true
+
+path "components" do
+  gem "authn"
+  gem "authz"
+  gem "finance"
+  gem "hr"
+  gem "sales"
+end
+
+gem "httparty"

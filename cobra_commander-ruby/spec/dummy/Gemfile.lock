@@ -1,0 +1,33 @@
+PATH
+  remote: components
+  specs:
+    authn (0.1.0)
+    authz (0.1.0)
+      authn
+    finance (0.1.0)
+      authn
+      authz
+    hr (0.1.0)
+      authn
+      authz
+      finance
+    sales (0.1.0)
+      authn
+      authz
+      hr
+
+GEM
+  specs:
+
+PLATFORMS
+  arm64-darwin-22
+
+DEPENDENCIES
+  authn!
+  authz!
+  finance!
+  hr!
+  sales!
+
+BUNDLED WITH
+   2.3.24
