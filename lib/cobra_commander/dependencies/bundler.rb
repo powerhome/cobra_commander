@@ -18,13 +18,11 @@ module CobraCommander
       end
 
       def root
-        Package.new(path: path, dependencies: lockfile.dependencies.values)
+        Package.new(path: path, dependencies: specs)
       end
 
       def packages
-        @packages ||= components_sources.flat_map do |source|
-          source.specs.map { |spec| Package.new(spec) }
-        end
+        @packages ||= specs.map { |spec| Package.new(spec) }
       end
 
     private
@@ -34,12 +32,16 @@ module CobraCommander
       end
 
       def components_sources
-        @components_sources ||= @lockfile.sources.filter_map do |source|
+        @components_sources ||= lockfile.sources.filter_map do |source|
           next unless source.path?
 
           options = source.options.merge!("root_path" => @root)
           ::Bundler::Source::Path.new(options)
         end
+      end
+
+      def specs
+        @specs ||= components_sources.flat_map { |source| source.specs.to_a }
       end
     end
   end
