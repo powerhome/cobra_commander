@@ -1,0 +1,10 @@
+{
+  "name": "dummy",
+  "version": "1.0.0",
+  "description": "Dummy app",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "components/*"
+  ]
+}

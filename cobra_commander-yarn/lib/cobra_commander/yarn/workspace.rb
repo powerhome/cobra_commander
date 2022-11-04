@@ -26,7 +26,7 @@ module CobraCommander
           output, = Open3.capture2("yarn workspaces --json info", chdir: @root_path.to_s)
           JSON.parse(JSON.parse(output)["data"]).map do |name, spec|
             Package.new(
-              path: @root_path.join(spec["location"], PACKAGE_FILE).realpath,
+              path: @root_path.join(spec["location"], PACKAGE_FILE).realpath.to_s,
               dependencies: spec["workspaceDependencies"],
               name: name
             )
