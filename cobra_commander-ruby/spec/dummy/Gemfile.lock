@@ -11,16 +11,22 @@ PATH
       authn
       authz
       finance
+      lockbox
     sales (0.1.0)
       authn
       authz
       hr
 
 GEM
+  remote: https://rubygems.org/
   specs:
+    lockbox (1.1.0)
+    useragent (0.16.10)
 
 PLATFORMS
   arm64-darwin-22
+  ruby
+  x86_64-linux
 
 DEPENDENCIES
   authn!
@@ -28,6 +34,7 @@ DEPENDENCIES
   finance!
   hr!
   sales!
+  useragent
 
 BUNDLED WITH
-   2.3.24
+   1.17.3

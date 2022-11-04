@@ -19,7 +19,7 @@ RSpec.describe CobraCommander::Ruby::Bundle do
   end
 
   it "does not include external packages" do
-    expect(subject.packages.map(&:name)).to_not include "httparty"
+    expect(subject.packages.map(&:name)).to_not include "useragent"
   end
 
   it "loads the internal dependencies of loaded packages" do

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+source "https://rubygems.org"
+
 path "components" do
   gem "authn"
   gem "authz"
@@ -8,4 +10,4 @@ path "components" do
   gem "sales"
 end
 
-gem "httparty"
+gem "useragent"
