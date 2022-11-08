@@ -37,7 +37,7 @@ module CobraCommander
         transitively_affected_components: transitively.map(&method(:affected_component)),
         test_scripts: scripts,
         component_names: names,
-        languages: { ruby: contains_ruby?, javascript: contains_js? },
+        languages: all_affected_packages,
       }.to_json
     end
 
@@ -56,18 +56,7 @@ module CobraCommander
     end
 
     def all_affected_packages
-      all.map(&:packages)
-         .map(&:keys)
-         .flatten
-         .uniq
-    end
-
-    def contains_ruby?
-      all_affected_packages.include?(:bundler)
-    end
-
-    def contains_js?
-      all_affected_packages.include?(:yarn)
+      all.map(&:packages).flat_map(&:keys).uniq
     end
   end
 end

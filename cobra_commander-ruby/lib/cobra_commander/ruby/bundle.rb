@@ -7,12 +7,13 @@ require "pathname"
 module CobraCommander
   module Ruby
     # Calculates ruby bundler dependencies
-    class Bundle
+    class Bundle < CobraCommander::Source[:ruby]
       attr_reader :path
 
       def initialize(root)
         @root = Pathname.new(root)
         @path = @root.join("Gemfile.lock").realpath
+        super()
       end
 
       def root

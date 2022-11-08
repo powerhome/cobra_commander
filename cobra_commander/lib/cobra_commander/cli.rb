@@ -22,8 +22,9 @@ module CobraCommander
     DEFAULT_CONCURRENCY = (Concurrent.processor_count / 2.0).ceil
 
     class_option :app, default: Dir.pwd, aliases: "-a", type: :string
-    class_option :js, default: false, type: :boolean, desc: "Consider only the JS dependency graph"
-    class_option :ruby, default: false, type: :boolean, desc: "Consider only the Ruby dependency graph"
+    Source.all.keys.each do |key|
+      class_option key, default: false, type: :boolean, desc: "Consider only the #{key} dependency graph"
+    end
 
     desc "version", "Prints version"
     def version
@@ -92,7 +93,13 @@ module CobraCommander
   private
 
     def umbrella
-      @umbrella ||= CobraCommander.umbrella(options.app, yarn: options.js, bundler: options.ruby)
+      selector = Source.all.keys.reduce({}) do |sel, key|
+        sel.merge(key => options.public_send(key))
+      end
+      @umbrella ||= CobraCommander.umbrella(
+        options.app,
+        **selector
+      )
     end
   end
 end

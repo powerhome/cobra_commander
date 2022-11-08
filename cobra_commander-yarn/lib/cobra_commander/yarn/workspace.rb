@@ -7,11 +7,12 @@ require "pathname"
 module CobraCommander
   module Yarn
     # Yarn workspace components source for an umbrella
-    class Workspace
+    class Workspace < CobraCommander::Source[:js]
       PACKAGE_FILE = "package.json"
 
       def initialize(root_path)
         @root_path = Pathname.new(root_path)
+        super()
       end
 
       def root
