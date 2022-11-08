@@ -21,10 +21,10 @@ module CobraCommander
     end
 
     def select(**selector)
-      return all unless selector.values.any?
+      return all.values unless selector.values.any?
 
       all.filter_map do |key, klass|
-        [key, klass] if selector[key]
+        klass if selector[key]
       end
     end
   end
@@ -32,9 +32,25 @@ module CobraCommander
   class Source
     extend Registry
 
-    def self.load(root_path, **selector)
-      select(**selector).each do |key, source|
-        yield key, source.new(root_path)
+    attr_reader :path
+
+    def initialize(path)
+      @path = Pathname.new(path)
+      super()
+    end
+
+    def root
+      @root ||= ::CobraCommander::Package.new(
+        self,
+        name: @path.basename,
+        path: @path,
+        dependencies: packages.map(&:name)
+      )
+    end
+
+    def self.load(path, **selector)
+      select(**selector).each do |source|
+        yield source.new(path)
       end
     end
   end

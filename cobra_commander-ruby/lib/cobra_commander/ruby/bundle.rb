@@ -8,25 +8,13 @@ module CobraCommander
   module Ruby
     # Calculates ruby bundler dependencies
     class Bundle < CobraCommander::Source[:ruby]
-      attr_reader :path
-
-      def initialize(root)
-        @root = Pathname.new(root)
-        @path = @root.join("Gemfile.lock").realpath
-        super()
-      end
-
-      def root
-        Package.new(self, name: File.basename(@root), path: path, dependencies: specs.map(&:name))
-      end
-
       def packages
         @packages ||= specs.map do |spec|
           ::CobraCommander::Package.new(
             self,
             name: spec.name,
             path: spec.loaded_from,
-            dependencies: spec.dependencies.map(&:name) & root.dependencies
+            dependencies: spec.dependencies.map(&:name) & specs.map(&:name)
           )
         end
       end
@@ -34,14 +22,14 @@ module CobraCommander
     private
 
       def lockfile
-        @lockfile ||= ::Bundler::LockfileParser.new(::Bundler.read_file(path))
+        @lockfile ||= ::Bundler::LockfileParser.new(::Bundler.read_file(path.join("Gemfile.lock")))
       end
 
       def sources
         @sources ||= lockfile.sources.filter_map do |source|
           next unless source.path?
 
-          options = source.options.merge!("root_path" => @root)
+          options = source.options.merge!("root_path" => path)
           ::Bundler::Source::Path.new(options)
         end
       end

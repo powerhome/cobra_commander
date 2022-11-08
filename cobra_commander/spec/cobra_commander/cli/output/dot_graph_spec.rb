@@ -10,7 +10,7 @@ RSpec.describe CobraCommander::CLI::Output::DotGraph do
 
     let(:umbrella) do
       CobraCommander::Umbrella.new("fake/path").tap do |umbrella|
-        umbrella.add_source :test, double(
+        umbrella.add_source double(
           packages: [
             double(:package, name: "a", path: "a.path", dependencies: %w[b c]),
             double(:package, name: "b", path: "b.path", dependencies: []),

@@ -22,10 +22,10 @@ module CobraCommander
       end
     end
 
-    def add_source(key, source)
+    def add_source(source)
       source.packages.each do |packages|
         @components[packages.name] ||= Component.new(self, packages.name)
-        @components[packages.name].add_package key, packages
+        @components[packages.name].add_package packages
       end
     end
 

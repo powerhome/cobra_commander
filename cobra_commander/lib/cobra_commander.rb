@@ -15,8 +15,8 @@ require "cobra_commander/version"
 module CobraCommander
   def self.umbrella(root_path, **selector)
     Umbrella.new(root_path).tap do |umbrella|
-      Source.load(root_path, **selector) do |key, source|
-        umbrella.add_source(key, source)
+      Source.load(root_path, **selector) do |source|
+        umbrella.add_source(source)
       end
     end
   end

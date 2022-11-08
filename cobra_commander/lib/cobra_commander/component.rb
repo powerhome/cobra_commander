@@ -12,7 +12,7 @@ module CobraCommander
       @packages = []
     end
 
-    def add_package(key, package)
+    def add_package(package)
       @packages << package
       @dependency_names |= package.dependencies
     end
