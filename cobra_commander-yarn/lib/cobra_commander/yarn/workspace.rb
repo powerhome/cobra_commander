@@ -16,23 +16,34 @@ module CobraCommander
       end
 
       def root
-        @root ||= Package.new(
+        @root ||= ::CobraCommander::Package.new(
+          self,
+          name: @root_path.basename,
           path: @root_path.join(PACKAGE_FILE).realpath,
           dependencies: packages.map(&:name)
         )
       end
 
       def packages
-        @packages ||= begin
-          output, = Open3.capture2("yarn workspaces --json info", chdir: @root_path.to_s)
-          JSON.parse(JSON.parse(output)["data"]).map do |name, spec|
-            Package.new(
-              path: @root_path.join(spec["location"], PACKAGE_FILE).realpath.to_s,
-              dependencies: spec["workspaceDependencies"],
-              name: name
-            )
-          end
+        @packages ||= workspace_data.map do |name, spec|
+          ::CobraCommander::Package.new(
+            self,
+            path: @root_path.join(spec["location"], PACKAGE_FILE).to_s,
+            dependencies: spec["workspaceDependencies"].map { |d| untag(d) },
+            name: untag(name)
+          )
         end
+      end
+
+    private
+
+      def workspace_data
+        output, = Open3.capture2("yarn workspaces --json info", chdir: @root_path.to_s)
+        JSON.parse(JSON.parse(output)["data"])
+      end
+
+      def untag(name)
+        name&.gsub(%r{^@[\w-]+/}, "")
       end
     end
   end

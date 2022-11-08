@@ -47,7 +47,7 @@ module CobraCommander
       {
         name: component.name,
         path: component.root_paths,
-        type: component.packages.keys.map(&:to_s),
+        type: component.packages.map(&:key).map(&:to_s),
       }
     end
 
@@ -56,7 +56,7 @@ module CobraCommander
     end
 
     def all_affected_packages
-      all.map(&:packages).flat_map(&:keys).uniq
+      all.flat_map(&:packages).map(&:key).uniq
     end
   end
 end

@@ -9,16 +9,16 @@ module CobraCommander
       @umbrella = umbrella
       @name = name
       @dependency_names = []
-      @packages = {}
+      @packages = []
     end
 
     def add_package(key, package)
-      @packages[key] = package
+      @packages << package
       @dependency_names |= package.dependencies
     end
 
     def root_paths
-      @packages.values.map do |package|
+      @packages.map do |package|
         File.dirname(package.path)
       end.uniq
     end

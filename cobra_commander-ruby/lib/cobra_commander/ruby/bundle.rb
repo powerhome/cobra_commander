@@ -17,12 +17,13 @@ module CobraCommander
       end
 
       def root
-        Package.new(path: path, dependencies: specs.map(&:name))
+        Package.new(self, name: File.basename(@root), path: path, dependencies: specs.map(&:name))
       end
 
       def packages
         @packages ||= specs.map do |spec|
-          Package.new(
+          ::CobraCommander::Package.new(
+            self,
             name: spec.name,
             path: spec.loaded_from,
             dependencies: spec.dependencies.map(&:name) & root.dependencies

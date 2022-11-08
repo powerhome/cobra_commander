@@ -79,7 +79,7 @@ module CobraCommander
         end
 
         def display(component)
-          "#{component.name} - #{component.packages.keys.map(&:to_s).map(&:capitalize).join(' & ')}"
+          "#{component.name} - #{component.packages.map(&:key).map(&:to_s).map(&:capitalize).join(' & ')}"
         end
 
         def blank_line

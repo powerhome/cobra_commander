@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
+require "cobra_commander/package"
+
 module CobraCommander
   module Registry
     def [](key)
       Class.new(self) do
         define_singleton_method(:key) { key }
+        define_method(:key) { key }
+
         def self.inherited(base)
           super
           superclass.all[key] = base

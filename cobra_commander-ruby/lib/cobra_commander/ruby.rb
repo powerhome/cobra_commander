@@ -2,7 +2,6 @@
 
 require "cobra_commander/source"
 
-require_relative "ruby/package"
 require_relative "ruby/bundle"
 require_relative "ruby/version"
 

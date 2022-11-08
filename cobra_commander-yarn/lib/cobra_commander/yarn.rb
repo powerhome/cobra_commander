@@ -2,7 +2,6 @@
 
 require "cobra_commander/source"
 
-require_relative "yarn/package"
 require_relative "yarn/version"
 require_relative "yarn/workspace"
 

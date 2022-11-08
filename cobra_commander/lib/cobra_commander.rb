@@ -4,6 +4,7 @@ require "cobra_commander/ruby"
 require "cobra_commander/yarn"
 
 require "cobra_commander/component"
+require "cobra_commander/package"
 require "cobra_commander/umbrella"
 require "cobra_commander/source"
 require "cobra_commander/version"
