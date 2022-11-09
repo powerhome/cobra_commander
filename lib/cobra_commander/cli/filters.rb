@@ -31,7 +31,7 @@ module CobraCommander
 
     def affected_by_changes(origin_branch)
       changes = GitChanged.new(umbrella.path, origin_branch)
-      Affected.new(umbrella, changes).all_affected
+      Affected.new(umbrella, changes).all
     end
 
     def filter_component(component_name)
