@@ -43,26 +43,10 @@ module CobraCommander
   private
 
     def run!
-      @transitively = Set.new
-      @directly = Set.new
-      @umbrella.components.each(&method(:add_if_changed))
-      @transitively = @transitively.sort_by(&:name)
-      @directly = @directly.sort_by(&:name)
-    end
-
-    def component_changed?(component)
-      component.root_paths.any? do |component_path|
-        @changes.any? do |file_path|
-          file_path.start_with?(component_path)
-        end
-      end
-    end
-
-    def add_if_changed(component)
-      return unless component_changed?(component)
-
-      @directly << component
-      @transitively.merge(component.deep_dependents)
+      @directly = @changes.map { |path| @umbrella.resolve(path) }
+                          .uniq.sort_by(&:name)
+      @transitively = @directly.flat_map(&:deep_dependents)
+                               .uniq.sort_by(&:name)
     end
 
     def affected_component(component)

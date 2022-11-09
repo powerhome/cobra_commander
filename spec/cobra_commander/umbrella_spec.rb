@@ -17,12 +17,12 @@ RSpec.describe CobraCommander::Umbrella do
   end
 
   describe ".resolve(component_root_path)" do
-    it "resolves the root component" do
-      expect(subject.resolve("/a/b").name).to eql "App"
-    end
-
     it "resolves a component given the root path" do
       expect(subject.resolve("/a/b/c/y").name).to eql "y"
+    end
+
+    it "resolves child paths" do
+      expect(subject.resolve("/a/b/c/z/app/models/mode.rb").name).to eql "z"
     end
 
     it "is nil when no component was found" do
