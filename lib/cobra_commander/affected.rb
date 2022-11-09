@@ -6,15 +6,14 @@ module CobraCommander
     def initialize(umbrella, changes)
       @umbrella = umbrella
       @changes = changes
-      run!
     end
 
     def names
-      @names ||= all_affected.map(&:name)
+      @names ||= all.map(&:name)
     end
 
-    def all_affected
-      @all_affected ||= (@directly | @transitively).sort_by(&:name)
+    def all
+      @all ||= (directly | transitively).sort_by(&:name)
     end
 
     def scripts
@@ -22,18 +21,20 @@ module CobraCommander
     end
 
     def directly
-      @directly.map(&method(:affected_component))
+      @directly ||= @changes.filter_map { |path| @umbrella.resolve(path) }
+                            .uniq.sort_by(&:name)
     end
 
     def transitively
-      @transitively.map(&method(:affected_component))
+      @transitively ||= directly.flat_map(&:deep_dependents)
+                                .uniq.sort_by(&:name)
     end
 
-    def json_representation
+    def to_json(*_args)
       {
         changed_files: @changes,
-        directly_affected_components: directly,
-        transitively_affected_components: transitively,
+        directly_affected_components: directly.map(&method(:affected_component)),
+        transitively_affected_components: transitively.map(&method(:affected_component)),
         test_scripts: scripts,
         component_names: names,
         languages: { ruby: contains_ruby?, javascript: contains_js? },
@@ -42,47 +43,23 @@ module CobraCommander
 
   private
 
-    def run!
-      @transitively = Set.new
-      @directly = Set.new
-      @umbrella.components.each(&method(:add_if_changed))
-      @transitively = @transitively.sort_by(&:name)
-      @directly = @directly.sort_by(&:name)
-    end
-
-    def component_changed?(component)
-      component.root_paths.any? do |component_path|
-        @changes.any? do |file_path|
-          file_path.start_with?(component_path)
-        end
-      end
-    end
-
-    def add_if_changed(component)
-      return unless component_changed?(component)
-
-      @directly << component
-      @transitively.merge(component.deep_dependents)
-    end
-
     def affected_component(component)
       {
         name: component.name,
         path: component.root_paths,
-        type: component.packages.keys.map(&:to_s).map(&:capitalize).join(" & "),
+        type: component.packages.keys.map(&:to_s),
       }
     end
 
     def paths
-      @paths ||= all_affected.map(&:root_paths).flatten
+      @paths ||= all.map(&:root_paths).flatten
     end
 
     def all_affected_packages
-      all_affected
-        .map(&:packages)
-        .map(&:keys)
-        .flatten
-        .uniq
+      all.map(&:packages)
+         .map(&:keys)
+         .flatten
+         .uniq
     end
 
     def contains_ruby?

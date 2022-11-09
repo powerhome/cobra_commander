@@ -24,7 +24,7 @@ module CobraCommander
     end
 
     def inspect
-      "#<CobraCommander::Component:#{object_id} #{name} dependencies=#{dependencies.map(&:name)} packages=#{sources}>"
+      "#<CobraCommander::Component:#{object_id} #{name} dependencies=#{dependencies.map(&:name)} packages=#{packages}>"
     end
 
     def deep_dependents

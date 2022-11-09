@@ -18,7 +18,7 @@ module CobraCommander
     def run!
       assert_valid_result_choice
       if selected_format?("json")
-        puts affected.json_representation
+        puts affected.to_json
       else
         show_full if selected_format?("full")
         tests_to_run
@@ -57,13 +57,13 @@ module CobraCommander
 
     def directly_affected_components
       puts "<<< Directly affected components >>>"
-      affected.directly.each { |component| puts display(**component) }
+      affected.directly.each { |component| puts display(component) }
       puts blank_line
     end
 
     def transitively_affected_components
       puts "<<< Transitively affected components >>>"
-      affected.transitively.each { |component| puts display(**component) }
+      affected.transitively.each { |component| puts display(component) }
       puts blank_line
     end
 
@@ -76,8 +76,8 @@ module CobraCommander
       end
     end
 
-    def display(name:, type:, **)
-      "#{name} - #{type}"
+    def display(component)
+      "#{component.name} - #{component.packages.keys.map(&:to_s).map(&:capitalize).join(' & ')}"
     end
 
     def blank_line

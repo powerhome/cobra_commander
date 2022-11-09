@@ -19,11 +19,11 @@ module CobraCommander
       @root_component
     end
 
-    def resolve(component_root_path)
-      return root if root.root_paths.include?(component_root_path)
-
+    def resolve(path)
       components.find do |component|
-        component.root_paths.include?(component_root_path)
+        component.root_paths.any? do |component_path|
+          path.start_with?(component_path.to_s)
+        end
       end
     end
 
