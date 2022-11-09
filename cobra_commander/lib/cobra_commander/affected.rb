@@ -46,7 +46,7 @@ module CobraCommander
     def affected_component(component)
       {
         name: component.name,
-        path: component.root_paths,
+        path: component.root_paths.map(&:to_s),
         type: component.packages.map(&:key).map(&:to_s),
       }
     end

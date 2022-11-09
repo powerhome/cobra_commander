@@ -18,9 +18,7 @@ module CobraCommander
     end
 
     def root_paths
-      @packages.map do |package|
-        File.dirname(package.path)
-      end.uniq
+      @packages.map(&:path).map(&:dirname).uniq
     end
 
     def inspect

@@ -27,6 +27,6 @@ RSpec.describe CobraCommander::Ruby::Bundle do
   end
 
   it "package paths are the root path of a package" do
-    expect(hr_package.path).to eql "#{dummy_path}/components/hr/hr.gemspec"
+    expect(hr_package.path.to_s).to eql "#{dummy_path}/components/hr/hr.gemspec"
   end
 end

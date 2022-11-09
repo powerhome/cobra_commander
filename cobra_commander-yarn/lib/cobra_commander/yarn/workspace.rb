@@ -14,7 +14,7 @@ module CobraCommander
         @packages ||= workspace_data.map do |name, spec|
           ::CobraCommander::Package.new(
             self,
-            path: path.join(spec["location"], PACKAGE_FILE).to_s,
+            path: path.join(spec["location"], PACKAGE_FILE),
             dependencies: spec["workspaceDependencies"].map { |d| untag(d) },
             name: untag(name)
           )
