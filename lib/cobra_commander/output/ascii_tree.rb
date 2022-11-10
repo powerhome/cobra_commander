@@ -11,14 +11,16 @@ module CobraCommander
       TEE = "├── "
       CORNER = "└── "
 
-      def initialize(component)
-        @component = component
+      def initialize(components)
+        @components = components
       end
 
       def to_s
         StringIO.new.tap do |io|
-          io.puts @component.name
-          list_dependencies(io, @component)
+          @components.each do |component|
+            io.puts component.name
+            list_dependencies(io, component)
+          end
         end.string
       end
 

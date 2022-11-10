@@ -4,9 +4,9 @@ module CobraCommander
   module Output
     # Generates graphs of components
     module DotGraph
-      def self.generate(component, output)
+      def self.generate(components, output)
         output << "digraph G {\n"
-        ([component] + component.deep_dependencies).each do |comp|
+        [*components, *components.flat_map(&:deep_dependencies)].uniq.each do |comp|
           output << "\t#{comp.name};\n"
           comp.dependencies.each do |dep|
             output << "\t#{comp.name} -> #{dep.name};\n"

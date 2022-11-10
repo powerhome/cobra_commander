@@ -13,8 +13,6 @@ module CobraCommander
   private
 
     def find_component(name)
-      return umbrella.root unless name
-
       umbrella.find(name) || error("Component #{name} not found, maybe #{suggestion(name)}") || exit(1)
     end
 
