@@ -22,7 +22,7 @@ RSpec.describe CobraCommander::Output::DotGraph do
     end
 
     it "correctly generates graph.dot" do
-      CobraCommander::Output::DotGraph.generate(umbrella.root, generated_dot)
+      CobraCommander::Output::DotGraph.generate(umbrella.components, generated_dot)
 
       expect(generated_dot.string).to eql expected_dot.read
     end

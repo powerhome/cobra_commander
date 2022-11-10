@@ -69,7 +69,7 @@ module CobraCommander
     def graph(component = nil)
       output = File.open(options.output, "w")
       CobraCommander::Output::DotGraph.generate(
-        find_component(component),
+        component ? [find_component(component)] : umbrella.components,
         output
       )
       puts "Graph generated at #{options.output}"
