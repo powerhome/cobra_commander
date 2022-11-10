@@ -154,8 +154,23 @@ RSpec.describe "cobra cli", type: :aruba do
       run_command_and_stop("cobra tree -a #{umbrella.path}", fail_on_error: true)
 
       expected_output = <<~OUTPUT
+        a
+        ├── b
+        │   └── e
+        └── c
+            └── b
+                └── e
         b
         └── e
+        c
+        └── b
+            └── e
+        d
+        ├── b
+        │   └── e
+        └── c
+            └── b
+                └── e
         e
         f
         └── b
@@ -183,21 +198,6 @@ RSpec.describe "cobra cli", type: :aruba do
             └── f
                 └── b
                     └── e
-        a
-        ├── b
-        │   └── e
-        └── c
-            └── b
-                └── e
-        c
-        └── b
-            └── e
-        d
-        ├── b
-        │   └── e
-        └── c
-            └── b
-                └── e
       OUTPUT
 
       # This converts a unicode non-breaking space with

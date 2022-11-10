@@ -12,7 +12,7 @@ module CobraCommander
       CORNER = "└── "
 
       def initialize(components)
-        @components = components
+        @components = components.sort_by(&:name)
       end
 
       def to_s
