@@ -36,7 +36,7 @@ module CobraCommander
     method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
     def ls(components = nil)
       components = components_filtered(components)
-      puts options.total ? components.size : CobraCommander::Output::FlatList.new(components).to_s
+      puts options.total ? components.size : components.map(&:name).sort
     end
 
     desc "exec [components] <command>", "Executes the command in the context of a given component or set thereof. " \
