@@ -4,7 +4,7 @@ require "pastel"
 require "tty-prompt"
 
 module CobraCommander
-  module Output
+  module CLI::Output
     # Runs an interactive output printer
     class InteractivePrinter
       pastel = Pastel.new
@@ -34,7 +34,7 @@ module CobraCommander
     private
 
       def map_options(contexts)
-        contexts.sort(&method(:sort_contexts))
+        contexts.sort { |*cxs| sort_contexts(*cxs) }
                 .reduce({}) do |options, context|
           template = context.success? ? SUCCESS : ERROR
           options.merge format(template, context.component_name) => context

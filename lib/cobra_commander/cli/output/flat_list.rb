@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module CobraCommander
-  module Output
+  module CLI::Output
     # Prints a list of components' names sorted alphabetically
     class FlatList
       def initialize(components)
