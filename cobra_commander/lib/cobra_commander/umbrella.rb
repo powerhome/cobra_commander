@@ -17,15 +17,15 @@ module CobraCommander
     def resolve(path)
       components.find do |component|
         component.root_paths.any? do |component_path|
-          path.start_with?(component_path.to_s)
+          path.start_with?(component_path.cleanpath.to_s)
         end
       end
     end
 
     def add_source(source)
-      source.packages.each do |packages|
-        @components[packages.name] ||= Component.new(self, packages.name)
-        @components[packages.name].add_package packages
+      source.packages.each do |package|
+        @components[package.name] ||= Component.new(self, package.name)
+        @components[package.name].add_package package
       end
     end
 

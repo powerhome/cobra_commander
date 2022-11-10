@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
 module AppHelper
+  def fixture_path
+    Pathname.new(__dir__)
+  end
+
   def fixture_file_path(name)
-    File.expand_path(name, __dir__)
+    Pathname.new(name).expand_path(fixture_path)
   end
 
   def fixture_file(name)
-    File.open(fixture_file_path(name))
+    fixture_file_path(name).open
   end
 
   def fixture_umbrella(name)

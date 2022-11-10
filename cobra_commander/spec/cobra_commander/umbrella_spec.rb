@@ -7,9 +7,9 @@ RSpec.describe CobraCommander::Umbrella do
     CobraCommander::Umbrella.new("/a/b").tap do |umbrella|
       umbrella.add_source double(
         packages: [
-          double(:package, name: "x", path: Pathname.new("/a/b/c/x/x.path"), dependencies: %w[b c]),
-          double(:package, name: "y", path: Pathname.new("/a/b/c/y/y.path"), dependencies: []),
-          double(:package, name: "z", path: Pathname.new("/a/b/c/z/z.path"), dependencies: []),
+          double(:package, name: "x", path: Pathname.new("/a/b/c/x/"), dependencies: %w[b c]),
+          double(:package, name: "y", path: Pathname.new("/a/b/c/y/"), dependencies: []),
+          double(:package, name: "z", path: Pathname.new("/a/b/c/z/"), dependencies: []),
         ]
       )
     end

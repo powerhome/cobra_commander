@@ -26,6 +26,6 @@ RSpec.describe CobraCommander::Yarn::Workspace do
   end
 
   it "package paths are the root path of a package" do
-    expect(hr_package.path.to_s).to eql "#{dummy_path}/components/hr-ui/package.json"
+    expect(hr_package.path.to_s).to eql "#{dummy_path}/components/hr-ui"
   end
 end

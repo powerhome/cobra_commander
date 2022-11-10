@@ -13,7 +13,7 @@ module CobraCommander
           ::CobraCommander::Package.new(
             self,
             name: spec.name,
-            path: Pathname.new(spec.loaded_from),
+            path: Pathname.new(spec.loaded_from).dirname,
             dependencies: spec.dependencies.map(&:name) & specs.map(&:name)
           )
         end
