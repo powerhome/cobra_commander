@@ -4,22 +4,39 @@ require "spec_helper"
 require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor do
-  let(:output) { StringIO.new }
-  let(:umbrella) { fixture_umbrella("app") }
+  let(:spin_output) { StringIO.new }
+  let(:component_e) { fixture_umbrella("app").find("e") }
+  subject { CobraCommander::Executor.new(component_e.dependents, concurrency: 1, spin_output: spin_output) }
+  before do
+    allow(spin_output).to receive(:tty?) { true }
+  end
 
-  describe ".exec" do
-    it "executes the given command with full output when its a single component" do
-      contexts = CobraCommander::Executor.exec(components: [umbrella.find("a")],
-                                               command: "pwd", concurrency: 1, status_output: output)
+  it "executes in the context of each given component" do
+    contexts = subject.exec("echo 'I am at' $PWD")
+    outputs = contexts.map(&:output).join
 
-      expect(contexts.map(&:output)).to match_array ["#{umbrella.path}/components/a\n\n"]
-    end
+    expect(outputs).to match(%r{I am at .*components/b$})
+    expect(outputs).to match(/I am at .*node_manifest$/)
+    expect(outputs).to match(%r{I am at .*components/g$})
+  end
 
-    it "executes the given command with status output only when multiple components are given" do
-      CobraCommander::Executor.exec(components: umbrella.components, command: "pwd",
-                                    concurrency: 1, status_output: output)
+  it "prints the status of each component" do
+    subject.exec("echo 'I am at' $PWD")
 
-      expect(output.string).to_not include("[DONE]")
-    end
+    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? b/)
+    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? node_manifest/)
+    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? g/)
+  end
+
+  it "fails when the command fail" do
+    contexts = subject.exec("lol")
+
+    expect(contexts.all?(&:success?)).to be false
+  end
+
+  it "succeeds when it succeed" do
+    contexts = subject.exec("true")
+
+    expect(contexts.all?(&:success?)).to be true
   end
 end
