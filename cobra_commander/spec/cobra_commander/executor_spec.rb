@@ -24,11 +24,11 @@ RSpec.describe CobraCommander::Executor do
 
   it "executes in the context of each given component" do
     contexts = subject.exec("echo 'I am at' $PWD")
-    outputs = contexts.map(&:output)
+    outputs = contexts.map(&:output).join
 
     expect(contexts.size).to eql 2
-    expect(outputs.first).to match(/I am at #{component_path}$/)
-    expect(outputs.last).to match(/I am at #{another_component_path}$/)
+    expect(outputs).to match(/I am at #{component_path}$/)
+    expect(outputs).to match(/I am at #{another_component_path}$/)
   end
 
   it "prints the status of each component" do
