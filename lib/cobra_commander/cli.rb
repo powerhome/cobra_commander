@@ -60,8 +60,8 @@ module CobraCommander
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"
     def tree(component = nil)
-      component = find_component(component)
-      puts CobraCommander::Output::AsciiTree.new(component).to_s
+      components = component ? [find_component(component)] : umbrella.components
+      puts CobraCommander::Output::AsciiTree.new(components).to_s
     end
 
     desc "graph [component]", "Outputs a graph of a given component or umbrella"
