@@ -3,9 +3,9 @@
 module CobraCommander
   # An umbrella application
   class Umbrella
-    attr_reader :name, :path
+    attr_reader :path
 
-    def initialize(name, path)
+    def initialize(path)
       @path = path
       @components = {}
     end

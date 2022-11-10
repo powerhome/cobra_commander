@@ -4,9 +4,8 @@ require "spec_helper"
 
 RSpec.describe CobraCommander::Umbrella do
   subject do
-    CobraCommander::Umbrella.new("App", "/a/b").tap do |umbrella|
+    CobraCommander::Umbrella.new("/a/b").tap do |umbrella|
       umbrella.add_source :test, double(
-        root: double(:root_package, path: "/a/b/a.path", dependencies: %w[x y z]),
         packages: [
           double(:package, name: "x", path: "/a/b/c/x/x.path", dependencies: %w[b c]),
           double(:package, name: "y", path: "/a/b/c/y/y.path", dependencies: []),

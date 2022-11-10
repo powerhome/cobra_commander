@@ -9,7 +9,7 @@ RSpec.describe CobraCommander::Output::DotGraph do
     let(:generated_dot) { StringIO.new }
 
     let(:umbrella) do
-      CobraCommander::Umbrella.new("App", "fake/path").tap do |umbrella|
+      CobraCommander::Umbrella.new("fake/path").tap do |umbrella|
         umbrella.add_source :test, double(
           packages: [
             double(:package, name: "a", path: "a.path", dependencies: %w[b c]),
