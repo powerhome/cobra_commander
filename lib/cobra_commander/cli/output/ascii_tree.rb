@@ -3,7 +3,7 @@
 require "stringio"
 
 module CobraCommander
-  module Output
+  module CLI::Output
     # Prints the tree in a nice tree form
     class AsciiTree
       SPACE = "    "
