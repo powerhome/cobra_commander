@@ -9,10 +9,8 @@ require "cobra_commander/version"
 # Includes tools for graphing the components of an app and their relationships, as well as selectively
 # testing components based on changes made.
 module CobraCommander
-  UMBRELLA_APP_NAME = "App"
-
-  def self.umbrella(root_path, yarn: false, bundler: false, name: UMBRELLA_APP_NAME)
-    umbrella = Umbrella.new(name, root_path)
+  def self.umbrella(root_path, yarn: false, bundler: false)
+    umbrella = Umbrella.new(root_path)
     umbrella.add_source(:yarn, Dependencies::Yarn.new(root_path)) unless bundler
     umbrella.add_source(:bundler, Dependencies::Bundler.new(root_path)) unless yarn
     umbrella

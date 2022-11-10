@@ -6,15 +6,18 @@ require "concurrent-ruby"
 
 require "cobra_commander"
 require "cobra_commander/affected"
-require "cobra_commander/change"
 require "cobra_commander/git_changed"
 require "cobra_commander/executor"
-require "cobra_commander/output"
 
 module CobraCommander
   # Implements the tool's CLI
   class CLI < Thor
-    require "cobra_commander/cli/filters"
+    require_relative "cli/filters"
+    require_relative "cli/output/ascii_tree"
+    require_relative "cli/output/change"
+    require_relative "cli/output/dot_graph"
+    require_relative "cli/output/interactive_printer"
+    require_relative "cli/output/markdown_printer"
 
     DEFAULT_CONCURRENCY = (Concurrent.processor_count / 2.0).ceil
 
@@ -33,7 +36,7 @@ module CobraCommander
     method_option :total, type: :boolean, aliases: "-t", desc: "Prints the total count of components"
     def ls(components = nil)
       components = components_filtered(components)
-      puts options.total ? components.size : CobraCommander::Output::FlatList.new(components).to_s
+      puts options.total ? components.size : components.map(&:name).sort
     end
 
     desc "exec [components] <command>", "Executes the command in the context of a given component or set thereof. " \
@@ -52,24 +55,24 @@ module CobraCommander
         concurrency: options.concurrency, status_output: $stderr
       )
       if options.interactive && results.size > 1
-        CobraCommander::Output::InteractivePrinter.run(results, $stdout)
+        Output::InteractivePrinter.run(results, $stdout)
       else
-        CobraCommander::Output::MarkdownPrinter.run(results, $stdout)
+        Output::MarkdownPrinter.run(results, $stdout)
       end
     end
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"
     def tree(component = nil)
-      component = find_component(component)
-      puts CobraCommander::Output::AsciiTree.new(component).to_s
+      components = component ? [find_component(component)] : umbrella.components
+      puts Output::AsciiTree.new(components).to_s
     end
 
     desc "graph [component]", "Outputs a graph of a given component or umbrella"
     method_option :output, default: File.join(Dir.pwd, "output.dot"), aliases: "-o"
     def graph(component = nil)
       output = File.open(options.output, "w")
-      CobraCommander::Output::DotGraph.generate(
-        find_component(component),
+      Output::DotGraph.generate(
+        component ? [find_component(component)] : umbrella.components,
         output
       )
       puts "Graph generated at #{options.output}"
@@ -83,7 +86,7 @@ module CobraCommander
     method_option :results, default: "test", aliases: "-r", desc: "Accepts test, full, name or json"
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
     def changes
-      Change.new(umbrella, options.results, options.branch).run!
+      Output::Change.new(umbrella, options.results, options.branch).run!
     end
 
   private
