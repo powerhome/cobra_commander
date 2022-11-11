@@ -1,0 +1,17 @@
+auth:
+
+hr:
+  - auth
+  - directory
+
+directory:
+  - auth
+
+finance:
+  - auth
+  - directory
+
+sales:
+  - auth
+  - directory
+  - finance

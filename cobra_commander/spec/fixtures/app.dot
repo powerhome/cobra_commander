@@ -1,0 +1,15 @@
+digraph G {
+	auth;
+	hr;
+	hr -> auth;
+	hr -> directory;
+	directory;
+	directory -> auth;
+	finance;
+	finance -> auth;
+	finance -> directory;
+	sales;
+	sales -> auth;
+	sales -> directory;
+	sales -> finance;
+}

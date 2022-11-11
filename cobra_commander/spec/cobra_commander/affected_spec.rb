@@ -4,7 +4,7 @@ require "spec_helper"
 require "cobra_commander/affected"
 
 RSpec.describe CobraCommander::Affected do
-  let(:umbrella) { fixture_umbrella("app") }
+  let(:umbrella) { stub_umbrella("app") }
 
   it "successfully instantiates" do
     expect(CobraCommander::Affected.new(umbrella, [])).to be_truthy
@@ -29,107 +29,99 @@ RSpec.describe CobraCommander::Affected do
   end
 
   context "with change to top level dependency" do
-    let(:with_change_to_a) do
-      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/a/Gemfile"])
+    let(:with_change_to_hr) do
+      CobraCommander::Affected.new(umbrella, [umbrella.path.join("hr", "index.html").to_s])
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_a.directly.size).to eql 1
-      expect(with_change_to_a.directly[0].name).to eql "a"
-      expect(with_change_to_a.directly[0].packages.map(&:key)).to eql %i[ruby]
+      expect(with_change_to_hr.directly.size).to eql 1
+      expect(with_change_to_hr.directly[0].name).to eql "hr"
+      expect(with_change_to_hr.directly[0].packages.map(&:key)).to eql %i[stub]
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_a.transitively).to eq []
+      expect(with_change_to_hr.transitively).to eq []
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_a.scripts).to eq(["#{umbrella.path}/components/a/test.sh"])
+      expect(with_change_to_hr.scripts).to eq([umbrella.path.join("hr", "test.sh").to_s])
     end
 
     it "correctly reports component names" do
-      expect(with_change_to_a.names).to eq(["a"])
+      expect(with_change_to_hr.names).to eq(["hr"])
     end
   end
 
   context "with change to lower level dependency" do
-    let(:with_change_to_b) do
-      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/b/Gemfile"])
+    let(:with_change_to_directory) do
+      CobraCommander::Affected.new(umbrella, [umbrella.path.join("directory", "index.html").to_s])
     end
 
     it "correctly reports directly affected components" do
-      expect(with_change_to_b.directly.size).to eql 1
-      expect(with_change_to_b.directly[0].name).to eql "b"
-      expect(with_change_to_b.directly[0].packages.map(&:key)).to eql %i[ruby js]
+      expect(with_change_to_directory.directly.size).to eql 1
+      expect(with_change_to_directory.directly[0].name).to eql "directory"
+      expect(with_change_to_directory.directly[0].packages.map(&:key)).to eql %i[stub]
     end
 
     it "correctly reports transitively affected components" do
-      expect(with_change_to_b.transitively.size).to eql 7
-      expect(with_change_to_b.transitively[0].name).to eql "a"
-      expect(with_change_to_b.transitively[0].packages.map(&:key)).to eql %i[ruby]
-      expect(with_change_to_b.transitively[1].name).to eql "c"
-      expect(with_change_to_b.transitively[1].packages.map(&:key)).to eql %i[ruby]
-      expect(with_change_to_b.transitively[2].name).to eql "d"
-      expect(with_change_to_b.transitively[2].packages.map(&:key)).to eql %i[ruby]
-      expect(with_change_to_b.transitively[3].name).to eql "f"
-      expect(with_change_to_b.transitively[3].packages.map(&:key)).to eql %i[js]
-      expect(with_change_to_b.transitively[4].name).to eql "g"
-      expect(with_change_to_b.transitively[4].packages.map(&:key)).to eql %i[js]
-      expect(with_change_to_b.transitively[5].name).to eql "h"
-      expect(with_change_to_b.transitively[5].packages.map(&:key)).to eql %i[ruby js]
-      expect(with_change_to_b.transitively[6].name).to eql "node_manifest"
-      expect(with_change_to_b.transitively[6].packages.map(&:key)).to eql %i[js]
+      expect(with_change_to_directory.transitively.size).to eql 3
+      expect(with_change_to_directory.transitively[0].name).to eql "finance"
+      expect(with_change_to_directory.transitively[0].packages.map(&:key)).to eql %i[stub]
+      expect(with_change_to_directory.transitively[1].name).to eql "hr"
+      expect(with_change_to_directory.transitively[1].packages.map(&:key)).to eql %i[stub]
+      expect(with_change_to_directory.transitively[2].name).to eql "sales"
+      expect(with_change_to_directory.transitively[2].packages.map(&:key)).to eql %i[stub]
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/a/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/b/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/c/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/components/d/test.sh")
-      expect(with_change_to_b.scripts).to include("#{umbrella.path}/node_manifest/test.sh")
-    end
-
-    it "correctly reports component names" do
-      expect(with_change_to_b.names).to include("a")
-      expect(with_change_to_b.names).to include("b")
-      expect(with_change_to_b.names).to include("c")
-      expect(with_change_to_b.names).to include("d")
-      expect(with_change_to_b.names).to include("node_manifest")
-    end
-  end
-
-  context "with change to lowest level dependency" do
-    let(:with_change_to_f) do
-      CobraCommander::Affected.new(umbrella, ["#{umbrella.path}/components/f/package.json"])
-    end
-
-    it "correctly reports directly affected components" do
-      expect(with_change_to_f.directly.size).to eql 1
-      expect(with_change_to_f.directly.first.name).to eql "f"
-      expect(with_change_to_f.directly.first.packages.map(&:key)).to eql %i[js]
-    end
-
-    it "correctly reports transitively affected components" do
-      expect(with_change_to_f.transitively.size).to eql 3
-      expect(with_change_to_f.transitively[0].name).to eql "g"
-      expect(with_change_to_f.transitively[0].packages.map(&:key)).to eql %i[js]
-      expect(with_change_to_f.transitively[1].name).to eql "h"
-      expect(with_change_to_f.transitively[1].packages.map(&:key)).to eql %i[ruby js]
-      expect(with_change_to_f.transitively[2].name).to eql "node_manifest"
-      expect(with_change_to_f.transitively[2].packages.map(&:key)).to eql %i[js]
-    end
-
-    it "correctly reports test scripts" do
-      expect(with_change_to_f.scripts).to match_array [
-        "#{umbrella.path}/components/f/test.sh",
-        "#{umbrella.path}/components/g/test.sh",
-        "#{umbrella.path}/components/h/test.sh",
-        "#{umbrella.path}/node_manifest/test.sh",
+      expect(with_change_to_directory.scripts).to match_array [
+        umbrella.path.join("directory", "test.sh").to_s,
+        umbrella.path.join("finance", "test.sh").to_s,
+        umbrella.path.join("hr", "test.sh").to_s,
+        umbrella.path.join("sales", "test.sh").to_s,
       ]
     end
 
     it "correctly reports component names" do
-      expect(with_change_to_f.names).to match_array %w[f g h node_manifest]
+      expect(with_change_to_directory.names).to match_array %w[directory finance hr sales]
+    end
+  end
+
+  context "with change to lowest level dependency" do
+    let(:with_change_to_auth) do
+      CobraCommander::Affected.new(umbrella, [umbrella.path.join("auth", "index.js").to_s])
+    end
+
+    it "correctly reports directly affected components" do
+      expect(with_change_to_auth.directly.size).to eql 1
+      expect(with_change_to_auth.directly.first.name).to eql "auth"
+      expect(with_change_to_auth.directly.first.packages.map(&:key)).to eql %i[stub]
+    end
+
+    it "correctly reports transitively affected components" do
+      expect(with_change_to_auth.transitively.size).to eql 4
+      expect(with_change_to_auth.transitively[0].name).to eql "directory"
+      expect(with_change_to_auth.transitively[0].packages.map(&:key)).to eql %i[stub]
+      expect(with_change_to_auth.transitively[1].name).to eql "finance"
+      expect(with_change_to_auth.transitively[1].packages.map(&:key)).to eql %i[stub]
+      expect(with_change_to_auth.transitively[2].name).to eql "hr"
+      expect(with_change_to_auth.transitively[2].packages.map(&:key)).to eql %i[stub]
+      expect(with_change_to_auth.transitively[3].name).to eql "sales"
+      expect(with_change_to_auth.transitively[3].packages.map(&:key)).to eql %i[stub]
+    end
+
+    it "correctly reports test scripts" do
+      expect(with_change_to_auth.scripts).to match_array [
+        umbrella.path.join("auth", "test.sh").to_s,
+        umbrella.path.join("directory", "test.sh").to_s,
+        umbrella.path.join("finance", "test.sh").to_s,
+        umbrella.path.join("hr", "test.sh").to_s,
+        umbrella.path.join("sales", "test.sh").to_s,
+      ]
+    end
+
+    it "correctly reports component names" do
+      expect(with_change_to_auth.names).to match_array %w[auth directory finance hr sales]
     end
   end
 end
