@@ -39,15 +39,6 @@ module CobraCommander
       super()
     end
 
-    def root
-      @root ||= ::CobraCommander::Package.new(
-        self,
-        name: @path.basename,
-        path: @path,
-        dependencies: packages.map(&:name)
-      )
-    end
-
     def self.load(path, **selector)
       select(**selector).each do |source|
         yield source.new(path)
