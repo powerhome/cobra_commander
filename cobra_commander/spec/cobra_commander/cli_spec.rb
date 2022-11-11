@@ -5,18 +5,12 @@ require "spec_helper"
 RUBY_2_7 = Gem::Version.new(RUBY_VERSION) > Gem::Version.new("2.7.0")
 
 RSpec.describe "cobra cli", type: :aruba do
-  let(:umbrella) { fixture_umbrella("app") }
+  let(:umbrella) { stub_umbrella("app") }
   let(:last_command_output) do
     last_command_started.output.strip.split("\n").grep_v(/warning/).join("\n")
   end
 
   describe "cobra exec --no-interactive" do
-    let(:components_affected) do
-      Dir["#{umbrella.path}/{**/**/,}cobra-rocks"].map do |path|
-        File.basename File.dirname(path)
-      end
-    end
-
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} non_existent pwd", fail_on_error: false)
 
@@ -24,80 +18,79 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command on all components" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --no-self 'touch cobra-rocks'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --no-self 'echo \"hi\" `pwd`'",
                            fail_on_error: true)
 
-      expect(components_affected).to match_array %w[
-        e
-        f
-        g
-        b
-        node_manifest
-        h
-        a
-        c
-        d
-      ]
+      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('sales')}")
     end
 
     it "executes the given command a given component" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} b 'echo \"hello from\" `pwd`'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} hr 'echo \"hi\" `pwd`'",
                            fail_on_error: true)
 
-      expect(last_command_output).to include("hello from #{umbrella.path}/components/b")
+      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
     end
 
     it "executes the given command a given component's dependents" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependents b 'touch cobra-rocks'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependents directory 'echo \"hi\" `pwd`'",
                            fail_on_error: true)
 
-      expect(components_affected).to match_array %w[a b c d f g h node_manifest]
+      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('sales')}")
     end
 
     it "executes the given command a given component's js dependents" do
       run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --js --dependents b 'touch cobra-rocks'",
                            fail_on_error: true)
 
-      expect(components_affected).to match_array %w[b f g h node_manifest]
-    end
-
-    it "executes the given command a given component's ruby dependents" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --ruby --dependents b 'touch cobra-rocks'",
-                           fail_on_error: false)
-
-      expect(components_affected).to match_array %w[a b c d h]
+      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('sales')}")
     end
 
     it "executes the given command a given component's dependencies" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependencies b 'touch cobra-rocks'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependencies finance 'echo \"hi\" `pwd`'",
                            fail_on_error: true)
 
-      expect(components_affected).to match_array %w[b e]
+      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
     end
 
     it "executes the given command a given component's js dependencies without self optionally" do
       run_command_and_stop(
-        "cobra exec --no-interactive -a #{umbrella.path} --js --dependencies --no-self h 'touch cobra-rocks'",
+        "cobra exec --no-interactive -a #{umbrella.path} --js --dependencies --no-self finance 'echo \"hi\" `pwd`'",
         fail_on_error: true
       )
 
-      expect(components_affected).to match_array %w[b e f]
+      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
     end
 
     it "executes the given command a given component's js dependencies including own component by default" do
       run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --js --dependencies h 'touch cobra-rocks'",
                            fail_on_error: true)
 
-      expect(components_affected).to match_array %w[b e f h]
+      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
     end
 
     it "executes the given command a given component's ruby dependencies" do
       run_command_and_stop(
-        "cobra exec --no-interactive -a #{umbrella.path} --ruby --dependencies --no-self h 'echo \"hello from\" `pwd`'",
+        "cobra exec --no-interactive -a #{umbrella.path} --ruby --dependencies --no-self h 'echo \"hi\" `pwd`'",
         fail_on_error: true
       )
 
-      expect(last_command_output).to include("hello from #{umbrella.path}/components/b")
+      expect(last_command_output).to include("hi #{umbrella.path}/components/b")
     end
   end
 
@@ -129,7 +122,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with specified component" do
       it "creates the file" do
-        run_command_and_stop("cobra graph -a #{umbrella.path} b", fail_on_error: true)
+        run_command_and_stop("cobra graph -a #{umbrella.path} sales", fail_on_error: true)
         expect(exist?("output.dot")).to be true
       end
     end
@@ -154,50 +147,25 @@ RSpec.describe "cobra cli", type: :aruba do
       run_command_and_stop("cobra tree -a #{umbrella.path}", fail_on_error: true)
 
       expected_output = <<~OUTPUT
-        a
-        ├── b
-        │   └── e
-        └── c
-            └── b
-                └── e
-        b
-        └── e
-        c
-        └── b
-            └── e
-        d
-        ├── b
-        │   └── e
-        └── c
-            └── b
-                └── e
-        e
-        f
-        └── b
-            └── e
-        g
-        ├── e
-        └── f
-            └── b
-                └── e
-        h
-        ├── b
-        │   └── e
-        └── f
-            └── b
-                └── e
-        node_manifest
-        ├── b
-        │   └── e
-        ├── e
-        ├── f
-        │   └── b
-        │       └── e
-        └── g
-            ├── e
-            └── f
-                └── b
-                    └── e
+        auth
+        directory
+        └── auth
+        finance
+        ├── auth
+        └── directory
+            └── auth
+        hr
+        ├── auth
+        └── directory
+            └── auth
+        sales
+        ├── auth
+        ├── directory
+        │   └── auth
+        └── finance
+            ├── auth
+            └── directory
+                └── auth
       OUTPUT
 
       # This converts a unicode non-breaking space with
@@ -208,15 +176,17 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "outputs the tree of components from the specified component" do
-      run_command_and_stop("cobra tree -a #{umbrella.path} a", fail_on_error: true)
+      run_command_and_stop("cobra tree -a #{umbrella.path} sales", fail_on_error: true)
 
       expected_output = <<~OUTPUT
-        a
-        ├── b
-        │   └── e
-        └── c
-            └── b
-                └── e
+        sales
+        ├── auth
+        ├── directory
+        │   └── auth
+        └── finance
+            ├── auth
+            └── directory
+                └── auth
       OUTPUT
 
       # This converts a unicode non-breaking space with
@@ -295,15 +265,15 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "suggests when there's any DidYouMean match", if: RUBY_2_7 do
-      run_command_and_stop("cobra ls -a #{umbrella.path} node_manifeast", fail_on_error: false)
+      run_command_and_stop("cobra ls -a #{umbrella.path} sals", fail_on_error: false)
 
-      expect(last_command_output).to match(/Component node_manifeast not found, maybe node_manifest, one of "cobra ls"/)
+      expect(last_command_output).to match(/Component sals not found, maybe sales, one of "cobra ls"/)
     end
 
     it "suggests with DidYouMean when one of the list does not exist", if: RUBY_2_7 do
-      run_command_and_stop("cobra ls -a #{umbrella.path} node_manifeast,a,b", fail_on_error: false)
+      run_command_and_stop("cobra ls -a #{umbrella.path} sals,hr,auth", fail_on_error: false)
 
-      expect(last_command_output).to match(/Component node_manifeast not found, maybe node_manifest, one of "cobra ls"/)
+      expect(last_command_output).to match(/Component sals not found, maybe sales, one of "cobra ls"/)
     end
 
     it "has a default suggestion when there isn't DidYouMean", unless: RUBY_2_7 do
@@ -313,28 +283,28 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "lists a comma separated list of components" do
-      run_command_and_stop("cobra ls -a #{umbrella.path} node_manifest,a,b", fail_on_error: false)
+      run_command_and_stop("cobra ls -a #{umbrella.path} hr,sales,finance", fail_on_error: false)
 
-      expect(last_command_output.strip.split("\n")).to match(%w[a b node_manifest])
+      expect(last_command_output.strip.split("\n")).to match(%w[finance hr sales])
     end
 
     it "lists components uniquely" do
-      run_command_and_stop("cobra ls -a #{umbrella.path} node_manifest,a,a,b,b", fail_on_error: false)
+      run_command_and_stop("cobra ls -a #{umbrella.path} sales,sales,finance", fail_on_error: false)
 
-      expect(last_command_output.strip.split("\n")).to match(%w[a b node_manifest])
+      expect(last_command_output.strip.split("\n")).to match(%w[finance sales])
     end
 
     describe "cobra ls component --dependents" do
       it "lists a component's direct dependents" do
-        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents --no-self node_manifest", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents --no-self finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match([])
+        expect(last_command_output.strip.split("\n")).to match(%w[sales])
       end
 
-      it "lists a component's transient dependents" do
-        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents --no-self b", fail_on_error: true)
+      it "lists a component itself along with dependents by default" do
+        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match(%w[a c d f g h node_manifest])
+        expect(last_command_output.strip.split("\n")).to match(%w[finance sales])
       end
 
       it "lists a component itself along with dependents by default" do
@@ -363,16 +333,16 @@ RSpec.describe "cobra cli", type: :aruba do
         expect(last_command_output.strip.split("\n")).to match_array %w[b]
       end
 
-      it "lists a component's direct dependency" do
-        run_command_and_stop("cobra ls --dependencies --no-self -a #{umbrella.path} g", fail_on_error: true)
+      it "lists a component's direct dependency without self" do
+        run_command_and_stop("cobra ls --no-self --dependencies -a #{umbrella.path} finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match_array %w[b e f]
+        expect(last_command_output.strip.split("\n")).to match_array %w[auth directory]
       end
 
       it "lists a component itself along with dependents by default" do
-        run_command_and_stop("cobra ls --dependencies -a #{umbrella.path} b", fail_on_error: true)
+        run_command_and_stop("cobra ls --dependencies -a #{umbrella.path} finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match(%w[b e])
+        expect(last_command_output.strip.split("\n")).to match(%w[auth directory finance])
       end
 
       it "lists a component's transient dependency" do
