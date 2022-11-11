@@ -7,5 +7,6 @@ gemspec
 bundler_version = ENV.fetch("BUNDLER_VERSION", "2")
 gem "bundler", "~> #{bundler_version}"
 
-gem "cobra_commander-ruby", path: "../"
-gem "cobra_commander-yarn", path: "../"
+group :cobra do
+  gem "cobra_commander-stub", path: "./spec/fixtures/", require: "stub_source"
+end
