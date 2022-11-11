@@ -44,9 +44,7 @@ module CobraCommander
     end
 
     def dependencies
-      @dependencies ||= @dependency_names.sort
-                                         .map(&@umbrella.method(:find))
-                                         .compact
+      @dependencies ||= @dependency_names.sort.filter_map { |name| @umbrella.find(name) }
     end
   end
 end

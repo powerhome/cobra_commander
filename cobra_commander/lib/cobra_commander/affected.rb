@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "json"
+
 module CobraCommander
   # Calculates directly & transitively affected components
   class Affected
@@ -33,8 +35,8 @@ module CobraCommander
     def to_json(*_args)
       {
         changed_files: @changes,
-        directly_affected_components: directly.map(&method(:affected_component)),
-        transitively_affected_components: transitively.map(&method(:affected_component)),
+        directly_affected_components: directly.map { |c| affected_component(c) },
+        transitively_affected_components: transitively.map { |c| affected_component(c) },
         test_scripts: scripts,
         component_names: names,
         languages: all_affected_packages,
