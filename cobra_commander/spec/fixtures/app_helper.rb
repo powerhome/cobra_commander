@@ -1,6 +1,22 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module AppHelper
+  class StubSource < CobraCommander::Source[:stub]
+    def packages
+      @packages ||= YAML.load_file("#{path}.yml").map do |name, dependencies|
+        CobraCommander::Package.new(self, name: name,
+                                          path: path.join(name),
+                                          dependencies: dependencies || [])
+      end
+    end
+  end
+
+  def stub_umbrella(path = nil)
+    CobraCommander.umbrella(fixture_file_path(path), stub: true)
+  end
+
   def fixture_path
     Pathname.new(__dir__)
   end
@@ -20,7 +36,7 @@ module AppHelper
       package = "#{File.expand_path(name, __dir__)}.tgz"
       system(`tar xfz #{package} -C #{unpacked_path}`)
     end
-    CobraCommander.umbrella(unpacked_path)
+    CobraCommander.umbrella(unpacked_path, ruby: true, js: true)
   end
 
   def self.included(config)

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 require "aruba/rspec"
-require "fixtures/app_helper"
 require "pry"
 
 require "cobra_commander"
+require "fixtures/app_helper"
 
 RSpec.configure do |config|
   config.include AppHelper
