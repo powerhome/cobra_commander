@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require "cobra_commander/ruby"
-require "cobra_commander/yarn"
+require "bundler"
+
+# Require plugins
+Bundler.require(:cobra)
 
 require "cobra_commander/component"
 require "cobra_commander/package"
