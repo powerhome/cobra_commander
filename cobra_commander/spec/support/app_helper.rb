@@ -26,14 +26,4 @@ module AppHelper
   def fixture_file(name)
     fixture_file_path(name).open
   end
-
-  def self.included(config)
-    config.before :each do
-      @tempdir = Pathname.new(Dir.mktmpdir).realpath
-    end
-
-    config.after :each do
-      FileUtils.rm_r @tempdir
-    end
-  end
 end

@@ -46,15 +46,13 @@ RSpec.describe "cobra cli", type: :aruba do
       expect(last_command_output).to include("hi #{umbrella.path.join('sales')}")
     end
 
-    it "executes the given command a given component's js dependents" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --js --dependents b 'touch cobra-rocks'",
+    it "executes the given selecting by plugin" do
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --memory " \
+                           "--dependents directory 'echo \"hi\" `pwd`'",
                            fail_on_error: true)
 
-      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
       expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('sales')}")
+      expect(last_command_output).to include("hi #{umbrella.path.join('payroll')}")
     end
 
     it "executes the given command a given component's dependencies" do
@@ -64,34 +62,6 @@ RSpec.describe "cobra cli", type: :aruba do
       expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
       expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
       expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
-    end
-
-    it "executes the given command a given component's js dependencies without self optionally" do
-      run_command_and_stop(
-        "cobra exec --no-interactive -a #{umbrella.path} --js --dependencies --no-self finance 'echo \"hi\" `pwd`'",
-        fail_on_error: true
-      )
-
-      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
-    end
-
-    it "executes the given command a given component's js dependencies including own component by default" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --js --dependencies h 'touch cobra-rocks'",
-                           fail_on_error: true)
-
-      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
-    end
-
-    it "executes the given command a given component's ruby dependencies" do
-      run_command_and_stop(
-        "cobra exec --no-interactive -a #{umbrella.path} --ruby --dependencies --no-self h 'echo \"hi\" `pwd`'",
-        fail_on_error: true
-      )
-
-      expect(last_command_output).to include("hi #{umbrella.path}/components/b")
     end
   end
 
@@ -157,10 +127,16 @@ RSpec.describe "cobra cli", type: :aruba do
         └── auth
         finance
         ├── auth
-        └── directory
-            └── auth
+        ├── directory
+        │   └── auth
+        └── payroll
+            └── directory
+                └── auth
         hr
         ├── auth
+        └── directory
+            └── auth
+        payroll
         └── directory
             └── auth
         sales
@@ -169,8 +145,30 @@ RSpec.describe "cobra cli", type: :aruba do
         │   └── auth
         └── finance
             ├── auth
+            ├── directory
+            │   └── auth
+            └── payroll
+                └── directory
+                    └── auth
+      OUTPUT
+
+      # This converts a unicode non-breaking space with
+      # a normal space because editors.
+      expected_output = expected_output.strip.tr("\u00a0", " ")
+
+      expect(last_command_output.strip.tr("\u00a0", " ")).to eq(expected_output)
+    end
+
+    it "outputs the tree of components from umbrella with specific plugins enabled" do
+      run_command_and_stop("cobra tree -a #{umbrella.path} --memory", fail_on_error: true)
+
+      expected_output = <<~OUTPUT
+        directory
+        finance
+        └── payroll
             └── directory
-                └── auth
+        payroll
+        └── directory
       OUTPUT
 
       # This converts a unicode non-breaking space with
@@ -190,8 +188,11 @@ RSpec.describe "cobra cli", type: :aruba do
         │   └── auth
         └── finance
             ├── auth
-            └── directory
-                └── auth
+            ├── directory
+            │   └── auth
+            └── payroll
+                └── directory
+                    └── auth
       OUTPUT
 
       # This converts a unicode non-breaking space with
@@ -304,53 +305,50 @@ RSpec.describe "cobra cli", type: :aruba do
       end
 
       it "lists a component itself along with dependents by default" do
-        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents b", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents directory", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match(%w[a b c d f g h node_manifest])
+        expect(last_command_output.strip.split("\n")).to match(%w[directory finance hr payroll sales])
       end
 
       it "counts a component's transient dependents" do
-        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents -t --no-self b", fail_on_error: true)
+        run_command_and_stop("cobra ls -a #{umbrella.path} --dependents -t --no-self auth", fail_on_error: true)
 
-        expect(last_command_output.to_i).to eq(7)
+        expect(last_command_output.to_i).to eq(5)
       end
     end
 
     describe "cobra ls component --dependencies" do
-      it "can list only js dependencies" do
-        run_command_and_stop("cobra ls --js --dependencies --no-self -a #{umbrella.path} h", fail_on_error: true)
+      it "can list only a specified plugin dependencies" do
+        run_command_and_stop("cobra ls --memory --dependencies --no-self -a #{umbrella.path} payroll",
+                             fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match_array %w[b e f]
+        expect(last_command_output).to eql "directory"
       end
 
-      it "can list only ruby dependencies" do
-        run_command_and_stop("cobra ls --ruby --dependencies --no-self -a #{umbrella.path} h", fail_on_error: true)
-
-        expect(last_command_output.strip.split("\n")).to match_array %w[b]
-      end
-
-      it "lists a component's direct dependency without self" do
+      it "lists a component's dependencies without self" do
         run_command_and_stop("cobra ls --no-self --dependencies -a #{umbrella.path} finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match_array %w[auth directory]
+        expect(last_command_output.strip.split("\n")).to match_array %w[auth directory payroll]
       end
 
       it "lists a component itself along with dependents by default" do
         run_command_and_stop("cobra ls --dependencies -a #{umbrella.path} finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match(%w[auth directory finance])
+        expect(last_command_output.strip.split("\n")).to match_array %w[auth directory finance payroll]
       end
 
       it "lists a component's transient dependency" do
-        run_command_and_stop("cobra ls --dependencies --no-self -a #{umbrella.path} b", fail_on_error: true)
+        run_command_and_stop("cobra ls --dependencies --no-self --memory -a #{umbrella.path} finance",
+                             fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match_array %w[e]
+        expect(last_command_output.strip.split("\n")).to match_array %w[directory payroll]
       end
 
       it "counts a component's transient dependency" do
-        run_command_and_stop("cobra ls --dependencies --no-self -a #{umbrella.path} -t h", fail_on_error: true)
+        run_command_and_stop("cobra ls --dependencies --no-self --memory -a #{umbrella.path} -t finance",
+                             fail_on_error: true)
 
-        expect(last_command_output.strip.to_i).to eq(3)
+        expect(last_command_output.strip.to_i).to eq(2)
       end
     end
   end
