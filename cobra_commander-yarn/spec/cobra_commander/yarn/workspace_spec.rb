@@ -3,13 +3,13 @@
 RSpec.describe CobraCommander::Yarn::Workspace do
   subject { CobraCommander::Yarn::Workspace.new(dummy_path) }
   let(:hr_package) do
-    subject.packages.find do |package|
+    subject.find do |package|
       package.name.eql?("hr-ui")
     end
   end
 
   it "can load all the internal packages" do
-    expect(subject.packages.map(&:name)).to match_array %w[
+    expect(subject.map(&:name)).to match_array %w[
       auth-ui
       finance-ui
       hr-ui
@@ -18,7 +18,7 @@ RSpec.describe CobraCommander::Yarn::Workspace do
   end
 
   it "does not include external packages" do
-    expect(subject.packages.map(&:name)).to_not include "lol"
+    expect(subject.map(&:name)).to_not include "lol"
   end
 
   it "loads the internal dependencies of loaded packages" do

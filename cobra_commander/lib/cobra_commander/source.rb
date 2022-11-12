@@ -30,6 +30,7 @@ module CobraCommander
   end
 
   class Source
+    include Enumerable
     extend Registry
 
     attr_reader :path

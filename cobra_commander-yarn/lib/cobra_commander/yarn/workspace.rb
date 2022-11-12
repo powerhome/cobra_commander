@@ -8,9 +8,9 @@ module CobraCommander
   module Yarn
     # Yarn workspace components source for an umbrella
     class Workspace < CobraCommander::Source[:js]
-      def packages
-        @packages ||= workspace_data.map do |name, spec|
-          ::CobraCommander::Package.new(
+      def each
+        workspace_data.each do |name, spec|
+          yield ::CobraCommander::Package.new(
             self,
             path: path.join(spec["location"]),
             dependencies: spec["workspaceDependencies"].map { |d| untag(d) },

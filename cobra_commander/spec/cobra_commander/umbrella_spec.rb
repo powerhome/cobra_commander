@@ -3,25 +3,15 @@
 require "spec_helper"
 
 RSpec.describe CobraCommander::Umbrella do
-  subject do
-    CobraCommander::Umbrella.new("/a/b").tap do |umbrella|
-      umbrella.add_source double(
-        packages: [
-          double(:package, name: "x", path: Pathname.new("/a/b/c/x/"), dependencies: %w[b c]),
-          double(:package, name: "y", path: Pathname.new("/a/b/c/y/"), dependencies: []),
-          double(:package, name: "z", path: Pathname.new("/a/b/c/z/"), dependencies: []),
-        ]
-      )
-    end
-  end
+  subject { stub_umbrella("app") }
 
   describe ".resolve(component_root_path)" do
     it "resolves a component given the root path" do
-      expect(subject.resolve("/a/b/c/y").name).to eql "y"
+      expect(subject.resolve(fixture_file_path("app/finance")).name).to eql "finance"
     end
 
     it "resolves child paths" do
-      expect(subject.resolve("/a/b/c/z/app/models/mode.rb").name).to eql "z"
+      expect(subject.resolve(fixture_file_path("app/directory/models/mode.rb")).name).to eql "directory"
     end
 
     it "is nil when no component was found" do

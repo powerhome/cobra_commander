@@ -3,13 +3,13 @@
 RSpec.describe CobraCommander::Ruby::Bundle do
   subject { CobraCommander::Ruby::Bundle.new(dummy_path) }
   let(:hr_package) do
-    subject.packages.find do |package|
+    subject.find do |package|
       package.name.eql?("hr")
     end
   end
 
   it "can load all the internal packages" do
-    expect(subject.packages.map(&:name)).to match_array %w[
+    expect(subject.map(&:name)).to match_array %w[
       authn
       authz
       finance
@@ -19,7 +19,7 @@ RSpec.describe CobraCommander::Ruby::Bundle do
   end
 
   it "does not include external packages" do
-    expect(subject.packages.map(&:name)).to_not include "useragent"
+    expect(subject.map(&:name)).to_not include "useragent"
   end
 
   it "loads the internal dependencies of loaded packages" do
