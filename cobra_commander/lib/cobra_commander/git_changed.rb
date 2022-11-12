@@ -11,10 +11,11 @@ module CobraCommander
   class GitChanged
     include Enumerable
 
-    InvalidSelectionError = Class.new(StandardError)
+    Error = Class.new(StandardError)
+    InvalidSelectionError = Class.new(Error)
 
-    def initialize(repo_root, base_branch)
-      @repo_root = repo_root
+    def initialize(path, base_branch)
+      @path = path
       @base_branch = base_branch
     end
 
@@ -25,17 +26,21 @@ module CobraCommander
   private
 
     def changes
-      @changes ||= begin
-        diff, _, result = Dir.chdir(@repo_root) do
-          Open3.capture3("git", "diff", "--name-only", @base_branch)
-        end
+      @changes ||= Dir.chdir(@path) do
+        git_dir, _, result = Open3.capture3("git", "rev-parse", "--git-dir")
+        validate_result!(result)
 
-        raise InvalidSelectionError, "Specified branch #{@base_branch} could not be found" if result.exitstatus == 128
+        diff, _, result = Open3.capture3("git", "diff", "--name-only", @base_branch)
+        validate_result!(result)
 
-        diff.split("\n").map do |f|
-          File.join(@repo_root, f)
-        end
+        git_dir = Pathname.new(git_dir)
+        diff.split("\n").map { |f| git_dir.dirname.join(f) }
       end
+    end
+
+    def validate_result!(result)
+      raise InvalidSelectionError, "Specified branch #{@base_branch} could not be found" if result.exitstatus == 128
+      raise Error, "Uknown git error: #{result.inspect}" if result.exitstatus > 0
     end
   end
 end

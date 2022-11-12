@@ -4,14 +4,11 @@ require "spec_helper"
 require "cobra_commander/git_changed"
 
 RSpec.describe CobraCommander::GitChanged do
-  let(:umbrella) { fixture_umbrella("modified-app") }
+  let(:umbrella) { stub_umbrella("modified-app", unpack: true) }
 
   it "finds all changed files" do
-    changed = CobraCommander::GitChanged.new(umbrella.path, "master")
+    changed = CobraCommander::GitChanged.new(umbrella.path, "main")
 
-    expect(changed.to_a).to match_array([
-                                          "#{umbrella.path}/components/c/Gemfile",
-                                          "#{umbrella.path}/components/f/package.json",
-                                        ])
+    expect(changed.map(&:to_s)).to match_array([umbrella.path.join("finance", "file").to_s])
   end
 end
