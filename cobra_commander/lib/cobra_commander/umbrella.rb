@@ -17,7 +17,7 @@ module CobraCommander
     def resolve(path)
       components.find do |component|
         component.root_paths.any? do |component_path|
-          path.start_with?(component_path.cleanpath.to_s)
+          path.to_s.start_with?(component_path.cleanpath.to_s)
         end
       end
     end
