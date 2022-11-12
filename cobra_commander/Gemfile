@@ -8,5 +8,5 @@ bundler_version = ENV.fetch("BUNDLER_VERSION", "2")
 gem "bundler", "~> #{bundler_version}"
 
 group :cobra do
-  gem "cobra_commander-stub", path: "./spec/fixtures/", require: "stub_source"
+  gem "cobra_commander-stub", path: "./spec/support/", require: "stub_source"
 end

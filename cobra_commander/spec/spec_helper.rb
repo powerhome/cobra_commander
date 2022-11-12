@@ -4,7 +4,7 @@ require "aruba/rspec"
 require "pry"
 
 require "cobra_commander"
-require "fixtures/app_helper"
+require "support/app_helper"
 
 RSpec.configure do |config|
   config.include AppHelper
