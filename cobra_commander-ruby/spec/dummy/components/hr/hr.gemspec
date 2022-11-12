@@ -5,6 +5,7 @@ Gem::Specification.new do |spec|
   spec.version = "0.1.0"
   spec.summary = "This is an example component for cobra_commander-ruby"
   spec.authors = ["Carlos Palhares"]
+  spec.license = "MIT"
 
   # External dependencies
   spec.add_dependency "lockbox"

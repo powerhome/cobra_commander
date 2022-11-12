@@ -5,6 +5,7 @@ Gem::Specification.new do |spec|
   spec.version = "0.1.0"
   spec.summary = "cobra_commander-stub"
   spec.authors = ["Carlos Palhares"]
+  spec.license = "MIT"
 
   spec.files = ["stub_source.rb"]
   spec.require_paths = ["./"]
