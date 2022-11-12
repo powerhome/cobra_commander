@@ -5,12 +5,13 @@ require "spec_helper"
 RUBY_2_7 = Gem::Version.new(RUBY_VERSION) > Gem::Version.new("2.7.0")
 
 RSpec.describe "cobra cli", type: :aruba do
-  let(:umbrella) { stub_umbrella("app") }
   let(:last_command_output) do
     last_command_started.output.strip.split("\n").grep_v(/warning/).join("\n")
   end
 
   describe "cobra exec --no-interactive" do
+    let(:umbrella) { stub_umbrella("app") }
+
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} non_existent pwd", fail_on_error: false)
 
@@ -95,6 +96,8 @@ RSpec.describe "cobra cli", type: :aruba do
   end
 
   describe "cobra graph" do
+    let(:umbrella) { stub_umbrella("app") }
+
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra graph -a #{umbrella.path} non_existent", fail_on_error: false)
 
@@ -137,6 +140,8 @@ RSpec.describe "cobra cli", type: :aruba do
   end
 
   describe "cobra tree" do
+    let(:umbrella) { stub_umbrella("app") }
+
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra tree -a #{umbrella.path} non_existent", fail_on_error: false)
 
@@ -198,23 +203,21 @@ RSpec.describe "cobra cli", type: :aruba do
   end
 
   describe "cobra changes" do
-    context "with defaults (-r test -b master)" do
-      before do
-        run_command_and_stop("cobra changes -a #{umbrella.path}", fail_on_error: true)
-      end
+    let(:umbrella) { stub_umbrella("modified-app", unpack: true) }
 
-      it "does not output 'Test scripts to run' header" do
-        expect(last_command_output).to_not include("Test scripts to run")
-      end
+    it "does not output 'Test scripts to run' header" do
+      run_command_and_stop("cobra changes -a #{umbrella.path} -b main", fail_on_error: false)
+
+      expect(last_command_output).to_not include("Test scripts to run")
+      expect(last_command_output).to include("modified-app/finance/test.sh")
+      expect(last_command_output).to include("modified-app/sales/test.sh")
     end
 
     context "with full results" do
-      before do
-        run_command_and_stop("cobra changes -a #{umbrella.path} -r full", fail_on_error: true)
-      end
-
       it "outputs all headers" do
-        expect(last_command_output).to include("Changes since last commit on ")
+        run_command_and_stop("cobra changes -a #{umbrella.path} -r full -b main", fail_on_error: true)
+
+        expect(last_command_output).to include("Changes since last commit on main")
         expect(last_command_output).to include("Directly affected components")
         expect(last_command_output).to include("Transitively affected components")
         expect(last_command_output).to include("Test scripts to run")
@@ -223,26 +226,17 @@ RSpec.describe "cobra cli", type: :aruba do
 
     context "with incorrect results specified" do
       it "outputs error message" do
-        run_command_and_stop("cobra changes -a #{umbrella.path} -r partial", fail_on_error: false)
+        run_command_and_stop("cobra changes -a #{umbrella.path} -b main -r partial", fail_on_error: false)
 
         expect(last_command_output).to match "--results must be 'test', 'full', 'name' or 'json'"
       end
     end
 
-    context "with branch specified" do
-      it "outputs specified branch in 'Changes since' header" do
-        branch = "test-branch"
-
-        run_command_and_stop("cobra changes -a #{umbrella.path} -r full -b #{branch}", fail_on_error: true)
-
-        expect(last_command_output).to include("Changes since last commit on #{branch}")
-      end
-    end
-
     context "with nonexistent branch specified" do
-      it "outputs error message" do
-        run_command_and_stop("cobra changes -a #{umbrella.path} -b oak_branch", fail_on_error: false)
+      it "outputs specified branch in 'Changes since' header" do
+        run_command_and_stop("cobra changes -a #{umbrella.path} -r full -b oak_branch", fail_on_error: true)
 
+        expect(last_command_output).to include("Changes since last commit on oak_branch")
         expect(last_command_output).to include("Specified branch oak_branch could not be found")
         expect(last_command_output).to_not include("Test scripts to run")
       end
@@ -250,12 +244,14 @@ RSpec.describe "cobra cli", type: :aruba do
   end
 
   describe "cobra ls" do
+    let(:umbrella) { stub_umbrella("app") }
+
     it "lists components affected by changes in a branch" do
-      umbrella = fixture_umbrella("modified-app")
+      umbrella = stub_umbrella("modified-app", unpack: true)
 
-      run_command_and_stop("cobra ls -a #{umbrella.path} --affected master", fail_on_error: true)
+      run_command_and_stop("cobra ls -a #{umbrella.path} --affected main", fail_on_error: true)
 
-      expect(last_command_output).to eq("a\nc\nd")
+      expect(last_command_output).to eq("finance\nsales")
     end
 
     it "errors gently if component doesn't exist" do
