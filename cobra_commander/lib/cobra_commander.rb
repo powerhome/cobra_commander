@@ -5,10 +5,13 @@ require "bundler"
 # Require plugins
 Bundler.require(:cobra)
 
+require "cobra_commander/affected"
 require "cobra_commander/component"
+require "cobra_commander/executor"
+require "cobra_commander/git_changed"
 require "cobra_commander/package"
-require "cobra_commander/umbrella"
 require "cobra_commander/source"
+require "cobra_commander/umbrella"
 require "cobra_commander/version"
 
 # Tools for working with Component Based Rails Apps (see https://cbra.info).
