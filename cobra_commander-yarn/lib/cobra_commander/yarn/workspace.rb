@@ -22,8 +22,14 @@ module CobraCommander
     private
 
       def workspace_data
-        output, = Open3.capture2("yarn workspaces --json info", chdir: path.to_s)
-        JSON.parse(JSON.parse(output)["data"])
+        output, error, status = Open3.capture3("yarn workspaces --json info", chdir: path.to_s)
+        raise ::CobraCommander::Source::Error, json_data(error) unless status.success?
+
+        JSON.parse(json_data(output))
+      end
+
+      def json_data(json)
+        JSON.parse(json)["data"]
       end
 
       def untag(name)

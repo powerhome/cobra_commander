@@ -97,6 +97,9 @@ module CobraCommander
         options.app,
         **selector
       )
+    rescue ::CobraCommander::Source::Error => e
+      error(e.message)
+      exit(1)
     end
   end
 end

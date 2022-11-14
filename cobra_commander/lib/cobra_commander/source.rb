@@ -18,6 +18,8 @@ module CobraCommander
 
     def self.load(path, **selector)
       select(**selector).flat_map { |source| source.new(path).to_a }
+    rescue Errno::ENOENT => e
+      raise Error, e.message
     end
   end
 end
