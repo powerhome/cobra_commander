@@ -15,6 +15,15 @@ Add this line to your application's Gemfile:
 gem 'cobra_commander'
 ```
 
+Then pick the plugins and add them to the cobra group:
+
+```ruby
+group :cobra do
+  gem 'cobra_commander-ruby'
+  gem 'cobra_commander-yarn'
+end
+```
+
 And then execute:
 
     $ bundle
@@ -22,6 +31,26 @@ And then execute:
 Or install it yourself as:
 
     $ gem install cobra_commander
+
+## Plugins
+
+Plugins provide a package source (i.e.: `yarn workspaces`) to compose the components graph of an application.
+
+[cobra_commander-ruby](https://github.com/powerhome/cobra_commander/blob/main/cobra_commander-ruby/docs/README.md)
+[cobra_commander-yarn](https://github.com/powerhome/cobra_commander/blob/main/cobra_commander-yarn/docs/README.md)
+
+### Dependency graph
+
+For all cobra's CLI, you an enable disable a specific source by using its keys. I.e.:
+
+If you want to load only the `cobra_commander-yarn` dependency graph:
+
+```bash
+$ cobra ls --js
+```
+
+This means that cobra won't be able to see components that are not part of that graph, and commands like
+`cobra exec` won't consider them.
 
 ## Usage (cobra help)
 
@@ -38,8 +67,7 @@ Commands:
 Options:
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 ```
 
 ### cobra changes
@@ -55,8 +83,7 @@ Options:
                              # Default: master
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Prints list of changed files
 ```
@@ -98,8 +125,7 @@ Options:
                              # Default: /Users/me/myapp/output.png
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Outputs a graph of a given component or umbrella
 ```
@@ -121,8 +147,7 @@ Options:
   -t, [--total], [--no-total]                # Prints the total count of components
   -a, [--app=APP]
                                              # Default: /Users/me/myapp
-      [--js], [--no-js]                      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Lists the components in the context of a given component or umbrella
 ```
@@ -136,8 +161,7 @@ Usage:
 Options:
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Prints the dependency tree of a given component or umbrella
 ```
