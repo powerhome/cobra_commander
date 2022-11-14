@@ -15,6 +15,7 @@ require "cobra_commander/version"
 # Includes tools for graphing the components of an app and their relationships, as well as selectively
 # testing components based on changes made.
 module CobraCommander
+  # @deprecated Use Umbrella.new
   def self.umbrella(root_path, **selector)
     Umbrella.new(root_path, **selector)
   end
