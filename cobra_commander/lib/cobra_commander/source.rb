@@ -41,9 +41,7 @@ module CobraCommander
     end
 
     def self.load(path, **selector)
-      select(**selector).each do |source|
-        yield source.new(path)
-      end
+      select(**selector).flat_map { |source| source.new(path).to_a }
     end
   end
 end

@@ -19,10 +19,6 @@ require "cobra_commander/version"
 # testing components based on changes made.
 module CobraCommander
   def self.umbrella(root_path, **selector)
-    Umbrella.new(root_path).tap do |umbrella|
-      Source.load(root_path, **selector) do |source|
-        umbrella.add_source(source)
-      end
-    end
+    Umbrella.new(root_path, **selector)
   end
 end

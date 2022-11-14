@@ -93,7 +93,7 @@ module CobraCommander
       selector = Source.all.keys.reduce({}) do |sel, key|
         sel.merge(key => options.public_send(key))
       end
-      @umbrella ||= CobraCommander.umbrella(
+      @umbrella ||= CobraCommander::Umbrella.new(
         options.app,
         **selector
       )

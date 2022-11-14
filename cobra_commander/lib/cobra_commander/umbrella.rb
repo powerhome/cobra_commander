@@ -5,9 +5,10 @@ module CobraCommander
   class Umbrella
     attr_reader :path
 
-    def initialize(path)
+    def initialize(path, **source_selector)
       @path = path
       @components = {}
+      load(source_selector)
     end
 
     def find(name)
@@ -22,8 +23,8 @@ module CobraCommander
       end
     end
 
-    def add_source(source)
-      source.each do |package|
+    def load(**source_selector)
+      Source.load(path, **source_selector).each do |package|
         @components[package.name] ||= Component.new(self, package.name)
         @components[package.name].add_package package
       end

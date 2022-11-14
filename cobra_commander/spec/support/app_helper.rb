@@ -12,7 +12,7 @@ module AppHelper
            else
              fixture_file_path(name)
            end
-    CobraCommander.umbrella(path, stub: true)
+    CobraCommander::Umbrella.new(path, stub: true)
   end
 
   def fixture_path
