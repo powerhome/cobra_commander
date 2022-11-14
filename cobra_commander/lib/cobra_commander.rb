@@ -2,9 +2,6 @@
 
 require "bundler"
 
-# Require plugins
-Bundler.require(:cobra)
-
 require "cobra_commander/affected"
 require "cobra_commander/component"
 require "cobra_commander/executor"

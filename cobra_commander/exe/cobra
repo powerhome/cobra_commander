@@ -1,6 +1,11 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require "bundler"
+
+# Require plugins
+Bundler.require(:cobra)
+
 require "cobra_commander/cli"
 
 CobraCommander::CLI.start

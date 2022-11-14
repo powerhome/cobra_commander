@@ -5,6 +5,7 @@ require "pry"
 
 require "cobra_commander"
 require "support/app_helper"
+require "support/stub_source"
 
 RSpec.configure do |config|
   config.include AppHelper
