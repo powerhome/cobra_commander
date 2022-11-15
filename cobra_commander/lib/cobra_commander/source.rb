@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "cobra_commander/package"
 require "cobra_commander/registry"
 
 module CobraCommander
