@@ -14,7 +14,7 @@ module CobraCommander
     def initialize(path, **source_selector)
       @path = path
       @components = {}
-      load(source_selector)
+      load(**source_selector)
     end
 
     #
