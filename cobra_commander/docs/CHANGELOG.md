@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## Version 1.0.0 - 2022-10-15
+
+* Extract Ruby and Yarn package loading to plugins by @xjunior [#87](https://github.com/powerhome/cobra_commander/pull/87)
+* Remove unused/broken methods from CobraCommander API by @xjunior [#84](https://github.com/powerhome/cobra_commander/pull/84)
+* Ruby sources are not hardcoded to "components" anymore by @xjunior [#85](https://github.com/powerhome/cobra_commander/pull/85)
+* Remove graphviz graph in favor of plain dot graph file by @xjunior [#88](https://github.com/powerhome/cobra_commander/pull/88)
+* Add license_finder to cobra CI by @xjunior [#89](https://github.com/powerhome/cobra_commander/pull/89)
+* Umbrella now "depends" on all packages in Yarn AND Ruby by @xjunior [#90](https://github.com/powerhome/cobra_commander/pull/90)
+* Refactor affected to reuse umbrella#resolve by @xjunior [#91](https://github.com/powerhome/cobra_commander/pull/91)
+* Umbrella root is not a component by itself anymore by @xjunior [#92](https://github.com/powerhome/cobra_commander/pull/92)
+* Move output into CLI by @xjunior [#93](https://github.com/powerhome/cobra_commander/pull/93)
+* Simplify Executor and remove Executor::Concurrent by @xjunior [#94](https://github.com/powerhome/cobra_commander/pull/94)
+
 ## Version 0.15.1 - 2022-08-23
 
 * Fix `--affected` filter [#82](https://github.com/powerhome/cobra_commander/pull/82)
