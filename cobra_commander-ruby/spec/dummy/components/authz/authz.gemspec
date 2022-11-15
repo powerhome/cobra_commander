@@ -8,4 +8,5 @@ Gem::Specification.new do |spec|
   spec.license = "MIT"
 
   spec.add_dependency "authn"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

@@ -9,4 +9,5 @@ Gem::Specification.new do |spec|
 
   spec.files = ["stub_source.rb"]
   spec.require_paths = ["./"]
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

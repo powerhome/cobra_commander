@@ -10,4 +10,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "authn"
   spec.add_dependency "authz"
   spec.add_dependency "hr"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end
