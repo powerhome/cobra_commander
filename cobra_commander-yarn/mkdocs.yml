@@ -1,0 +1,8 @@
+site_name: Cobra Commander - Yarn
+site_description: Cobra Commander Yarn Documentation
+repo_url: https://github.com/powerhome/cobra_commander
+nav:
+  - "Home": "README.md"
+  - "Changelog": "CHANGELOG.md"
+plugins:
+  - techdocs-core

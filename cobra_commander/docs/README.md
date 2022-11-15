@@ -1,10 +1,5 @@
 # cobra_commander
 
-[![Gem](https://img.shields.io/gem/dv/cobra_commander/stable.svg)](https://rubygems.org/gems/cobra_commander)
-[![Gem](https://img.shields.io/gem/v/cobra_commander.svg)](https://rubygems.org/gems/cobra_commander)
-[![CI](https://github.com/powerhome/cobra_commander/actions/workflows/ci.yml/badge.svg)](https://github.com/powerhome/cobra_commander/actions/workflows/ci.yml)
-[![Maintainability](https://api.codeclimate.com/v1/badges/7fe0781c18f6923ab753/maintainability)](https://codeclimate.com/github/powerhome/cobra_commander/maintainability)
-
 Tools for working with Component Based Rails Apps (see https://cbra.info). Includes tools for graphing both Ruby and Javascript components in an application and their relationships, as well as selectively testing components based on changes made.
 
 ## Installation
@@ -15,15 +10,6 @@ Add this line to your application's Gemfile:
 gem 'cobra_commander'
 ```
 
-Then pick the plugins and add them to the cobra group:
-
-```ruby
-group :cobra do
-  gem 'cobra_commander-ruby'
-  gem 'cobra_commander-yarn'
-end
-```
-
 And then execute:
 
     $ bundle
@@ -32,153 +18,17 @@ Or install it yourself as:
 
     $ gem install cobra_commander
 
-## Plugins
-
-Plugins provide a package source (i.e.: `yarn workspaces`) to compose the components graph of an application.
-
-[cobra_commander-ruby](https://github.com/powerhome/cobra_commander/blob/main/cobra_commander-ruby/docs/README.md)
-[cobra_commander-yarn](https://github.com/powerhome/cobra_commander/blob/main/cobra_commander-yarn/docs/README.md)
-
-### Dependency graph
-
-For all cobra's CLI, you an enable disable a specific source by using its keys. I.e.:
-
-If you want to load only the `cobra_commander-yarn` dependency graph:
-
-```bash
-$ cobra ls --js
-```
-
-This means that cobra won't be able to see components that are not part of that graph, and commands like
-`cobra exec` won't consider them.
-
-## Usage (cobra help)
-
-```bash
-Commands:
-  cobra changes [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
-  cobra exec [components] <command>                    # Executes the command in the context of a given component or set thereof. Defaults to all components.
-  cobra graph [component]                              # Outputs a graph of a given component or umbrella
-  cobra help [COMMAND]                                 # Describe available commands or one specific command
-  cobra ls [components]                                # Lists the components in the context of a given component or umbrella
-  cobra tree [component]                               # Prints the dependency tree of a given component or umbrella
-  cobra version                                        # Prints version
-
-Options:
-  -a, [--app=APP]
-                             # Default: /Users/me/myapp
-      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
-```
-
-### cobra changes
-
-```sh
-Usage:
-  cobra changes [--results=RESULTS] [--branch=BRANCH]
-
-Options:
-  -r, [--results=RESULTS]    # Accepts test, full, name or json
-                             # Default: test
-  -b, [--branch=BRANCH]      # Specified target to calculate against
-                             # Default: master
-  -a, [--app=APP]
-                             # Default: /Users/me/myapp
-      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
-
-Prints list of changed files
-```
-
-### cobra exec
-
-```sh
-Usage:
-  cobra exec [components] <command>
-
-[components] is all components by default, or a comma separated list of component names (no spaces between)
-
-Options:
-      [--affected=AFFECTED]                  # Components affected since given branch [default: main]
-  -d, [--dependencies], [--no-dependencies]  # Run the command on each dependency of a given component
-  -D, [--dependents], [--no-dependents]      # Run the command on each dependent of a given component
-      [--self], [--no-self]                  # Include the own component
-                                             # Default: true
-  -c, [--concurrency=N]                      # Max number of jobs to run concurrently
-                                             # Default: 5
-  -i, [--interactive], [--no-interactive]    # Runs in interactive mode to allow the user to inspect the output of each component
-                                             # Default: true
-  -a, [--app=APP]
-                                             # Default: /Users/me/myapp
-      [--js], [--no-js]                      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
-
-Executes the command in the context of a given component or set thereof. Defaults to all components.
-```
-
-### cobra graph
-
-```sh
-Usage:
-  cobra graph [component]
-
-Options:
-  -o, [--output=OUTPUT]      # Output file, accepts .png or .dot
-                             # Default: /Users/me/myapp/output.png
-  -a, [--app=APP]
-                             # Default: /Users/me/myapp
-      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
-
-Outputs a graph of a given component or umbrella
-```
-
-### cobra ls
-
-```sh
-Usage:
-  cobra ls [components]
-
-[components] is all components by default, or a comma separated list of component names (no spaces between)
-
-Options:
-      [--affected=AFFECTED]                  # Components affected since given branch [default: main]
-  -d, [--dependencies], [--no-dependencies]  # Lists all dependencies of a given component
-  -D, [--dependents], [--no-dependents]      # Lists all dependents of a given component
-      [--self], [--no-self]                  # Include the own component
-                                             # Default: true
-  -t, [--total], [--no-total]                # Prints the total count of components
-  -a, [--app=APP]
-                                             # Default: /Users/me/myapp
-      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
-
-Lists the components in the context of a given component or umbrella
-```
-
-### cobra tree
-
-```sh
-Usage:
-  cobra tree [component]
-
-Options:
-  -a, [--app=APP]
-                             # Default: /Users/me/myapp
-      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
-
-Prints the dependency tree of a given component or umbrella
-```
-
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. You will also need to install `graphviz` by running `brew install graphviz`. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
 
 ### Bundled App
 
-In order to maintain the features around umbrella apps and specially `changes`, a bundled [`umbrella app repo`](spec/fixtures/app.tgz) is included in this repository. This repo is compacted by `tar`/`gzip` in order to keep isolation, the format was chosen to avoid issues described in https://github.com/swcarpentry/git-novice/issues/272. To avoid the same issues, the workflow for this fixture app is the following:
+In order to maintain the features around umbrella apps and specially `changes`, a bundled [`umbrella app repo`](spec/fixtures/modified-app.tgz) is included in this repository. This repo is compacted by `tar`/`gzip` in order to keep isolation, the format was chosen to avoid issues described in https://github.com/swcarpentry/git-novice/issues/272. To avoid the same issues, the workflow for this fixture modified-app is the following:
 
 1. unpack it somewhere outside your repo
 1. do your changes and commit (locally only, it doesn't have a remote)
-1. from within the app run `tar cfz path/to/cobra/spec/fixtures/app.tgz .`
+1. from within the app run `tar cfz path/to/cobra/spec/fixtures/modified-app.tgz .`
 
 ## Contributing
 

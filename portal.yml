@@ -29,3 +29,37 @@ spec:
   lifecycle: production
   subcomponentOf: cobra-commander
   system: power-application-framework
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cobra_commander
+  title: Cobra Commander Ruby
+  description: >-
+    CobraCommander::Ruby is the CobraCommander plugin for working with Ruby
+    dependencies.
+  annotations:
+    backstage.io/techdocs-ref: dir:cobra_commander-ruby
+spec:
+  type: library
+  owner: heroes-for-hire
+  lifecycle: production
+  subcomponentOf: cobra-commander
+  system: power-application-framework
+---
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cobra_commander
+  title: Cobra Commander Yarn
+  description: >-
+    CobraCommander::Yarn is the CobraCommander plugin for working with Yarn
+    dependencies.
+  annotations:
+    backstage.io/techdocs-ref: dir:cobra_commander-yarn
+spec:
+  type: library
+  owner: heroes-for-hire
+  lifecycle: production
+  subcomponentOf: cobra-commander
+  system: power-application-framework
