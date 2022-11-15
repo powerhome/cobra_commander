@@ -3,7 +3,6 @@ site_description: Cobra Commander Documentation
 repo_url: https://github.com/powerhome/cobra_commander
 nav:
   - "Home": "README.md"
-  - "Code of Conduct": "CODE_OF_CONDUCT.md"
-  - "License": "LICENSE.md"
+  - "Changelog": "CHANGELOG.md"
 plugins:
   - techdocs-core

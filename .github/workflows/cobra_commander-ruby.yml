@@ -1,4 +1,4 @@
-name: cobra_commander
+name: cobra_commander-ruby
 
 on:
   push:

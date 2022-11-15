@@ -1,0 +1,8 @@
+require:
+  - rubocop-powerhome
+
+Rails:
+  Enabled: false
+
+Style/ClassAndModuleChildren:
+  Enabled: false

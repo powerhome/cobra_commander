@@ -1,0 +1,5 @@
+require:
+  - rubocop-powerhome
+
+Rails:
+  Enabled: false

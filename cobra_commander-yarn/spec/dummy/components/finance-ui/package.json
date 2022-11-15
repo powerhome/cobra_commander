@@ -1,0 +1,8 @@
+{
+  "name": "finance-ui",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "auth-ui": "1.0.0"
+  }
+}

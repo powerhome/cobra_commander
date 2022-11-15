@@ -15,6 +15,15 @@ Add this line to your application's Gemfile:
 gem 'cobra_commander'
 ```
 
+Then pick the plugins and add them to the cobra group:
+
+```ruby
+group :cobra do
+  gem 'cobra_commander-ruby'
+  gem 'cobra_commander-yarn'
+end
+```
+
 And then execute:
 
     $ bundle
@@ -22,6 +31,15 @@ And then execute:
 Or install it yourself as:
 
     $ gem install cobra_commander
+
+## Read more
+
+The core package that provides all Cobra functions and models is `cobra_commander`. You can read more about it in its [README file](https://github.com/powerhome/cobra_commander/blob/main/cobra_commander/docs/README.md).
+
+Plugins provide a package source (i.e.: `yarn workspaces`) to compose the components graph of an application. Read more about them here:
+
+  - [cobra_commander-ruby](https://github.com/powerhome/cobra_commander/blob/main/cobra_commander-ruby/docs/README.md)
+  - [cobra_commander-yarn](https://github.com/powerhome/cobra_commander/blob/main/cobra_commander-yarn/docs/README.md)
 
 ## Usage (cobra help)
 
@@ -38,8 +56,7 @@ Commands:
 Options:
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 ```
 
 ### cobra changes
@@ -55,8 +72,7 @@ Options:
                              # Default: master
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Prints list of changed files
 ```
@@ -98,8 +114,7 @@ Options:
                              # Default: /Users/me/myapp/output.png
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Outputs a graph of a given component or umbrella
 ```
@@ -121,8 +136,7 @@ Options:
   -t, [--total], [--no-total]                # Prints the total count of components
   -a, [--app=APP]
                                              # Default: /Users/me/myapp
-      [--js], [--no-js]                      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]                  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Lists the components in the context of a given component or umbrella
 ```
@@ -136,25 +150,14 @@ Usage:
 Options:
   -a, [--app=APP]
                              # Default: /Users/me/myapp
-      [--js], [--no-js]      # Consider only the JS dependency graph
-      [--ruby], [--no-ruby]  # Consider only the Ruby dependency graph
+      [--[plugin-key]], [--no-[plugin-key]]  # Consider only the [plugin] dependency graph
 
 Prints the dependency tree of a given component or umbrella
 ```
 
-## Development
+### Releasing
 
-After checking out the repo, run `bin/setup` to install dependencies. You will also need to install `graphviz` by running `brew install graphviz`. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-### Bundled App
-
-In order to maintain the features around umbrella apps and specially `changes`, a bundled [`umbrella app repo`](spec/fixtures/app.tgz) is included in this repository. This repo is compacted by `tar`/`gzip` in order to keep isolation, the format was chosen to avoid issues described in https://github.com/swcarpentry/git-novice/issues/272. To avoid the same issues, the workflow for this fixture app is the following:
-
-1. unpack it somewhere outside your repo
-1. do your changes and commit (locally only, it doesn't have a remote)
-1. from within the app run `tar cfz path/to/cobra/spec/fixtures/app.tgz .`
+To release a new version, create a PR updating the version number in `version.rb`, close the version changes in CHANGELOG.md, and create a version tag in master matching the package being released (i.e.: v1.1.1-cobra_commander).
 
 ## Contributing
 
