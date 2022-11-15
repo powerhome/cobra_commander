@@ -4,8 +4,5 @@ require:
 Rails:
   Enabled: false
 
-Gemspec/RequireMFA:
-  Enabled: false
-
 Style/ClassAndModuleChildren:
   Enabled: false

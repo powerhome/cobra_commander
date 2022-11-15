@@ -26,6 +26,11 @@ Gem::Specification.new do |spec|
   spec.homepage = "http://tech.powerhrg.com/cobra_commander/"
   spec.license = "MIT"
 
+  spec.metadata["rubygems_mfa_required"] = "true"
+  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata["source_code_uri"] = "https://github.com/powerhome/cobra_commander"
+  spec.metadata["changelog_uri"] = "https://github.com/powerhome/cobra_commander/blob/main/cobra_commander/docs/CHANGELOG.md"
+
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
   end

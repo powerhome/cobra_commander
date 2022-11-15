@@ -3,6 +3,3 @@ require:
 
 Rails:
   Enabled: false
-
-Gemspec/RequireMFA:
-  Enabled: false
