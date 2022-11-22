@@ -38,6 +38,6 @@ RSpec.describe CobraCommander::Executor::Script do
     result, output = run_script(hr_component, "lol_I_clearly_dont_exist_as_a_command_please")
 
     expect(result).to be :error
-    expect(output).to match(/lol_I_clearly_dont_exist_as_a_command_please: command not found/)
+    expect(output).to match(/lol_I_clearly_dont_exist_as_a_command_please.*not found/)
   end
 end

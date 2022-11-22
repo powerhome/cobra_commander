@@ -92,7 +92,7 @@ RSpec.describe CobraCommander::Executor do
       it "fails when the command fail" do
         reason = subject.wait.reason
 
-        expect(reason).to match_array([/lol: command not found\n/] * 5)
+        expect(reason).to match_array([/lol.*not found\n/] * 5)
       end
 
       it "prints the status of each failed component" do
