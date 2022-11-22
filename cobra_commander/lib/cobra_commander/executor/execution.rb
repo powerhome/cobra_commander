@@ -18,7 +18,7 @@ module CobraCommander
       end
 
       def wait
-        Concurrent::Promises.zip_futures(*values)
+        Concurrent::Promises.zip_futures_on(@executor, *values)
                             .tap(&:wait)
       end
 
