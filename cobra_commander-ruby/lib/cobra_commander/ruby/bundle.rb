@@ -8,9 +8,9 @@ module CobraCommander
   module Ruby
     # Calculates ruby bundler dependencies
     class Bundle < CobraCommander::Source[:ruby]
-      def each
-        specs.each do |spec|
-          yield ::CobraCommander::Package.new(
+      def packages
+        specs.map do |spec|
+          ::CobraCommander::Package.new(
             self,
             name: spec.name,
             path: Pathname.new(spec.loaded_from).dirname,

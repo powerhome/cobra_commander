@@ -3,26 +3,29 @@
 require "spec_helper"
 
 RSpec.describe CobraCommander::Source do
-  describe ".load(path, **selector)" do
+  describe ".load(path, config, **selector)" do
     it "loads the given sources" do
-      memory_source = ::CobraCommander::Source.load("doesnt_matter", memory: true)
+      memory_source, *others = ::CobraCommander::Source.load("doesnt_matter", memory: true)
 
-      expect(memory_source.size).to eql 3
+      expect(others.size).to eql 0
+      expect(memory_source.count).to eql 3
       expect(memory_source.map(&:key).uniq).to eql [:memory]
     end
 
     it "handles Errno::ENOENT coming from plugins" do
+      memory_source, = ::CobraCommander::Source.load("doesnt_matter", memory: true)
+
       expect do
-        expect_any_instance_of(::MemorySource).to receive(:each) { raise Errno::ENOENT }
-        ::CobraCommander::Source.load("doesnt_matter", memory: true)
+        allow(memory_source).to receive(:packages) { raise Errno::ENOENT }
+        memory_source.to_a
       end.to raise_error ::CobraCommander::Source::Error
     end
 
     it "loads from all sources when none is given" do
-      memory_source = ::CobraCommander::Source.load(fixture_file_path("app"))
+      packages = ::CobraCommander::Source.load(fixture_file_path("app")).flatten
 
-      expect(memory_source.size).to eql 8
-      expect(memory_source.map(&:key).uniq).to eql %i[memory stub]
+      expect(packages.count).to eql 8
+      expect(packages.map(&:key).uniq).to eql %i[memory stub]
     end
   end
 end

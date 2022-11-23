@@ -70,7 +70,7 @@ module CobraCommander
     # @return [::CobraCommander::Component,nil] the component where the path is
     #
     def load(**source_selector)
-      Source.load(path, **source_selector).each do |package|
+      Source.load(path, **source_selector).flatten.each do |package|
         @components[package.name] ||= Component.new(self, package.name)
         @components[package.name].add_package package
       end
