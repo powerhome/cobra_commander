@@ -4,45 +4,106 @@ require "spec_helper"
 require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor do
-  let(:spin_output) { StringIO.new }
   let(:umbrella) { stub_umbrella("app") }
+  let(:spin_output) { StringIO.new }
   # TTY::Spinner::Multi will not print if it's not a TTY IO
   before { allow(spin_output).to receive(:tty?).and_return(true) }
-  subject do
-    ::CobraCommander::Executor.new(umbrella.components, concurrency: 1, spin_output: spin_output)
+
+  include ::CobraCommander::Executor::Job
+
+  def success_job(output)
+    -> { success(output) }
   end
 
-  it "executes in the context of each given component" do
-    contexts = subject.exec("echo 'I am at' $PWD")
-    outputs = contexts.map(&:output).join
-
-    expect(contexts.size).to eql 5
-    expect(outputs).to match(/I am at #{umbrella.path.join("auth")}$/)
-    expect(outputs).to match(/I am at #{umbrella.path.join("directory")}$/)
-    expect(outputs).to match(/I am at #{umbrella.path.join("finance")}$/)
-    expect(outputs).to match(/I am at #{umbrella.path.join("hr")}$/)
-    expect(outputs).to match(/I am at #{umbrella.path.join("sales")}$/)
+  def error_job(output)
+    -> { error(output) }
   end
 
-  it "prints the status of each component" do
-    subject.exec("echo 'I am at' $PWD")
+  describe ".execute(jobs:, status_output: nil, **kwargs)" do
+    subject do
+      CobraCommander::Executor.execute(
+        jobs: [success_job("go brazil"), error_job("didn't happen")],
+        workers: 1,
+        status_output: spin_output
+      )
+    end
 
-    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? auth/)
-    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? directory/)
-    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? finance/)
-    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? hr/)
-    expect(spin_output.string).to match(/\[DONE\](\e\[0m)? sales/)
+    it "handles the status of each job" do
+      outputs = subject.wait
+
+      expect(outputs.value).to match_array ["go brazil", nil]
+      expect(outputs.reason).to match_array [nil, "didn't happen"]
+      expect(spin_output.string).to match(/\[DONE\](\e\[0m)? .*Proc/)
+      expect(spin_output.string).to match(/\[ERROR\](\e\[0m)? .*Proc/)
+    end
   end
 
-  it "fails when the command fail" do
-    contexts = subject.exec("lol")
+  describe ".execute_script(components:, script:, **kwargs)" do
+    context "when it succeeds" do
+      subject do
+        ::CobraCommander::Executor.execute_script(
+          components: umbrella.components,
+          script: "echo 'I am at' $PWD",
+          workers: 1,
+          status_output: spin_output
+        )
+      end
 
-    expect(contexts.all?(&:success?)).to be false
-  end
+      it "executes in the context of each given component" do
+        outputs = subject.wait.value
 
-  it "succeeds when it succeed" do
-    contexts = subject.exec("true")
+        expect(outputs.size).to eql 5
+        expect(outputs).to match_array([
+                                         /I am at #{umbrella.path.join("auth")}$/,
+                                         /I am at #{umbrella.path.join("directory")}$/,
+                                         /I am at #{umbrella.path.join("finance")}$/,
+                                         /I am at #{umbrella.path.join("hr")}$/,
+                                         /I am at #{umbrella.path.join("sales")}$/,
+                                       ])
+      end
 
-    expect(contexts.all?(&:success?)).to be true
+      it "prints the status of each component" do
+        subject.wait
+
+        expect(spin_output.string).to match(/\[DONE\](\e\[0m)? auth/)
+        expect(spin_output.string).to match(/\[DONE\](\e\[0m)? directory/)
+        expect(spin_output.string).to match(/\[DONE\](\e\[0m)? finance/)
+        expect(spin_output.string).to match(/\[DONE\](\e\[0m)? hr/)
+        expect(spin_output.string).to match(/\[DONE\](\e\[0m)? sales/)
+      end
+
+      it "succeeds when it succeed" do
+        result = subject.wait
+
+        expect(result).to be_fulfilled
+      end
+    end
+
+    context "when a job fails" do
+      subject do
+        ::CobraCommander::Executor.execute_script(
+          components: umbrella.components,
+          script: "lol",
+          status_output: spin_output,
+          workers: 1
+        )
+      end
+
+      it "fails when the command fail" do
+        reason = subject.wait.reason
+
+        expect(reason).to match_array([/lol.*not found\n/] * 5)
+      end
+
+      it "prints the status of each failed component" do
+        subject.wait
+
+        expect(spin_output.string).to match(/\[ERROR\](\e\[0m)? auth/)
+        expect(spin_output.string).to match(/\[ERROR\](\e\[0m)? directory/)
+        expect(spin_output.string).to match(/\[ERROR\](\e\[0m)? finance/)
+        expect(spin_output.string).to match(/\[ERROR\](\e\[0m)? hr/)
+        expect(spin_output.string).to match(/\[ERROR\](\e\[0m)? sales/)
+      end
+    end
   end
 end

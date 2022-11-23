@@ -1,57 +1,42 @@
 # frozen_string_literal: true
 
-require "concurrent-ruby"
-require "pastel"
-require "tty-spinner"
+require_relative "executor/execution"
+require_relative "executor/job"
+require_relative "executor/script"
+require_relative "executor/spinners"
 
 module CobraCommander
-  # Execute a command on all given components
-  class Executor
-    autoload :Context, "cobra_commander/executor/context"
+  # Execute a command on all given packages
+  module Executor
+  module_function
 
-    def self.exec(components:, command:, concurrency:, status_output:)
-      new(components, concurrency: concurrency,
-                      spin_output: status_output).exec(command)
+    # Executes the given script in all Components.
+    #
+    # If a component has two packages in the same path, the script will run only once.
+    #
+    # @param components [Enumerable<CobraCommander::Component>] the target components
+    # @param script [String] shell script to run from the directories of the component's packages
+    # @param workers [Integer] number of workers processing the job queue
+    # @return [CobraCommander::Executor::Execution]
+    # @see .execute
+    def execute_script(components:, script:, **kwargs)
+      packages = components.flat_map(&:packages).uniq(&:path)
+      jobs = packages.map { |package| Script.new(package.name, package.path, script) }
+
+      execute jobs: jobs, **kwargs
     end
 
-    def initialize(components, concurrency:, spin_output:)
-      @components = components
-      @multi = TTY::Spinner::Multi.new(":spinner :task", output: spin_output)
-      @semaphore = ::Concurrent::Semaphore.new(concurrency)
-    end
-
-    def exec(command)
-      @multi.top_spinner.update(task: "Running #{command}")
-      @results = []
-      @components.each do |component|
-        register_job(component, command)
-      end
-      @multi.auto_spin
-      @results
-    end
-
-  private
-
-    def pastel
-      @pastel ||= ::Pastel.new
-    end
-
-    def spinner_options
-      @spinner_options ||= {
-        format: :bouncing,
-        success_mark: pastel.green("[DONE]"),
-        error_mark: pastel.red("[ERROR]"),
-      }
-    end
-
-    def register_job(component, command)
-      @multi.register(":spinner #{component.name}", **spinner_options) do |spinner|
-        @semaphore.acquire
-        context = Context.new(component, command)
-        context.success? ? spinner.success : spinner.error
-        @results << context
-        @semaphore.release
-      end
+    # Executes the given jobs, in an Execution
+    #
+    # @param jobs [Enumerable<CobraCommander::Executor::Job>] the jobs to run
+    # @param status_output [IO,nil] if not nil, will print the spinners for each job in this output
+    # @param workers [Integer] number of workers processing the jobs queue
+    # @return [CobraCommander::Executor::Execution]
+    # @see CobraCommander::Executor::Execution
+    def execute(jobs:, status_output: nil, **kwargs)
+      execution = Execution.new(jobs, **kwargs)
+      Spinners.start(execution, output: status_output) if status_output
+      execution.tap(&:wait)
     end
   end
 end

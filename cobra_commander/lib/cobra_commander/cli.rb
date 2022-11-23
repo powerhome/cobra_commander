@@ -37,25 +37,25 @@ module CobraCommander
       puts options.total ? components.size : components.map(&:name).sort
     end
 
-    desc "exec [components] <command>", "Executes the command in the context of a given component or set thereof. " \
-                                        "Defaults to all components."
-    filter_options dependents: "Run the command on each dependent of a given component",
-                   dependencies: "Run the command on each dependency of a given component"
+    desc "exec [components] <script>", "Executes the script in the context of a given component or set thereof. " \
+                                       "Defaults to all components."
+    filter_options dependents: "Run the script on each dependent of a given component",
+                   dependencies: "Run the script on each dependency of a given component"
     method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
                                 desc: "Max number of jobs to run concurrently"
     method_option :interactive, type: :boolean, default: true, aliases: "-i",
                                 desc: "Runs in interactive mode to allow the user to inspect the output of each " \
                                       "component"
-    def exec(command_or_components, command = nil)
-      results = CobraCommander::Executor.exec(
-        components: components_filtered(command && command_or_components),
-        command: command || command_or_components,
-        concurrency: options.concurrency, status_output: $stderr
+    def exec(script_or_components, script = nil)
+      result = CobraCommander::Executor.execute_script(
+        components: components_filtered(script && script_or_components),
+        script: script || script_or_components,
+        workers: options.concurrency, status_output: $stderr
       )
-      if options.interactive && results.size > 1
-        Output::InteractivePrinter.run(results, $stdout)
+      if options.interactive && result.count > 1
+        Output::InteractivePrinter.run(result, $stdout)
       else
-        Output::MarkdownPrinter.run(results, $stdout)
+        Output::MarkdownPrinter.run(result, $stdout)
       end
     end
 

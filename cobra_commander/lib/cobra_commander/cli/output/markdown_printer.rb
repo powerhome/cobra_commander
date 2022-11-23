@@ -8,14 +8,14 @@ module CobraCommander
     module MarkdownPrinter
       SUCCESS = "\n## ✔ %s\n"
       ERROR = "\n## ✖ %s\n"
-      OUTPUT = "\n```\n$ %s\n\n%s\n```\n"
+      OUTPUT = "\n```\n\n%s\n```\n"
 
-      def self.run(contexts, output)
-        contexts.each do |context|
-          template = context.success? ? SUCCESS : ERROR
+      def self.run(execution, output)
+        execution.each do |job, result|
+          template = result.fulfilled? ? SUCCESS : ERROR
 
-          output.print format(template, context.component_name)
-          output.print format(OUTPUT, context.command, context.output)
+          output.print format(template, job.name)
+          output.print format(OUTPUT, result.fulfilled? ? result.value : result.reason)
         end
       end
     end
