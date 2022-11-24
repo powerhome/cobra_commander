@@ -27,5 +27,12 @@ RSpec.describe CobraCommander::Source do
       expect(packages.count).to eql 8
       expect(packages.map(&:key).uniq).to eql %i[memory stub]
     end
+
+    it "loads the sources with their specific configs" do
+      memory_source, = ::CobraCommander::Source.load(fixture_file_path("app"), { memory: "memory config" },
+                                                     memory: true)
+
+      expect(memory_source.config).to eql "memory config"
+    end
   end
 end
