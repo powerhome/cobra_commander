@@ -9,11 +9,11 @@ RSpec.describe CobraCommander::Umbrella do
   describe "configuration" do
     it "is the config file at the root of umbrella" do
       expect(subject.config).to match({
-                                      "sources" => {
-                                        stub: anything,
-                                        memory: anything,
-                                      },
-                                    })
+                                        "sources" => {
+                                          stub: anything,
+                                          memory: anything,
+                                        },
+                                      })
     end
 
     it "is empty when the app does not define a config" do

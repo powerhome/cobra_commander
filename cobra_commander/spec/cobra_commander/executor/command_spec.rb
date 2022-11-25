@@ -31,6 +31,7 @@ RSpec.describe CobraCommander::Executor::Command do
     result, output = run_command(finance_stub_package, "lol_I_clearly_dont_exist_as_a_command_please")
 
     expect(result).to be :skip
-    expect(output).to eql "Command lol_I_clearly_dont_exist_as_a_command_please does not exist. Check your cobra.yml for existing commands in stub."
+    expect(output).to eql "Command lol_I_clearly_dont_exist_as_a_command_please does not exist. " \
+                          "Check your cobra.yml for existing commands in stub."
   end
 end
