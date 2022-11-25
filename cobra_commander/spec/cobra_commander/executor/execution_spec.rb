@@ -14,6 +14,10 @@ RSpec.describe CobraCommander::Executor::Execution do
     -> { error(output) }
   end
 
+  def skip_job(reason)
+    -> { skip(reason) }
+  end
+
   it "executes all given jobs" do
     execution = ::CobraCommander::Executor::Execution.new([
                                                             success_job("very good"),
@@ -43,15 +47,21 @@ RSpec.describe CobraCommander::Executor::Execution do
   end
 
   it "succeeds with a returned output" do
-    execution = ::CobraCommander::Executor::Execution.new([
-                                                            success_job("very good"),
-                                                            -> { "success output" },
-                                                          ], workers: 1)
+    execution = ::CobraCommander::Executor::Execution.new([-> { "success output" }], workers: 1)
 
     result = execution.wait
 
     expect(result).to be_fulfilled
     expect(result.value.last).to eql "success output"
+  end
+
+  it "succeeds with a returned reason when skip is returned" do
+    execution = ::CobraCommander::Executor::Execution.new([skip_job("cant do it right now")], workers: 1)
+
+    result = execution.wait
+
+    expect(result).to be_fulfilled
+    expect(result.value.last).to eql "cant do it right now"
   end
 
   it "fails if a job returns [:error, output]" do
