@@ -30,9 +30,9 @@ module CobraCommander
       def run_script(script, path)
         result = isolate_bundle do
           TTY::Command.new(pty: true, printer: :null)
-                      .run!(script, chdir: path)
+                      .run!(script, chdir: path, err: :out)
         end
-        return error(result.err) if result.failed?
+        return error(result.out) if result.failed?
 
         success(result.out)
       end
