@@ -49,10 +49,9 @@ module CobraCommander
         components_filtered(script && script_or_components),
         script || script_or_components
       )
-      execution = CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency, status_output: $stderr)
-      return CobraCommander::Executor::InteractivePrinter.run(execution, $stdout) if options.interactive && execution.count > 1
-
-      CobraCommander::Executor::MarkdownPrinter.run(execution, $stdout)
+      CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
+                                       output_mode: options.interactive && execution.count > 1 ? :interactive : :markdown,
+                                       output: $stdout, status_output: $stderr)
     end
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"
