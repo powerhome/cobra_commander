@@ -8,10 +8,10 @@ RSpec.describe CobraCommander::Umbrella do
 
   describe "configuration" do
     it "is the config file at the root of umbrella" do
-      expect(subject.config).to eql({
+      expect(subject.config).to match({
                                       "sources" => {
-                                        stub: "stub config",
-                                        memory: "memory config",
+                                        stub: anything,
+                                        memory: anything,
                                       },
                                     })
     end

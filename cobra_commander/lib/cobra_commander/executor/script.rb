@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "tty-command"
-
 require_relative "./job"
 
 module CobraCommander
@@ -39,22 +37,7 @@ module CobraCommander
       end
 
       def call
-        isolate_bundle do
-          result = @tty.run!(@script, chdir: @package.path)
-          return error(result.err) if result.failed?
-
-          success(result.out)
-        end
-      end
-
-    private
-
-      def isolate_bundle(&block)
-        if Bundler.respond_to?(:with_unbundled_env)
-          Bundler.with_unbundled_env(&block)
-        else
-          Bundler.with_clean_env(&block)
-        end
+        run_script @script, @package.path
       end
     end
   end

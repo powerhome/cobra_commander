@@ -1,3 +1,7 @@
 sources:
-  :stub: "stub config"
-  :memory: "memory config"
+  :stub:
+    commands:
+      deps: "echo 'install stub deps'"
+  :memory:
+    commands:
+      deps: "echo 'install memory deps'"

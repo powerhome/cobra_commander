@@ -3,6 +3,7 @@
 require_relative "executor/execution"
 require_relative "executor/job"
 require_relative "executor/script"
+require_relative "executor/command"
 require_relative "executor/spinners"
 
 module CobraCommander
