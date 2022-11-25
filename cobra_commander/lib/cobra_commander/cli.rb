@@ -13,8 +13,6 @@ module CobraCommander
     require_relative "cli/output/ascii_tree"
     require_relative "cli/output/change"
     require_relative "cli/output/dot_graph"
-    require_relative "cli/output/interactive_printer"
-    require_relative "cli/output/markdown_printer"
 
     DEFAULT_CONCURRENCY = (Concurrent.processor_count / 2.0).ceil
 
@@ -52,9 +50,9 @@ module CobraCommander
         script || script_or_components
       )
       execution = CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency, status_output: $stderr)
-      return Output::InteractivePrinter.run(execution, $stdout) if options.interactive && execution.count > 1
+      return CobraCommander::Executor::InteractivePrinter.run(execution, $stdout) if options.interactive && execution.count > 1
 
-      Output::MarkdownPrinter.run(execution, $stdout)
+      CobraCommander::Executor::MarkdownPrinter.run(execution, $stdout)
     end
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"

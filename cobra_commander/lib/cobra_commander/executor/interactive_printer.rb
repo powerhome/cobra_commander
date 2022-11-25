@@ -4,7 +4,7 @@ require "pastel"
 require "tty-prompt"
 
 module CobraCommander
-  module CLI::Output
+  module Executor
     # Runs an interactive output printer
     class InteractivePrinter
       pastel = Pastel.new

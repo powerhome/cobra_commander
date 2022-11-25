@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require "tty-prompt"
-
 module CobraCommander
-  module CLI::Output
+  module Executor
     # Prints the given CobraCommander::Executor::Context to [output] collection in markdown
     module MarkdownPrinter
       SUCCESS = "\n## ✔ %s\n"
