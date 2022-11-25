@@ -47,16 +47,14 @@ module CobraCommander
                                 desc: "Runs in interactive mode to allow the user to inspect the output of each " \
                                       "component"
     def exec(script_or_components, script = nil)
-      result = CobraCommander::Executor.execute_script(
-        components: components_filtered(script && script_or_components),
-        script: script || script_or_components,
-        workers: options.concurrency, status_output: $stderr
+      jobs = CobraCommander::Executor::Script.for(
+        components_filtered(script && script_or_components),
+        script || script_or_components
       )
-      if options.interactive && result.count > 1
-        Output::InteractivePrinter.run(result, $stdout)
-      else
-        Output::MarkdownPrinter.run(result, $stdout)
-      end
+      execution = CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency, status_output: $stderr)
+      return Output::InteractivePrinter.run(execution, $stdout) if options.interactive && execution.count > 1
+
+      Output::MarkdownPrinter.run(execution, $stdout)
     end
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"

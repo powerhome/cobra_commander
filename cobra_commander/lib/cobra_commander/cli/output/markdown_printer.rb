@@ -14,7 +14,7 @@ module CobraCommander
         execution.each do |job, result|
           template = result.fulfilled? ? SUCCESS : ERROR
 
-          output.print format(template, job.name)
+          output.print format(template, job)
           output.print format(OUTPUT, result.fulfilled? ? result.value : result.reason)
         end
       end

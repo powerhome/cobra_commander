@@ -10,22 +10,6 @@ module CobraCommander
   module Executor
   module_function
 
-    # Executes the given script in all Components.
-    #
-    # If a component has two packages in the same path, the script will run only once.
-    #
-    # @param components [Enumerable<CobraCommander::Component>] the target components
-    # @param script [String] shell script to run from the directories of the component's packages
-    # @param workers [Integer] number of workers processing the job queue
-    # @return [CobraCommander::Executor::Execution]
-    # @see .execute
-    def execute_script(components:, script:, **kwargs)
-      packages = components.flat_map(&:packages).uniq(&:path)
-      jobs = packages.map { |package| Script.new(package.name, package.path, script) }
-
-      execute jobs: jobs, **kwargs
-    end
-
     # Executes the given jobs, in an Execution
     #
     # @param jobs [Enumerable<CobraCommander::Executor::Job>] the jobs to run
