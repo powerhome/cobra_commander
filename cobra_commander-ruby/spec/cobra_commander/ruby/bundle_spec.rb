@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe CobraCommander::Ruby::Bundle do
-  subject { CobraCommander::Ruby::Bundle.new(dummy_path) }
+  subject { CobraCommander::Ruby::Bundle.new(dummy_path, {}) }
   let(:hr_package) do
     subject.find do |package|
       package.name.eql?("hr")
