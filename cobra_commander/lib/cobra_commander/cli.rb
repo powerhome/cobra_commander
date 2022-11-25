@@ -50,7 +50,26 @@ module CobraCommander
         script || script_or_components
       )
       CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
-                                       output_mode: options.interactive && execution.count > 1 ? :interactive : :markdown,
+                                       output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
+                                       output: $stdout, status_output: $stderr)
+    end
+
+    desc "cmd [components] <command>", "Executes the command in the context of a given component or set thereof. " \
+                                       "Defaults to all components."
+    filter_options dependents: "Run the command on each dependent of a given component",
+                   dependencies: "Run the command on each dependency of a given component"
+    method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
+                                desc: "Max number of jobs to run concurrently"
+    method_option :interactive, type: :boolean, default: true, aliases: "-i",
+                                desc: "Runs in interactive mode to allow the user to inspect the output of each " \
+                                      "component"
+    def cmd(command_or_components, command = nil)
+      jobs = CobraCommander::Executor::Command.for(
+        components_filtered(command && command_or_components),
+        command || command_or_components
+      )
+      CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
+                                       output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
                                        output: $stdout, status_output: $stderr)
     end
 
