@@ -1,13 +1,16 @@
 # frozen_string_literal: true
 
 require_relative "./job"
+require_relative "./package_criteria"
 
 module CobraCommander
   module Executor
     class Command
       include ::CobraCommander::Executor::Job
+      include ::CobraCommander::Executor::PackageCriteria
 
       SKIP_UNEXISTING = "Command %s does not exist. Check your cobra.yml for existing commands in %s."
+      SKIP_CRITERIA = "Package %s does not match criteria."
 
       # Executes the given script in all Components.
       #
@@ -34,10 +37,18 @@ module CobraCommander
       end
 
       def call
-        script = @package.source.config&.dig("commands", @command)
-        return skip(format(SKIP_UNEXISTING, @command, @package.key)) unless script
+        command = @package.source.config&.dig("commands", @command)
+        case command
+        when Hash then run_with_criteria command
+        when nil then skip(format(SKIP_UNEXISTING, @command, @package.key))
+        else run_script command, @package.path
+        end
+      end
 
-        run_script script, @package.path
+      def run_with_criteria(command)
+        return skip(format(SKIP_CRITERIA, @package.name)) unless match_criteria?(@package, command.fetch("if", {}))
+
+        run_script command["run"], @package.path
       end
     end
   end

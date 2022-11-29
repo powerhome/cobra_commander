@@ -34,4 +34,36 @@ RSpec.describe CobraCommander::Executor::Command do
     expect(output).to eql "Command lol_I_clearly_dont_exist_as_a_command_please does not exist. " \
                           "Check your cobra.yml for existing commands in stub."
   end
+
+  describe "command criteria" do
+    describe "depends_on" do
+      let(:command) do
+        {
+          "if" => { "depends_on" => %w[auth] },
+          "run" => "echo 'lol'",
+        }
+      end
+      let(:source) { double("le source", config: { "commands" => { "my_command" => command } }) }
+      let(:package_dependent) do
+        CobraCommander::Package.new(source, path: "./", dependencies: %w[directory auth], name: "management")
+      end
+      let(:package_not_dependent) do
+        CobraCommander::Package.new(source, path: "./", dependencies: %w[directory], name: "management")
+      end
+
+      it "executes on packages matching the criteria" do
+        result, output = run_command(package_dependent, "my_command")
+
+        expect(result).to be :success
+        expect(output).to eql "lol\n"
+      end
+
+      it "skips packages not matching the criteria" do
+        result, output = run_command(package_not_dependent, "my_command")
+
+        expect(result).to be :skip
+        expect(output).to eql "Package management does not match criteria."
+      end
+    end
+  end
 end
