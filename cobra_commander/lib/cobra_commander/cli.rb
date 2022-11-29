@@ -13,8 +13,6 @@ module CobraCommander
     require_relative "cli/output/ascii_tree"
     require_relative "cli/output/change"
     require_relative "cli/output/dot_graph"
-    require_relative "cli/output/interactive_printer"
-    require_relative "cli/output/markdown_printer"
 
     DEFAULT_CONCURRENCY = (Concurrent.processor_count / 2.0).ceil
 
@@ -47,16 +45,32 @@ module CobraCommander
                                 desc: "Runs in interactive mode to allow the user to inspect the output of each " \
                                       "component"
     def exec(script_or_components, script = nil)
-      result = CobraCommander::Executor.execute_script(
-        components: components_filtered(script && script_or_components),
-        script: script || script_or_components,
-        workers: options.concurrency, status_output: $stderr
+      jobs = CobraCommander::Executor::Script.for(
+        components_filtered(script && script_or_components),
+        script || script_or_components
       )
-      if options.interactive && result.count > 1
-        Output::InteractivePrinter.run(result, $stdout)
-      else
-        Output::MarkdownPrinter.run(result, $stdout)
-      end
+      CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
+                                       output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
+                                       output: $stdout, status_output: $stderr)
+    end
+
+    desc "cmd [components] <command>", "Executes the command in the context of a given component or set thereof. " \
+                                       "Defaults to all components."
+    filter_options dependents: "Run the command on each dependent of a given component",
+                   dependencies: "Run the command on each dependency of a given component"
+    method_option :concurrency, type: :numeric, default: DEFAULT_CONCURRENCY, aliases: "-c",
+                                desc: "Max number of jobs to run concurrently"
+    method_option :interactive, type: :boolean, default: true, aliases: "-i",
+                                desc: "Runs in interactive mode to allow the user to inspect the output of each " \
+                                      "component"
+    def cmd(command_or_components, command = nil)
+      jobs = CobraCommander::Executor::Command.for(
+        components_filtered(command && command_or_components),
+        command || command_or_components
+      )
+      CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
+                                       output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
+                                       output: $stdout, status_output: $stderr)
     end
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"

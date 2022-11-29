@@ -10,17 +10,28 @@ module CobraCommander
     include Enumerable
     extend CobraCommander::Registry
 
-    attr_reader :path
+    attr_reader :path, :config
 
-    def initialize(path)
+    def initialize(path, config)
       @path = Pathname.new(path)
+      @config = config || {}
       super()
     end
 
-    def self.load(path, **selector)
-      select(**selector).flat_map { |source| source.new(path).to_a }
+    def to_ary
+      to_a
+    end
+
+    def each(&block)
+      packages.each(&block)
     rescue Errno::ENOENT => e
       raise Error, e.message
+    end
+
+    def self.load(path, config = nil, **selector)
+      select(**selector).map do |source|
+        source.new(path, config&.dig(source.key))
+      end
     end
   end
 end

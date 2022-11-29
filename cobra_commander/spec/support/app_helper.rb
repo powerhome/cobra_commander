@@ -3,7 +3,7 @@
 require "yaml"
 
 module AppHelper
-  def stub_umbrella(name = nil, unpack: false)
+  def stub_umbrella(name = nil, unpack: false, memory: false, stub: true)
     path = if unpack
              unpacked_path = Pathname.new(Dir.mktmpdir).realpath
              package = fixture_file_path("#{name}.tgz")
@@ -12,7 +12,7 @@ module AppHelper
            else
              fixture_file_path(name)
            end
-    CobraCommander::Umbrella.new(path, stub: true)
+    CobraCommander::Umbrella.new(path, memory: memory, stub: stub)
   end
 
   def fixture_path

@@ -26,11 +26,10 @@ module CobraCommander
 
       def create_future(job)
         Concurrent::Promises.future_on(@executor, job, &:call).then do |result|
-          case result
-          in [:error, error]
-            Concurrent::Promises.rejected_future(error)
-          in [:success, output]
-            Concurrent::Promises.fulfilled_future(output)
+          status, output = result
+          case status
+          when :error then Concurrent::Promises.rejected_future(output)
+          when :success, :skip then Concurrent::Promises.fulfilled_future(output)
           else
             Concurrent::Promises.fulfilled_future(result)
           end

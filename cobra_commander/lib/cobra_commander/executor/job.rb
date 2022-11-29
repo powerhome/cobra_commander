@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "tty-command"
+
 module CobraCommander
   module Executor
     #
@@ -13,12 +15,36 @@ module CobraCommander
     # (i.e.: [:error, "string output"] or just "string output").
     #
     module Job
+      def skip(reason)
+        [:skip, reason]
+      end
+
       def error(output)
         [:error, output]
       end
 
       def success(output)
         [:success, output]
+      end
+
+      def run_script(script, path)
+        result = isolate_bundle do
+          TTY::Command.new(pty: true, printer: :null)
+                      .run!(script, chdir: path, err: :out)
+        end
+        return error(result.out) if result.failed?
+
+        success(result.out)
+      end
+
+    private
+
+      def isolate_bundle(&block)
+        if Bundler.respond_to?(:with_unbundled_env)
+          Bundler.with_unbundled_env(&block)
+        else
+          Bundler.with_clean_env(&block)
+        end
       end
     end
   end

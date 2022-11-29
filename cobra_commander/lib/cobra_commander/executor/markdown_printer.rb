@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
-require "tty-prompt"
-
 module CobraCommander
-  module CLI::Output
+  module Executor
     # Prints the given CobraCommander::Executor::Context to [output] collection in markdown
     module MarkdownPrinter
       SUCCESS = "\n## ✔ %s\n"
@@ -14,7 +12,7 @@ module CobraCommander
         execution.each do |job, result|
           template = result.fulfilled? ? SUCCESS : ERROR
 
-          output.print format(template, job.name)
+          output.print format(template, job)
           output.print format(OUTPUT, result.fulfilled? ? result.value : result.reason)
         end
       end

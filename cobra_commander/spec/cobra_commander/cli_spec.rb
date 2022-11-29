@@ -65,6 +65,32 @@ RSpec.describe "cobra cli", type: :aruba do
     end
   end
 
+  describe "cobra cmd --no-interactive" do
+    let(:umbrella) { stub_umbrella("app") }
+
+    it "errors gently if component doesn't exist" do
+      run_command_and_stop("cobra cmd --no-interactive -a #{umbrella.path} non_existent pwd", fail_on_error: false)
+
+      expect(last_command_output).to match(/Component non_existent not found/)
+    end
+
+    it "executes the given command from all available sources" do
+      run_command_and_stop("cobra cmd --no-interactive -a #{umbrella.path} --no-self deps",
+                           fail_on_error: true)
+
+      expect(last_command_output).to include("install memory deps")
+      expect(last_command_output).to include("install stub deps")
+    end
+
+    it "executes the given selecting by plugin" do
+      run_command_and_stop("cobra cmd --no-interactive -a #{umbrella.path} --memory " \
+                           "--dependents directory deps",
+                           fail_on_error: true)
+
+      expect(last_command_output).to include("install memory deps")
+    end
+  end
+
   describe "cobra graph" do
     let(:umbrella) { stub_umbrella("app") }
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe CobraCommander::Yarn::Workspace do
-  subject { CobraCommander::Yarn::Workspace.new(dummy_path) }
+  subject { CobraCommander::Yarn::Workspace.new(dummy_path, {}) }
   let(:hr_package) do
     subject.find do |package|
       package.name.eql?("hr-ui")
@@ -30,7 +30,7 @@ RSpec.describe CobraCommander::Yarn::Workspace do
   end
 
   it "throws a CobraCommander::Source::Error when not a valid workspace" do
-    workspace = CobraCommander::Yarn::Workspace.new(__dir__)
+    workspace = CobraCommander::Yarn::Workspace.new(__dir__, {})
 
     expect { workspace.to_a }.to raise_error CobraCommander::Source::Error
   end

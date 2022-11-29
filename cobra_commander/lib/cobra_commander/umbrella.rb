@@ -1,9 +1,17 @@
 # frozen_string_literal: true
 
+require "yaml"
+
 module CobraCommander
   # An umbrella application
   class Umbrella
-    attr_reader :path
+    attr_reader :path, :config
+
+    def self.load_config(path)
+      return {} unless path.exist?
+
+      YAML.safe_load(path.read, permitted_classes: [Symbol], aliases: true)
+    end
 
     # Umbrella constructor. This will load the given source packages.
     #
@@ -11,9 +19,10 @@ module CobraCommander
     # @param path [String,Pathname] path to umbrella app
     # @param **source_selector [Symbol => Boolean] selector as explained above
     #
-    def initialize(path, **source_selector)
-      @path = path
+    def initialize(path, config = nil, **source_selector)
+      @path = Pathname.new(path)
       @components = {}
+      @config = config || Umbrella.load_config(@path.join("cobra.yml"))
       load(**source_selector)
     end
 
@@ -70,7 +79,7 @@ module CobraCommander
     # @return [::CobraCommander::Component,nil] the component where the path is
     #
     def load(**source_selector)
-      Source.load(path, **source_selector).each do |package|
+      Source.load(path, config["sources"], **source_selector).flatten.each do |package|
         @components[package.name] ||= Component.new(self, package.name)
         @components[package.name].add_package package
       end
