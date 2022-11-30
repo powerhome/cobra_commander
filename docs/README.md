@@ -155,7 +155,45 @@ Options:
 Prints the dependency tree of a given component or umbrella
 ```
 
-### Releasing
+## cobra.yml
+
+### Cobra Commands
+
+You can create pre-defined commands to be run in multiple components and packages with `cobra cmd`. An example configuration looks like:
+
+```yaml
+sources:
+  :ruby:
+    commands:
+      deps: bundle install
+  :js:
+    commands:
+      deps: yarn install
+```
+
+Then running `cobra cmd deps` will run `bundle install` in all ruby packages, and `yarn install` in all JS packages. It will run both commands when the component has both packages.
+
+#### Conditional commands
+
+You can also conditionally disable commands with `if`:
+
+```yaml
+sources:
+  :ruby:
+    commands:
+      deps: bundle install
+      database:
+        if:
+          depends_on: database
+        run: rake db:refresh
+  :js:
+    commands:
+      deps: yarn install
+```
+
+Then running `cobra cmd database` will run `rake db:refresh` in all ruby that depends on the `database` package, and will skip on all other packages.
+
+## Releasing
 
 To release a new version, create a PR updating the version number in `version.rb`, close the version changes in CHANGELOG.md, and create a version tag in master matching the package being released (i.e.: v1.1.1-cobra_commander).
 
