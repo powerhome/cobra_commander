@@ -106,7 +106,7 @@ RSpec.describe CobraCommander::Executor::Command do
       result, output = run_command(package, "lol_and_fail")
 
       expect(result).to be :error
-      expect(output).to eql "lol\nsh: i: command not found"
+      expect(output).to match "lol\nsh:.*not found"
     end
 
     it "allows nested dependency" do
