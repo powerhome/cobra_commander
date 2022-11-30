@@ -193,6 +193,36 @@ sources:
 
 Then running `cobra cmd database` will run `rake db:refresh` in all ruby that depends on the `database` package, and will skip on all other packages.
 
+#### Sequential commands
+
+Sometimes a specific order of commands has to be run to achieve something, that can be done with sequential commands like this:
+
+```yaml
+sources:
+  :ruby:
+    commands:
+      deps: bundle install
+      database:
+        if:
+          depends_on: database
+        run: rake db:refresh
+      test: rake test
+      ci:
+        - deps
+        - database
+        - test
+  :js:
+    commands:
+      deps: yarn install
+      ci:
+        - deps
+        - test
+```
+
+Then running `cobra cmd ci` will run "deps", then "database", then "test" in all ruby packages. On packages that don't depend on `database` the database job will skip. On JS packages it will run "deps" and then "test".
+
+If any error occur, the execution stops and returns an that job is classified as error.
+
 ## Releasing
 
 To release a new version, create a PR updating the version number in `version.rb`, close the version changes in CHANGELOG.md, and create a version tag in master matching the package being released (i.e.: v1.1.1-cobra_commander).

@@ -66,4 +66,68 @@ RSpec.describe CobraCommander::Executor::Command do
       end
     end
   end
+
+  describe "sequential execution" do
+    let(:will_skip) do
+      {
+        "if" => { "depends_on" => ["i_dont_exist"] },
+        "run" => "doesn't matter wont run",
+      }
+    end
+    let(:failing_command) { "i just fail" }
+    let(:command_rofl) { "echo 'rofl'" }
+    let(:command_lol) { "echo 'lol'" }
+    let(:source) do
+      double("le source", key: "le",
+                          config: {
+                            "commands" => {
+                              "skp" => will_skip,
+                              "fail" => failing_command,
+                              "rofl" => command_rofl,
+                              "lol" => command_lol,
+                              "lol_and_fail" => %w[lol fail rofl],
+                              "ltc" => %w[lol rofl],
+                              "ltc_lol" => %w[ltc lol],
+                              "lol_skip_rolf" => %w[lol skp rofl],
+                              "lol_skip" => %w[lol skp],
+                            },
+                          })
+    end
+    let(:package) { CobraCommander::Package.new(source, path: "./", dependencies: [], name: "management") }
+
+    it "can run other commands in a sequential order" do
+      result, output = run_command(package, "ltc")
+
+      expect(result).to be :success
+      expect(output).to eql "lol\nrofl"
+    end
+
+    it "stops when one command fails" do
+      result, output = run_command(package, "lol_and_fail")
+
+      expect(result).to be :error
+      expect(output).to match "lol\nsh:.*not found"
+    end
+
+    it "allows nested dependency" do
+      result, output = run_command(package, "ltc_lol")
+
+      expect(result).to be :success
+      expect(output).to eql "lol\nrofl\nlol"
+    end
+
+    it "skips conditional commands" do
+      result, output = run_command(package, "lol_skip_rolf")
+
+      expect(result).to be :success
+      expect(output).to eql "lol\nPackage management does not match criteria.\nrofl"
+    end
+
+    it "succeeds when last command skips" do
+      result, output = run_command(package, "lol_skip")
+
+      expect(result).to be :success
+      expect(output).to eql "lol\nPackage management does not match criteria."
+    end
+  end
 end
