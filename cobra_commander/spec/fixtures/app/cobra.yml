@@ -4,4 +4,5 @@ sources:
       deps: "echo 'install stub deps'"
   :memory:
     commands:
+      failing_command: "lol"
       deps: "echo 'install memory deps'"

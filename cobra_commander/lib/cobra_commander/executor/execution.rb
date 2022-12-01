@@ -17,9 +17,17 @@ module CobraCommander
         merge! create_futures(jobs)
       end
 
+      # Wait for all jobs to complete, returns a future with all execution futures
+      # @return [Concurrent::Promises::Future]
       def wait
         Concurrent::Promises.zip_futures_on(@executor, *values)
                             .tap(&:wait)
+      end
+
+      # The execution succeeds when all jobs succeeded
+      # @return [Boolean]
+      def success?
+        values.all?(&:fulfilled?)
       end
 
     private
