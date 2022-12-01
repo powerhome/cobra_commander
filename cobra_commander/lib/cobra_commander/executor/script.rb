@@ -36,6 +36,7 @@ module CobraCommander
         @package.name
       end
 
+      # @see CobraCommander::Executor::Job
       def call
         run_script @script, @package.path
       end
