@@ -75,8 +75,7 @@ module CobraCommander
     #
     #      umbrella.load(ruby: true)
     #
-    # @param path [String,Pathname] the path to be resolved
-    # @return [::CobraCommander::Component,nil] the component where the path is
+    # @see CobraCommander::Registry
     #
     def load(**source_selector)
       Source.load(path, config["sources"], **source_selector).flatten.each do |package|

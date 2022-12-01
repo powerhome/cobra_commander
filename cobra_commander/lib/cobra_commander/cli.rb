@@ -49,9 +49,10 @@ module CobraCommander
         components_filtered(script && script_or_components),
         script || script_or_components
       )
-      CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
-                                       output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
-                                       output: $stdout, status_output: $stderr)
+      execution = CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
+                                                   output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
+                                                   output: $stdout, status_output: $stderr)
+      exit 1 unless execution.success?
     end
 
     desc "cmd [components] <command>", "Executes the command in the context of a given component or set thereof. " \
@@ -68,9 +69,10 @@ module CobraCommander
         components_filtered(command && command_or_components),
         command || command_or_components
       )
-      CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
-                                       output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
-                                       output: $stdout, status_output: $stderr)
+      execution = CobraCommander::Executor.execute(jobs: jobs, workers: options.concurrency,
+                                                  output_mode: options.interactive && jobs.count > 1 ? :interactive : :markdown,
+                                                  output: $stdout, status_output: $stderr)
+      exit 1 unless execution.success?
     end
 
     desc "tree [component]", "Prints the dependency tree of a given component or umbrella"

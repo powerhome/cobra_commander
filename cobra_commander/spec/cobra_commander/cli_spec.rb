@@ -71,6 +71,7 @@ RSpec.describe "cobra cli", type: :aruba do
     it "errors gently if component doesn't exist" do
       run_command_and_stop("cobra cmd --no-interactive -a #{umbrella.path} non_existent pwd", fail_on_error: false)
 
+      expect(last_command_started).to_not be_successfully_executed
       expect(last_command_output).to match(/Component non_existent not found/)
     end
 
@@ -88,6 +89,14 @@ RSpec.describe "cobra cli", type: :aruba do
                            fail_on_error: true)
 
       expect(last_command_output).to include("install memory deps")
+    end
+
+    it "exists with error when a job fails" do
+      run_command_and_stop("cobra cmd --no-interactive -a #{umbrella.path} --memory " \
+                           "--dependents directory failing_command",
+                           fail_on_error: false)
+
+      expect(last_command_started).to_not be_successfully_executed
     end
   end
 
