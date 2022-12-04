@@ -4,7 +4,7 @@ require "spec_helper"
 
 RSpec.describe CobraCommander::Umbrella do
   let(:umbrella_without_config) { stub_umbrella("modified-app", unpack: true) }
-  subject { stub_umbrella("app") }
+  subject { stub_umbrella("app", memory: true, stub: true) }
 
   describe "configuration" do
     it "is the config file at the root of umbrella" do
@@ -43,9 +43,10 @@ RSpec.describe CobraCommander::Umbrella do
     end
 
     it "resolves names that start similarly" do
-      finance_path = fixture_file_path("app/finance")
+      finance_models_path = fixture_file_path("app/finance_models")
 
-      expect(subject.resolve("#{finance_path}_models")).to be_nil
+      expect(subject.resolve(finance_models_path).name).to eql "finance_models"
+      expect(subject.resolve(finance_models_path.to_s).name).to eql "finance_models"
     end
   end
 end

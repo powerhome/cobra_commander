@@ -8,7 +8,7 @@ RSpec.describe CobraCommander::Source do
       memory_source, *others = ::CobraCommander::Source.load("doesnt_matter", memory: true)
 
       expect(others.size).to eql 0
-      expect(memory_source.count).to eql 3
+      expect(memory_source.count).to eql 4
       expect(memory_source.map(&:key).uniq).to eql [:memory]
     end
 
@@ -24,7 +24,7 @@ RSpec.describe CobraCommander::Source do
     it "loads from all sources when none is given" do
       packages = ::CobraCommander::Source.load(fixture_file_path("app")).flatten
 
-      expect(packages.count).to eql 8
+      expect(packages.count).to eql 9
       expect(packages.map(&:key).uniq).to eql %i[memory stub]
     end
 
