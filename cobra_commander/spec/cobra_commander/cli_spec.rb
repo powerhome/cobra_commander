@@ -167,6 +167,14 @@ RSpec.describe "cobra cli", type: :aruba do
         └── payroll
             └── directory
                 └── auth
+        finance_models
+        └── finance
+            ├── auth
+            ├── directory
+            │   └── auth
+            └── payroll
+                └── directory
+                    └── auth
         hr
         ├── auth
         └── directory
@@ -202,6 +210,10 @@ RSpec.describe "cobra cli", type: :aruba do
         finance
         └── payroll
             └── directory
+        finance_models
+        └── finance
+            └── payroll
+                └── directory
         payroll
         └── directory
       OUTPUT
@@ -287,7 +299,7 @@ RSpec.describe "cobra cli", type: :aruba do
 
       run_command_and_stop("cobra ls -a #{umbrella.path} --affected main", fail_on_error: true)
 
-      expect(last_command_output).to eq("finance\nsales")
+      expect(last_command_output).to eq("finance\nfinance_models\nsales")
     end
 
     it "errors gently if component doesn't exist" do
@@ -330,25 +342,25 @@ RSpec.describe "cobra cli", type: :aruba do
       it "lists a component's direct dependents" do
         run_command_and_stop("cobra ls -a #{umbrella.path} --dependents --no-self finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match(%w[sales])
+        expect(last_command_output.strip.split("\n")).to match(%w[finance_models sales])
       end
 
       it "lists a component itself along with dependents by default" do
         run_command_and_stop("cobra ls -a #{umbrella.path} --dependents finance", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match(%w[finance sales])
+        expect(last_command_output.strip.split("\n")).to match(%w[finance finance_models sales])
       end
 
       it "lists a component itself along with dependents by default" do
         run_command_and_stop("cobra ls -a #{umbrella.path} --dependents directory", fail_on_error: true)
 
-        expect(last_command_output.strip.split("\n")).to match(%w[directory finance hr payroll sales])
+        expect(last_command_output.strip.split("\n")).to match(%w[directory finance finance_models hr payroll sales])
       end
 
       it "counts a component's transient dependents" do
         run_command_and_stop("cobra ls -a #{umbrella.path} --dependents -t --no-self auth", fail_on_error: true)
 
-        expect(last_command_output.to_i).to eq(5)
+        expect(last_command_output.to_i).to eq(6)
       end
     end
 
