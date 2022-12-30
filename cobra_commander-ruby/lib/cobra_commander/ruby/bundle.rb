@@ -35,7 +35,7 @@ module CobraCommander
       end
 
       def specs
-        @specs ||= sources.flat_map { |source| source.specs.to_a }
+        @specs ||= sources.flat_map { |source| source.specs.to_a }.uniq
       end
     end
   end

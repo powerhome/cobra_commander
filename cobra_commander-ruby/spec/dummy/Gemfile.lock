@@ -1,12 +1,16 @@
 PATH
+  remote: components/finance
+  specs:
+    finance (0.1.0)
+      authn
+      authz
+
+PATH
   remote: components
   specs:
     authn (0.1.0)
     authz (0.1.0)
       authn
-    finance (0.1.0)
-      authn
-      authz
     hr (0.1.0)
       authn
       authz

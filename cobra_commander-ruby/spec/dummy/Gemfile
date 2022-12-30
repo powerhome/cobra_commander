@@ -5,9 +5,10 @@ source "https://rubygems.org"
 path "components" do
   gem "authn"
   gem "authz"
-  gem "finance"
   gem "hr"
   gem "sales"
 end
+
+gem "finance", path: "components/finance"
 
 gem "useragent"
