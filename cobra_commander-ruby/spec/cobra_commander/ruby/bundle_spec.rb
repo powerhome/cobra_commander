@@ -8,7 +8,7 @@ RSpec.describe CobraCommander::Ruby::Bundle do
     end
   end
 
-  it "can load all the internal packages" do
+  it "can load all the unique internal packages" do
     expect(subject.map(&:name)).to match_array %w[
       authn
       authz
