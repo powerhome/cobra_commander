@@ -1,6 +1,8 @@
 # Change Log
 
-## Unreleased
+## Version 1.0.1 - 2023-01-05
+
+* Fix Umbrella#resolve unable to resolve a path relative to the project @xjunior [#103](https://github.com/powerhome/cobra_commander/pull/103)
 
 ## Version 1.0.0 - 2022-10-15
 
