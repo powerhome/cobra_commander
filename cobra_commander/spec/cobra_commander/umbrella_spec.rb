@@ -39,14 +39,13 @@ RSpec.describe CobraCommander::Umbrella do
     end
 
     it "is nil when no component was found" do
-      expect(subject.resolve("/a/b/c/lol")).to be_nil
+      expect(subject.resolve(Pathname.new("/a/b/c/lol"))).to be_nil
     end
 
     it "resolves names that start similarly" do
       finance_models_path = fixture_file_path("app/finance_models")
 
       expect(subject.resolve(finance_models_path).name).to eql "finance_models"
-      expect(subject.resolve(finance_models_path.to_s).name).to eql "finance_models"
     end
   end
 end

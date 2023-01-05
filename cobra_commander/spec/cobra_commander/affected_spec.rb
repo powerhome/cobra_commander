@@ -30,7 +30,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to top level dependency" do
     let(:with_change_to_hr) do
-      CobraCommander::Affected.new(umbrella, [umbrella.path.join("hr", "index.html").to_s])
+      CobraCommander::Affected.new(umbrella, [umbrella.path.join("hr", "index.html")])
     end
 
     it "correctly reports directly affected components" do
@@ -44,7 +44,7 @@ RSpec.describe CobraCommander::Affected do
     end
 
     it "correctly reports test scripts" do
-      expect(with_change_to_hr.scripts).to eq([umbrella.path.join("hr", "test.sh").to_s])
+      expect(with_change_to_hr.scripts).to eq([umbrella.path.join("hr", "test.sh")])
     end
 
     it "correctly reports component names" do
@@ -54,7 +54,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to lower level dependency" do
     let(:with_change_to_directory) do
-      CobraCommander::Affected.new(umbrella, [umbrella.path.join("directory", "index.html").to_s])
+      CobraCommander::Affected.new(umbrella, [umbrella.path.join("directory", "index.html")])
     end
 
     it "correctly reports directly affected components" do
@@ -75,10 +75,10 @@ RSpec.describe CobraCommander::Affected do
 
     it "correctly reports test scripts" do
       expect(with_change_to_directory.scripts).to match_array [
-        umbrella.path.join("directory", "test.sh").to_s,
-        umbrella.path.join("finance", "test.sh").to_s,
-        umbrella.path.join("hr", "test.sh").to_s,
-        umbrella.path.join("sales", "test.sh").to_s,
+        umbrella.path.join("directory", "test.sh"),
+        umbrella.path.join("finance", "test.sh"),
+        umbrella.path.join("hr", "test.sh"),
+        umbrella.path.join("sales", "test.sh"),
       ]
     end
 
@@ -89,7 +89,7 @@ RSpec.describe CobraCommander::Affected do
 
   context "with change to lowest level dependency" do
     let(:with_change_to_auth) do
-      CobraCommander::Affected.new(umbrella, [umbrella.path.join("auth", "index.js").to_s])
+      CobraCommander::Affected.new(umbrella, [umbrella.path.join("auth", "index.js")])
     end
 
     it "correctly reports directly affected components" do
@@ -112,11 +112,11 @@ RSpec.describe CobraCommander::Affected do
 
     it "correctly reports test scripts" do
       expect(with_change_to_auth.scripts).to match_array [
-        umbrella.path.join("auth", "test.sh").to_s,
-        umbrella.path.join("directory", "test.sh").to_s,
-        umbrella.path.join("finance", "test.sh").to_s,
-        umbrella.path.join("hr", "test.sh").to_s,
-        umbrella.path.join("sales", "test.sh").to_s,
+        umbrella.path.join("auth", "test.sh"),
+        umbrella.path.join("directory", "test.sh"),
+        umbrella.path.join("finance", "test.sh"),
+        umbrella.path.join("hr", "test.sh"),
+        umbrella.path.join("sales", "test.sh"),
       ]
     end
 
