@@ -19,7 +19,7 @@ module CobraCommander
     end
 
     def scripts
-      @scripts ||= paths.map { |path| File.join(path, "test.sh") }
+      @scripts ||= paths.map { |path| path.join("test.sh") }
     end
 
     def directly
