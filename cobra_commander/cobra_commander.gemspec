@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-lib = File.expand_path("lib", __dir__)
-$LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "cobra_commander/version"
+require_relative "lib/cobra_commander/version"
 
 Gem::Specification.new do |spec|
   spec.name = "cobra_commander"
@@ -31,12 +29,10 @@ Gem::Specification.new do |spec|
   spec.metadata["source_code_uri"] = "https://github.com/powerhome/cobra_commander"
   spec.metadata["changelog_uri"] = "https://github.com/powerhome/cobra_commander/blob/main/cobra_commander/docs/CHANGELOG.md"
 
-  spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(test|spec|features)/})
-  end
+  spec.files = Dir["{docs,exe,lib}/**/*"] + ["cobra_commander.gemspec"]
   spec.bindir = "exe"
-  spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  spec.executables = %w[cobra]
+  spec.require_paths = %w[lib]
 
   spec.add_dependency "bundler"
   spec.add_dependency "concurrent-ruby", "~> 1.1"
