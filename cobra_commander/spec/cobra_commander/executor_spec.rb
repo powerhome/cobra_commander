@@ -4,37 +4,45 @@ require "spec_helper"
 require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor do
-  let(:umbrella) { stub_umbrella("app") }
-  let(:spin_output) { StringIO.new }
-  # TTY::Spinner::Multi will not print if it's not a TTY IO
-  before { allow(spin_output).to receive(:tty?).and_return(true) }
-
-  include ::CobraCommander::Executor::Job
-
-  def success_job(output)
-    -> { success(output) }
-  end
-
-  def error_job(output)
-    -> { error(output) }
-  end
-
-  describe ".execute(jobs:, status_output: nil, **kwargs)" do
-    subject do
-      CobraCommander::Executor.execute(
-        jobs: [success_job("go brazil"), error_job("didn't happen")],
+  describe ".execute_and_handle_exit(jobs:, runner:, workers:, printer: :quiet, &name_f)" do
+    it "prints all output as it goes when only one job is given" do
+      runner = ->(tty, *args) do
+        expect(tty.printer).to be_a TTY::Command::Printers::Quiet
+        args
+      end
+      CobraCommander::Executor.execute_and_handle_exit(
+        jobs: [[:success, "go brazil"]],
+        interactive: false,
         workers: 1,
-        status_output: spin_output
+        runner: runner,
+        &:last
       )
     end
 
-    it "handles the status of each job" do
-      outputs = subject.wait
+    it "prints the output buffered when multiple jobs are executed in non-interactive mode" do
+      runner = ->(tty, *args) do
+        expect(tty.printer).to be_a CobraCommander::Executor::BufferedPrinter
+        args
+      end
+      CobraCommander::Executor.execute_and_handle_exit(
+        jobs: [[:success, "go brazil"], [:success, "go go"]],
+        interactive: false,
+        workers: 1,
+        runner: runner,
+        &:last
+      )
+    end
 
-      expect(outputs.value).to match_array ["go brazil", nil]
-      expect(outputs.reason).to match_array [nil, "didn't happen"]
-      expect(spin_output.string).to match(/\[DONE\](\e\[0m)? .*Proc/)
-      expect(spin_output.string).to match(/\[ERROR\](\e\[0m)? .*Proc/)
+    it "exits with error when a job fails in non-interactive mode" do
+      expect do
+        CobraCommander::Executor.execute_and_handle_exit(
+          jobs: [[:success, "go brazil"], [:error, "go go"]],
+          interactive: false,
+          workers: 1,
+          runner: ->(_, *args) { args },
+          &:last
+        )
+      end.to raise_error SystemExit
     end
   end
 end

@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require_relative "./job"
-require_relative "./package_criteria"
-
 module CobraCommander
   module Executor
     module PackageCriteria

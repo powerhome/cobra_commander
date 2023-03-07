@@ -1,44 +1,28 @@
 # frozen_string_literal: true
 
-require_relative "./job"
-
 module CobraCommander
   module Executor
-    # This is a script job. It can tarket any CobraCommander::Package.
+    # This is a script job. It can target any CobraCommander::Component.
     #
-    # If you want to target a Component, you can use Script.for to target
-    # individual paths for each given component.
+    # Script runs the given script once for each Component#root_paths
     #
-    # @see Script.for
     class Script
-      include ::CobraCommander::Executor::Job
+      include ::CobraCommander::Executor::RunScript
 
-      # Returns a set of scripts to be executed on the given commends.
-      #
-      # If a component has two packages in the same path, only one script for that component will be
-      # returned.
-      #
-      # @param components [Enumerable<CobraCommander::Component>] the target components
-      # @param script [String] shell script to run from the directories of the component's packages
-      # @return [Array<CobraCommander::Executor::Script>]
-      def self.for(components, script)
-        components.flat_map(&:packages).uniq(&:path).map do |package|
-          new(package, script)
-        end
-      end
-
-      def initialize(package, script)
-        @package = package
+      def initialize(script)
         @script = script
       end
 
-      def to_s
-        @package.name
-      end
-
-      # @see CobraCommander::Executor::Job
-      def call
-        run_script @script, @package.path
+      # Runs the script in the given component
+      #
+      # It runs the script once for each Component#root_paths. If a component has two packages in the
+      # same path, it will run the script only once.
+      #
+      # @param tty [CobraComander::Executor::IsolatedPTY] tty to execute shell scripts
+      # @param component [CobraComander::Component] target component
+      # @return [Array<Symbol, String>]
+      def call(tty, component)
+        run_many(component.root_paths) { run_script(tty, @script, _1) }
       end
     end
   end

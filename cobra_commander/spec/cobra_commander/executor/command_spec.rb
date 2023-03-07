@@ -6,18 +6,10 @@ require "cobra_commander/executor"
 RSpec.describe CobraCommander::Executor::Command do
   let(:finance_component) { stub_umbrella("app", memory: true, stub: true).find("finance") }
   let(:finance_stub_package) { finance_component.packages.find { |p| p.key == :stub } }
+  let(:pty) { TTY::Command.new(printer: :null) }
 
   def run_command(package, command)
-    CobraCommander::Executor::Command.new(package, command).call
-  end
-
-  describe ".for(components, script)" do
-    it "generates one command job for each package" do
-      scripts = CobraCommander::Executor::Command.for([finance_component], "deps")
-
-      expect(scripts.size).to eql 2
-      expect(finance_component.packages.size).to eql 2
-    end
+    CobraCommander::Executor::Command.new(command).call(pty, package)
   end
 
   it "executes the command configured in cobra.yml" do
