@@ -2,6 +2,7 @@ sources:
   :stub:
     commands:
       deps: "echo 'install stub deps'"
+      wait: "ping google.com -c $((RANDOM%5))"
   :memory:
     commands:
       failing_command: "lol"

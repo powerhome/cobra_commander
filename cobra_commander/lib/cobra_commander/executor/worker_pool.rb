@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-# Highly inspired by Bootsnap's WorkerPool [1] by Jean Boussier[2]
-#
-# [1] https://github.com/Shopify/bootsnap/blob/main/lib/bootsnap/cli/worker_pool.rb
-# [2] https://github.com/byroot
-#
 module CobraCommander
   module Executor
     class WorkerPool
@@ -30,7 +25,7 @@ module CobraCommander
         end
 
         def kill
-          @thread.kill
+          @thread&.kill
         end
 
         def spawn
@@ -72,13 +67,21 @@ module CobraCommander
       end
 
       def start
+        @stop = false
         @workers.each(&:spawn)
         @queue.close
-        @workers.each(&:wait)
+        begin
+          @workers.each(&:wait)
+        rescue Interrupt
+          @workers.each(&:kill) if @stop
+          @stop = true
+          retry
+        end
       end
 
       # @private
       def run_next
+        return :exit if @stop
         return :exit unless (job = @queue.pop)
 
         job.resolve!(*@runner.call(@tty, *job.args))
