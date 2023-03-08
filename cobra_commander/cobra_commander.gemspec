@@ -35,7 +35,6 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w[lib]
 
   spec.add_dependency "bundler"
-  spec.add_dependency "concurrent-ruby", "~> 1.1"
   spec.add_dependency "thor", ["< 2.0", ">= 0.18.1"]
   spec.add_dependency "tty-command", "~> 0.10.0"
   spec.add_dependency "tty-prompt", "~> 0.23.1"
