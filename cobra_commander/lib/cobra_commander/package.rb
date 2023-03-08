@@ -17,5 +17,9 @@ module CobraCommander
       @name = name
       @dependencies = dependencies
     end
+
+    def describe
+      "#{name} (#{key})"
+    end
   end
 end

@@ -12,6 +12,10 @@ module CobraCommander
       @packages = []
     end
 
+    def describe
+      "#{name} (#{packages.map(&:key).join(', ')})"
+    end
+
     def add_package(package)
       @packages << package
       @dependency_names |= package.dependencies
