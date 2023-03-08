@@ -21,6 +21,14 @@ module CobraCommander
 
     # Executes the given jobs in an CobraCommander::Executor::WorkerPool.
     #
+    # When only one job is queued, it choses the :quiet printer, to print the
+    # output as it happens.
+    # When more than one job is queued in interactive mode, it uses the :progress
+    # printer, which will display a green dot or a red F depending on the result
+    # of each script execution.
+    # If not in interactive mode, it will print the output in a buffered way to
+    # make it easier to read each output.
+    #
     # @param jobs [Enumerable<CobraCommander::Executor::Job>] the jobs to run
     # @param interactive [Boolean] prefer interactive output
     # @see CobraCommander::Executor::WorkerPool for more options
