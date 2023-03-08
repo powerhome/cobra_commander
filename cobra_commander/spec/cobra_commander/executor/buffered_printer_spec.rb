@@ -6,8 +6,6 @@ require "cobra_commander/executor"
 
 RSpec.describe CobraCommander::Executor::BufferedPrinter do
   let(:output) { StringIO.new }
-  # TTY::Spinner::Multi will not print if it's not a TTY IO
-  # before { allow(spin_output).to receive(:tty?).and_return(true) }
 
   def new_cmd(cmd, uuid = SecureRandom.uuid)
     double(to_command: cmd, uuid: uuid)
