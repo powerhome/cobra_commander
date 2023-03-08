@@ -2,6 +2,20 @@
 
 module CobraCommander
   module Executor
+    # @private
+    #
+    # This WorkerPooll will queue up jobs, and execute them using
+    # Worker's, each with a thread running our work loop using the
+    # given runner.
+    #
+    # - A *job* is defined by a group of arguments to be passed to the runner.
+    # - A *runner* is an object that respond to #call(tty, *args), where TTY is
+    #   an instance of TTY::Command, and *args are the arguments queued in the
+    #   worker pool.
+    # - The *runner* call method must return an array of [status, output]
+    # - A worker manages a thread running the job wirh runner.call and updates
+    #   the job result and output.
+    #
     class WorkerPool
       Job = Struct.new(:name, :args) do
         attr_reader :output, :status
@@ -79,7 +93,6 @@ module CobraCommander
         end
       end
 
-      # @private
       def run_next
         return :exit if @stop
         return :exit unless (job = @queue.pop)
