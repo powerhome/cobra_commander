@@ -1,25 +1,19 @@
 # frozen_string_literal: true
 
-require "json"
-
 module CobraCommander
   # Calculates directly & transitively affected components
+  # Takes a list of changes, and resolves all components affected
+  #
   class Affected
+    include Enumerable
+
     def initialize(umbrella, changes)
       @umbrella = umbrella
       @changes = changes
     end
 
-    def names
-      @names ||= all.map(&:name)
-    end
-
-    def all
-      @all ||= (directly | transitively).sort_by(&:name)
-    end
-
-    def scripts
-      @scripts ||= paths.map { |path| path.join("test.sh") }
+    def each(&block)
+      (directly | transitively).sort_by(&:name).each(&block)
     end
 
     def directly
@@ -30,35 +24,6 @@ module CobraCommander
     def transitively
       @transitively ||= directly.flat_map(&:deep_dependents)
                                 .uniq.sort_by(&:name)
-    end
-
-    def to_json(*_args)
-      {
-        changed_files: @changes,
-        directly_affected_components: directly.map { |c| affected_component(c) },
-        transitively_affected_components: transitively.map { |c| affected_component(c) },
-        test_scripts: scripts,
-        component_names: names,
-        languages: all_affected_packages,
-      }.to_json
-    end
-
-  private
-
-    def affected_component(component)
-      {
-        name: component.name,
-        path: component.root_paths.map(&:to_s),
-        type: component.packages.map(&:key).map(&:to_s),
-      }
-    end
-
-    def paths
-      @paths ||= all.map(&:root_paths).flatten
-    end
-
-    def all_affected_packages
-      all.flat_map(&:packages).map(&:key).uniq
     end
   end
 end
