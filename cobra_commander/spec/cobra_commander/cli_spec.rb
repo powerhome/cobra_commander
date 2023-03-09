@@ -253,40 +253,22 @@ RSpec.describe "cobra cli", type: :aruba do
   describe "cobra changes" do
     let(:umbrella) { stub_umbrella("modified-app", unpack: true) }
 
-    it "does not output 'Test scripts to run' header" do
-      run_command_and_stop("cobra changes -a #{umbrella.path} -b main", fail_on_error: false)
-
-      expect(last_command_output).to_not include("Test scripts to run")
-      expect(last_command_output).to include("modified-app/finance/test.sh")
-      expect(last_command_output).to include("modified-app/sales/test.sh")
-    end
-
     context "with full results" do
       it "outputs all headers" do
-        run_command_and_stop("cobra changes -a #{umbrella.path} -r full -b main", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{umbrella.path} -b main", fail_on_error: true)
 
         expect(last_command_output).to include("Changes since last commit on main")
         expect(last_command_output).to include("Directly affected components")
         expect(last_command_output).to include("Transitively affected components")
-        expect(last_command_output).to include("Test scripts to run")
-      end
-    end
-
-    context "with incorrect results specified" do
-      it "outputs error message" do
-        run_command_and_stop("cobra changes -a #{umbrella.path} -b main -r partial", fail_on_error: false)
-
-        expect(last_command_output).to match "--results must be 'test', 'full', 'name' or 'json'"
       end
     end
 
     context "with nonexistent branch specified" do
       it "outputs specified branch in 'Changes since' header" do
-        run_command_and_stop("cobra changes -a #{umbrella.path} -r full -b oak_branch", fail_on_error: true)
+        run_command_and_stop("cobra changes -a #{umbrella.path} -b oak_branch", fail_on_error: false)
 
         expect(last_command_output).to include("Changes since last commit on oak_branch")
         expect(last_command_output).to include("Specified branch oak_branch could not be found")
-        expect(last_command_output).to_not include("Test scripts to run")
       end
     end
   end

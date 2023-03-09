@@ -22,10 +22,6 @@ RSpec.describe CobraCommander::Affected do
     it "reports no transitiely affected components" do
       expect(no_changes.transitively).to eq []
     end
-
-    it "reports no testing needs" do
-      expect(no_changes.scripts).to eq []
-    end
   end
 
   context "with change to top level dependency" do
@@ -41,14 +37,6 @@ RSpec.describe CobraCommander::Affected do
 
     it "correctly reports directly affected components" do
       expect(with_change_to_hr.transitively).to eq []
-    end
-
-    it "correctly reports test scripts" do
-      expect(with_change_to_hr.scripts).to eq([umbrella.path.join("hr", "test.sh")])
-    end
-
-    it "correctly reports component names" do
-      expect(with_change_to_hr.names).to eq(["hr"])
     end
   end
 
@@ -73,17 +61,8 @@ RSpec.describe CobraCommander::Affected do
       expect(with_change_to_directory.transitively[2].packages.map(&:key)).to eql %i[stub]
     end
 
-    it "correctly reports test scripts" do
-      expect(with_change_to_directory.scripts).to match_array [
-        umbrella.path.join("directory", "test.sh"),
-        umbrella.path.join("finance", "test.sh"),
-        umbrella.path.join("hr", "test.sh"),
-        umbrella.path.join("sales", "test.sh"),
-      ]
-    end
-
     it "correctly reports component names" do
-      expect(with_change_to_directory.names).to match_array %w[directory finance hr sales]
+      expect(with_change_to_directory.map(&:name)).to match_array %w[directory finance hr sales]
     end
   end
 
@@ -110,18 +89,8 @@ RSpec.describe CobraCommander::Affected do
       expect(with_change_to_auth.transitively[3].packages.map(&:key)).to eql %i[stub]
     end
 
-    it "correctly reports test scripts" do
-      expect(with_change_to_auth.scripts).to match_array [
-        umbrella.path.join("auth", "test.sh"),
-        umbrella.path.join("directory", "test.sh"),
-        umbrella.path.join("finance", "test.sh"),
-        umbrella.path.join("hr", "test.sh"),
-        umbrella.path.join("sales", "test.sh"),
-      ]
-    end
-
     it "correctly reports component names" do
-      expect(with_change_to_auth.names).to match_array %w[auth directory finance hr sales]
+      expect(with_change_to_auth.map(&:name)).to match_array %w[auth directory finance hr sales]
     end
   end
 end

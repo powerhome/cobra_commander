@@ -92,10 +92,9 @@ module CobraCommander
     end
 
     desc "changes [--results=RESULTS] [--branch=BRANCH]", "Prints list of changed files"
-    method_option :results, default: "test", aliases: "-r", desc: "Accepts test, full, name or json"
     method_option :branch, default: "master", aliases: "-b", desc: "Specified target to calculate against"
     def changes
-      Output::Change.new(umbrella, options.results, options.branch).run!
+      Output::Change.new(umbrella, options.branch).run!
     end
 
   private
