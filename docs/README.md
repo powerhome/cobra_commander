@@ -45,7 +45,7 @@ Plugins provide a package source (i.e.: `yarn workspaces`) to compose the compon
 
 ```bash
 Commands:
-  cobra changes [--results=RESULTS] [--branch=BRANCH]  # Prints list of changed files
+  cobra changes [--branch=BRANCH]                      # Prints list of changed files
   cobra exec [components] <command>                    # Executes the command in the context of a given component or set thereof. Defaults to all components.
   cobra graph [component]                              # Outputs a graph of a given component or umbrella
   cobra help [COMMAND]                                 # Describe available commands or one specific command
@@ -66,8 +66,6 @@ Usage:
   cobra changes [--results=RESULTS] [--branch=BRANCH]
 
 Options:
-  -r, [--results=RESULTS]    # Accepts test, full, name or json
-                             # Default: test
   -b, [--branch=BRANCH]      # Specified target to calculate against
                              # Default: master
   -a, [--app=APP]
