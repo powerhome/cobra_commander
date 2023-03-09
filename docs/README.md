@@ -1,8 +1,24 @@
 # cobra_commander
 
+**CobraCommander**
+
 [![Gem](https://img.shields.io/gem/dv/cobra_commander/stable.svg)](https://rubygems.org/gems/cobra_commander)
 [![Gem](https://img.shields.io/gem/v/cobra_commander.svg)](https://rubygems.org/gems/cobra_commander)
-[![CI](https://github.com/powerhome/cobra_commander/actions/workflows/ci.yml/badge.svg)](https://github.com/powerhome/cobra_commander/actions/workflows/ci.yml)
+[![CobraCommander CI](https://github.com/powerhome/cobra_commander/actions/workflows/cobra_commander.yml/badge.svg)](https://github.com/powerhome/cobra_commander/actions/workflows/cobra_commander.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7fe0781c18f6923ab753/maintainability)](https://codeclimate.com/github/powerhome/cobra_commander/maintainability)
+
+**CobraCommander::Ruby**
+
+[![Gem](https://img.shields.io/gem/dv/cobra_commander-ruby/stable.svg)](https://rubygems.org/gems/cobra_commander-ruby)
+[![Gem](https://img.shields.io/gem/v/cobra_commander-ruby.svg)](https://rubygems.org/gems/cobra_commander-ruby)
+[![CobraCommander::Ruby CI](https://github.com/powerhome/cobra_commander/actions/workflows/cobra_commander-ruby.yml/badge.svg)](https://github.com/powerhome/cobra_commander/actions/workflows/cobra_commander-ruby.yml)
+[![Maintainability](https://api.codeclimate.com/v1/badges/7fe0781c18f6923ab753/maintainability)](https://codeclimate.com/github/powerhome/cobra_commander/maintainability)
+
+**CobraCommander::Yarn**
+
+[![Gem](https://img.shields.io/gem/dv/cobra_commander-yarn/stable.svg)](https://rubygems.org/gems/cobra_commander-yarn)
+[![Gem](https://img.shields.io/gem/v/cobra_commander-yarn.svg)](https://rubygems.org/gems/cobra_commander-yarn)
+[![CobraCommander::YARN CI](https://github.com/powerhome/cobra_commander/actions/workflows/cobra_commander-yarn.yml/badge.svg)](https://github.com/powerhome/cobra_commander/actions/workflows/cobra_commander-yarn.yml)
 [![Maintainability](https://api.codeclimate.com/v1/badges/7fe0781c18f6923ab753/maintainability)](https://codeclimate.com/github/powerhome/cobra_commander/maintainability)
 
 Tools for working with Component Based Rails Apps (see https://cbra.info). Includes tools for graphing both Ruby and Javascript components in an application and their relationships, as well as selectively testing components based on changes made.
