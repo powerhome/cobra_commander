@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## Version 1.1.0 - 2023-03-09
+
 * New Executor by @xjunior in [#104](https://github.com/powerhome/cobra_commander/pull/104)
 * Cleanup cobra changes by @xjunior in [#105](https://github.com/powerhome/cobra_commander/pull/105)
 
