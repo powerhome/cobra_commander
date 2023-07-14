@@ -5,11 +5,15 @@ on:
 
 jobs:
   ruby:
-    uses: powerhome/power-tools/.github/workflows/_ruby-package.yml@main
+    uses: powerhome/power-tools/.github/workflows/_ruby-workflow.yml@main
     with:
       package: '${{ github.workflow }}'
       workdir: '${{ github.workflow }}'
-      ruby: '["2.7", "3.0", "3.1"]'
-      rails: '["any"]'
+      gemfiles: '["gemfiles/bundler-1.gemfile","gemfiles/bundler-2.gemfile"]'
       bundler: '["1", "2"]'
+      exclude: |-
+        [
+          { gemfile: "gemfiles/bundler-1.gemfile", bundler: "2" },
+          { gemfile: "gemfiles/bundler-2.gemfile", bundler: "1" }
+        ]
     secrets: inherit

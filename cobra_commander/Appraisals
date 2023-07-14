@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+appraise "bundler-1" do
+  gem "bundler", "1.17.3"
+end
+
+appraise "bundler-2" do
+  gem "bundler", "2.4.17"
+end
