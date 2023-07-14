@@ -34,14 +34,13 @@ Gem::Specification.new do |spec|
   spec.executables = %w[cobra]
   spec.require_paths = %w[lib]
 
-  spec.add_dependency "bundler"
+  spec.add_dependency "bundler", ">= 1.17.3"
   spec.add_dependency "thor", ["< 2.0", ">= 0.18.1"]
   spec.add_dependency "tty-command", "~> 0.10.0"
   spec.add_dependency "tty-prompt", "~> 0.23.1"
 
   spec.add_development_dependency "appraisal", "~> 2.4.1"
   spec.add_development_dependency "aruba", "~> 0.14.2"
-  spec.add_development_dependency "bundler"
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "license_finder", ">= 7.0"
   spec.add_development_dependency "pry"
