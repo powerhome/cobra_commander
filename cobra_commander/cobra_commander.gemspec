@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
   spec.executables = %w[cobra]
   spec.require_paths = %w[lib]
 
-  spec.add_dependency "bundler"
+  spec.add_dependency "bundler", "~> 2.4.17"
   spec.add_dependency "thor", ["< 2.0", ">= 0.18.1"]
   spec.add_dependency "tty-command", "~> 0.10.0"
   spec.add_dependency "tty-prompt", "~> 0.23.1"

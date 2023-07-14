@@ -35,9 +35,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir["{docs,lib}/**/*"] + ["cobra_commander-ruby.gemspec"]
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "bundler"
+  spec.add_dependency "bundler", "~> 2.4.17"
 
-  spec.add_development_dependency "bundler"
   spec.add_development_dependency "license_finder", ">= 7.0"
   spec.add_development_dependency "pry"
   spec.add_development_dependency "rake", ">= 12.3.3"
