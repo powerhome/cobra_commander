@@ -189,6 +189,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   appraisal (~> 2.4.1)
