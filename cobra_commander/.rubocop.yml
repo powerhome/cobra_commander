@@ -6,3 +6,11 @@ Rails:
 
 Style/ClassAndModuleChildren:
   Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Exclude:
+    - 'gemfiles/*'
+
+Bundler/OrderedGems:
+  Exclude:
+    - 'gemfiles/*'
