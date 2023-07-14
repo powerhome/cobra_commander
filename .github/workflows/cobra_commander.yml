@@ -9,7 +9,7 @@ jobs:
     with:
       package: '${{ github.workflow }}'
       workdir: '${{ github.workflow }}'
-      bundler: '["1", "2"]'
+      bundler: '["1.17.3", "2.4.17"]'
       gemfiles: |-
         [
           "gemfiles/bundler_1.gemfile",
@@ -17,7 +17,7 @@ jobs:
         ]
       exclude: |-
         [
-          { gemfile: "gemfiles/bundler_1.gemfile", bundler: "2" },
-          { gemfile: "gemfiles/bundler_2.gemfile", bundler: "1" }
+          { gemfile: "gemfiles/bundler_1.gemfile", bundler: "2.4.17" },
+          { gemfile: "gemfiles/bundler_2.gemfile", bundler: "1.17.3" }
         ]
     secrets: inherit
