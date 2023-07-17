@@ -5,10 +5,8 @@ on:
 
 jobs:
   ruby:
-    uses: powerhome/power-tools/.github/workflows/_ruby-package.yml@main
+    uses: powerhome/power-tools/.github/workflows/_ruby-workflow.yml@main
     with:
       package: '${{ github.workflow }}'
       workdir: '${{ github.workflow }}'
-      ruby: '["2.7", "3.0", "3.1"]'
-      rails: '["any"]'
     secrets: inherit

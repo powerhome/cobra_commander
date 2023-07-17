@@ -1,7 +1,6 @@
 /.bundle/
 /.DS_store
 /.yardoc
-/Gemfile.lock
 /_yardoc/
 /coverage/
 /graph.*
