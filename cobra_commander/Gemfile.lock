@@ -32,7 +32,7 @@ GEM
     childprocess (3.0.0)
     coderay (1.1.3)
     concurrent-ruby (1.2.2)
-    contracts (0.16.1)
+    contracts (0.17)
     cucumber (8.0.0)
       builder (~> 3.2, >= 3.2.4)
       cucumber-ci-environment (~> 9.0, >= 9.0.4)
@@ -192,7 +192,7 @@ DEPENDENCIES
   bundler
   cobra_commander!
   cobra_commander-stub!
-  contracts (< 0.17)
+  contracts (< 0.18)
   guard-rspec
   license_finder (>= 7.0)
   pry
