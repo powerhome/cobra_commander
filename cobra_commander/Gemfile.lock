@@ -192,7 +192,6 @@ DEPENDENCIES
   bundler
   cobra_commander!
   cobra_commander-stub!
-  contracts (< 0.17)
   guard-rspec
   license_finder (>= 7.0)
   pry

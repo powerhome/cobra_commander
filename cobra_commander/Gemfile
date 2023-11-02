@@ -7,5 +7,3 @@ gemspec
 group :cobra do
   gem "cobra_commander-stub", path: "./spec/support/", require: "stub_source"
 end
-
-gem "contracts", "< 0.17"
