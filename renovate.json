@@ -1,6 +1,6 @@
 {
   "extends": [
-    "config:base"
+    "github>powerhome/renovate-config"
   ],
   "ignorePaths": [
     "spec/fixtures"
