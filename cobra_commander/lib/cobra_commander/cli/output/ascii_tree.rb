@@ -43,12 +43,12 @@ module CobraCommander
 
       def add_tee(io, outdents, dep)
         io.puts line(outdents, TEE, dep.name)
-        list_dependencies(io, dep, (outdents + [BAR]))
+        list_dependencies(io, dep, outdents + [BAR])
       end
 
       def add_corner(io, outdents, dep)
         io.puts line(outdents, CORNER, dep.name)
-        list_dependencies(io, dep, (outdents + [SPACE]))
+        list_dependencies(io, dep, outdents + [SPACE])
       end
 
       def line(outdents, sym, name)

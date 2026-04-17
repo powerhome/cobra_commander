@@ -12,8 +12,8 @@ module CobraCommander
       @changes = changes
     end
 
-    def each(&block)
-      (directly | transitively).sort_by(&:name).each(&block)
+    def each(&)
+      (directly | transitively).sort_by(&:name).each(&)
     end
 
     def directly

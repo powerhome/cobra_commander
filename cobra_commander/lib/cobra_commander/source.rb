@@ -22,8 +22,8 @@ module CobraCommander
       to_a
     end
 
-    def each(&block)
-      packages.each(&block)
+    def each(&)
+      packages.each(&)
     rescue Errno::ENOENT => e
       raise Error, e.message
     end

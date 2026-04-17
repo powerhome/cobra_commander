@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Raise the minimum supported Ruby version to 3.2 and expand CI to cover Ruby 4.0.
+
 ## Version 1.1.0 - 2023-03-09
 
 * New Executor by @xjunior in [#104](https://github.com/powerhome/cobra_commander/pull/104)

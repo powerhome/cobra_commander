@@ -7,8 +7,8 @@ module CobraCommander
     # of the current Bundler env vars.
     #
     class IsolatedPTY < ::TTY::Command
-      def initialize(**kwargs)
-        super(pty: true, **kwargs)
+      def initialize(**)
+        super(pty: true, **)
       end
 
       def run!(...)
@@ -17,11 +17,11 @@ module CobraCommander
         end
       end
 
-      def isolate_bundle(&block)
+      def isolate_bundle(&)
         if Bundler.respond_to?(:with_unbundled_env)
-          Bundler.with_unbundled_env(&block)
+          Bundler.with_unbundled_env(&)
         else
-          Bundler.with_clean_env(&block)
+          Bundler.with_clean_env(&)
         end
       end
     end

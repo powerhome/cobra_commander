@@ -14,10 +14,10 @@ module CobraCommander
       def run_many(collection, &block)
         collection.lazy.map(&block)
                   .reduce do |(_, prev_output), (result, output)|
-          new_output = [prev_output&.strip, output&.strip].join("\n")
-          return [:error, new_output] if result == :error
+                    new_output = [prev_output&.strip, output&.strip].join("\n")
+                    return [:error, new_output] if result == :error
 
-          [:success, new_output]
+                    [:success, new_output]
         end
       end
     end

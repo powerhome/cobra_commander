@@ -62,7 +62,7 @@ module CobraCommander
         @jobs = []
         @queue = Queue.new
 
-        push_all(jobs, &(name_f || :describe))
+        push_all(jobs, &name_f || :describe)
       end
 
       def error?
@@ -70,7 +70,7 @@ module CobraCommander
       end
 
       def push_all(jobs, &name_f)
-        jobs.each { push(name_f&.(_1), *Array(_1)) }
+        jobs.each { push(name_f&.call(_1), *Array(_1)) }
       end
 
       def push(name, *args)

@@ -19,8 +19,8 @@ module CobraCommander
       @base_branch = base_branch
     end
 
-    def each(&block)
-      changes.each(&block)
+    def each(&)
+      changes.each(&)
     end
 
   private

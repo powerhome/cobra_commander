@@ -1,5 +1,15 @@
+inherit_from: .rubocop_todo.yml
+
 require:
   - rubocop-powerhome
+
+AllCops:
+  TargetRubyVersion: 3.2
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
 
 Rails:
   Enabled: false
