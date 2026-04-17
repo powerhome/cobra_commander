@@ -23,6 +23,7 @@ Gem::Specification.new do |spec|
   DESCRIPTION
   spec.homepage = "http://tech.powerhrg.com/cobra_commander/"
   spec.license = "MIT"
+  spec.required_ruby_version = ">= 3.2.0"
 
   spec.metadata["rubygems_mfa_required"] = "true"
   spec.metadata["homepage_uri"] = spec.homepage
