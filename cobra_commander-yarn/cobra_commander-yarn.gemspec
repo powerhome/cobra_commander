@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_development_dependency "license_finder", "7.1"
+  spec.add_development_dependency "ostruct", "0.6.3"
   spec.add_development_dependency "pry", "0.14.2"
   spec.add_development_dependency "rake", "13.0.6"
   spec.add_development_dependency "rspec", "3.13.0"
