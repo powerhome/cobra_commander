@@ -37,10 +37,10 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "bundler", "~> 2.4.17"
 
-  spec.add_development_dependency "license_finder", ">= 7.0"
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "rake", ">= 12.3.3"
-  spec.add_development_dependency "rspec", "~> 3.5"
-  spec.add_development_dependency "rubocop", "1.30.1"
-  spec.add_development_dependency "rubocop-powerhome", ">= 0.5.0"
+  spec.add_development_dependency "license_finder", "7.1"
+  spec.add_development_dependency "pry", "0.14.2"
+  spec.add_development_dependency "rake", "13.0.6"
+  spec.add_development_dependency "rspec", "3.13.0"
+  spec.add_development_dependency "rubocop", "1.82.1"
+  spec.add_development_dependency "rubocop-powerhome", "0.6.1"
 end
