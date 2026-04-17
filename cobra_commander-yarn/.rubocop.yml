@@ -1,5 +1,13 @@
 require:
   - rubocop-powerhome
 
+AllCops:
+  TargetRubyVersion: 3.3
+  NewCops: enable
+  Exclude:
+    - 'bin/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+
 Rails:
   Enabled: false
