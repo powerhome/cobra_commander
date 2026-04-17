@@ -32,13 +32,13 @@ module CobraCommander
     # @param jobs [Enumerable<CobraCommander::Executor::Job>] the jobs to run
     # @param interactive [Boolean] prefer interactive output
     # @see CobraCommander::Executor::WorkerPool for more options
-    def execute_and_handle_exit(jobs:, interactive: false, **kwargs, &name_f)
+    def execute_and_handle_exit(jobs:, interactive: false, **, &name_f)
       printer = if jobs.size == 1 then :quiet
                 elsif interactive then :progress
                 else
                   ::CobraCommander::Executor::BufferedPrinter
                 end
-      pool = WorkerPool.new(jobs: jobs, printer: printer, **kwargs, &name_f).tap(&:start)
+      pool = WorkerPool.new(jobs: jobs, printer: printer, **, &name_f).tap(&:start)
       return CobraCommander::Executor::OutputPrompt.run(pool) if interactive && jobs.size > 1
 
       exit(1) if pool.error?
