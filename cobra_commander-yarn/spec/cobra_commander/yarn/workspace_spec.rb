@@ -39,10 +39,15 @@ RSpec.describe CobraCommander::Yarn::Workspace do
     let(:modern_ndjson) do
       [
         '{"location":".","name":"dummy","workspaceDependencies":[],"mismatchedWorkspaceDependencies":[]}',
-        '{"location":"components/auth-ui","name":"auth-ui","workspaceDependencies":[],"mismatchedWorkspaceDependencies":[]}',
-        '{"location":"components/finance-ui","name":"finance-ui","workspaceDependencies":["components/auth-ui"],"mismatchedWorkspaceDependencies":[]}',
-        '{"location":"components/hr-ui","name":"hr-ui","workspaceDependencies":["components/auth-ui"],"mismatchedWorkspaceDependencies":[]}',
-        '{"location":"components/sales-ui","name":"sales-ui","workspaceDependencies":["components/auth-ui","components/finance-ui"],"mismatchedWorkspaceDependencies":[]}',
+        '{"location":"components/auth-ui","name":"auth-ui",' \
+        '"workspaceDependencies":[],"mismatchedWorkspaceDependencies":[]}',
+        '{"location":"components/finance-ui","name":"finance-ui",' \
+        '"workspaceDependencies":["components/auth-ui"],"mismatchedWorkspaceDependencies":[]}',
+        '{"location":"components/hr-ui","name":"hr-ui",' \
+        '"workspaceDependencies":["components/auth-ui"],"mismatchedWorkspaceDependencies":[]}',
+        '{"location":"components/sales-ui","name":"sales-ui",' \
+        '"workspaceDependencies":["components/auth-ui","components/finance-ui"],' \
+        '"mismatchedWorkspaceDependencies":[]}',
       ].join("\n")
     end
 

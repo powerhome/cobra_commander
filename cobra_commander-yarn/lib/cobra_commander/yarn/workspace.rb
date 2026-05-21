@@ -32,14 +32,23 @@ module CobraCommander
       end
 
       def parse_modern_output(output)
-        entries = output.lines.map(&:strip).reject(&:empty?).map { |line| JSON.parse(line) }
-                        .reject { |e| e["location"] == "." }
+        entries = parse_entries(output)
         location_to_name = entries.each_with_object({}) { |e, h| h[e["location"]] = e["name"] }
         entries.each_with_object({}) do |entry, hash|
           hash[entry["name"]] = {
             "location" => entry["location"],
             "workspaceDependencies" => entry["workspaceDependencies"].filter_map { |loc| location_to_name[loc] },
           }
+        end
+      end
+
+      def parse_entries(output)
+        output.lines.filter_map do |line|
+          stripped = line.strip
+          next if stripped.empty?
+
+          entry = JSON.parse(stripped)
+          entry unless entry["location"] == "."
         end
       end
 
