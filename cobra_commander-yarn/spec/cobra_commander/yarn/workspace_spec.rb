@@ -42,7 +42,7 @@ RSpec.describe CobraCommander::Yarn::Workspace do
         '{"location":"components/auth-ui","name":"auth-ui","workspaceDependencies":[],"mismatchedWorkspaceDependencies":[]}',
         '{"location":"components/finance-ui","name":"finance-ui","workspaceDependencies":["components/auth-ui"],"mismatchedWorkspaceDependencies":[]}',
         '{"location":"components/hr-ui","name":"hr-ui","workspaceDependencies":["components/auth-ui"],"mismatchedWorkspaceDependencies":[]}',
-        '{"location":"components/sales-ui","name":"sales-ui","workspaceDependencies":["components/auth-ui","components/finance-ui"],"mismatchedWorkspaceDependencies":[]}'
+        '{"location":"components/sales-ui","name":"sales-ui","workspaceDependencies":["components/auth-ui","components/finance-ui"],"mismatchedWorkspaceDependencies":[]}',
       ].join("\n")
     end
 
@@ -74,8 +74,10 @@ RSpec.describe CobraCommander::Yarn::Workspace do
   context "when using yarn v1 (fallback)" do
     let(:v1_inner) do
       JSON.generate(
-        "auth-ui" => { "location" => "components/auth-ui", "workspaceDependencies" => [], "mismatchedWorkspaceDependencies" => [] },
-        "hr-ui" => { "location" => "components/hr-ui", "workspaceDependencies" => ["auth-ui"], "mismatchedWorkspaceDependencies" => [] }
+        "auth-ui" => { "location" => "components/auth-ui", "workspaceDependencies" => [],
+                       "mismatchedWorkspaceDependencies" => [] },
+        "hr-ui" => { "location" => "components/hr-ui", "workspaceDependencies" => ["auth-ui"],
+                     "mismatchedWorkspaceDependencies" => [] }
       )
     end
     let(:v1_output) { JSON.generate("type" => "info", "data" => v1_inner) }
