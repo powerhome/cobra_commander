@@ -2,7 +2,7 @@ PATH
   remote: ..
   specs:
     cobra_commander (1.1.0)
-      bundler (~> 2.4.17)
+      bundler (>= 2.4.17)
       thor (>= 0.18.1, < 2.0)
       tty-command (~> 0.10.0)
       tty-prompt (~> 0.23.1)
@@ -150,6 +150,7 @@ GEM
 PLATFORMS
   arm64-darwin-22
   arm64-darwin-23
+  arm64-darwin-24
   x86_64-linux
 
 DEPENDENCIES
@@ -164,4 +165,4 @@ DEPENDENCIES
   rubocop-powerhome (= 0.6.1)
 
 BUNDLED WITH
-   2.4.17
+   2.5.16
