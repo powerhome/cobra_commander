@@ -48,6 +48,7 @@ RSpec.describe CobraCommander::Yarn::Workspace do
         '{"location":"components/sales-ui","name":"sales-ui",' \
         '"workspaceDependencies":["components/auth-ui","components/finance-ui"],' \
         '"mismatchedWorkspaceDependencies":[]}',
+        '{"location":"components/no-name","workspaceDependencies":[],"mismatchedWorkspaceDependencies":[]}',
       ].join("\n")
     end
 

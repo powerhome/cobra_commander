@@ -48,7 +48,7 @@ module CobraCommander
           next if stripped.empty?
 
           entry = JSON.parse(stripped)
-          entry unless entry["location"] == "."
+          entry unless entry["location"] == "." || entry["name"].nil?
         end
       end
 
