@@ -22,10 +22,34 @@ module CobraCommander
     private
 
       def workspace_data
-        output, error, status = Open3.capture3("yarn workspaces --json info", chdir: path.to_s)
-        raise ::CobraCommander::Source::Error, json_data(error) unless status.success?
+        output, _error, status = Open3.capture3("yarn workspaces list --verbose --json", chdir: path.to_s)
+        return parse_modern_output(output) if status.success?
+
+        output, _, status = Open3.capture3("yarn workspaces --json info", chdir: path.to_s)
+        raise ::CobraCommander::Source::Error, "Unrecognized yarn workspaces output format" unless status.success?
 
         JSON.parse(json_data(output))
+      end
+
+      def parse_modern_output(output)
+        entries = parse_entries(output)
+        location_to_name = entries.each_with_object({}) { |e, h| h[e["location"]] = e["name"] }
+        entries.each_with_object({}) do |entry, hash|
+          hash[entry["name"]] = {
+            "location" => entry["location"],
+            "workspaceDependencies" => entry["workspaceDependencies"].filter_map { |loc| location_to_name[loc] },
+          }
+        end
+      end
+
+      def parse_entries(output)
+        output.lines.filter_map do |line|
+          stripped = line.strip
+          next if stripped.empty?
+
+          entry = JSON.parse(stripped)
+          entry unless entry["location"] == "." || entry["name"].nil?
+        end
       end
 
       def json_data(json)

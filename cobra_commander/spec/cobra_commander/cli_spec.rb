@@ -17,49 +17,49 @@ RSpec.describe "cobra cli", type: :aruba do
     end
 
     it "executes the given command on all components" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --no-self 'echo \"hi\" `pwd`'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --no-self 'pwd'",
                            fail_on_error: true)
 
-      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('sales')}")
+      expect(last_command_output).to include(umbrella.path.join("auth").to_s)
+      expect(last_command_output).to include(umbrella.path.join("directory").to_s)
+      expect(last_command_output).to include(umbrella.path.join("finance").to_s)
+      expect(last_command_output).to include(umbrella.path.join("hr").to_s)
+      expect(last_command_output).to include(umbrella.path.join("sales").to_s)
     end
 
     it "executes the given command a given component" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} hr 'echo \"hi\" `pwd`'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} hr 'pwd'",
                            fail_on_error: true)
 
-      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
+      expect(last_command_output).to include(umbrella.path.join("hr").to_s)
     end
 
     it "executes the given command a given component's dependents" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependents directory 'echo \"hi\" `pwd`'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependents directory 'pwd'",
                            fail_on_error: true)
 
-      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('hr')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('sales')}")
+      expect(last_command_output).to include(umbrella.path.join("directory").to_s)
+      expect(last_command_output).to include(umbrella.path.join("finance").to_s)
+      expect(last_command_output).to include(umbrella.path.join("hr").to_s)
+      expect(last_command_output).to include(umbrella.path.join("sales").to_s)
     end
 
     it "executes the given selecting by plugin" do
       run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --memory " \
-                           "--dependents directory 'echo \"hi\" `pwd`'",
+                           "--dependents directory 'pwd'",
                            fail_on_error: true)
 
-      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('payroll')}")
+      expect(last_command_output).to include(umbrella.path.join("directory").to_s)
+      expect(last_command_output).to include(umbrella.path.join("payroll").to_s)
     end
 
     it "executes the given command a given component's dependencies" do
-      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependencies finance 'echo \"hi\" `pwd`'",
+      run_command_and_stop("cobra exec --no-interactive -a #{umbrella.path} --dependencies finance 'pwd'",
                            fail_on_error: true)
 
-      expect(last_command_output).to include("hi #{umbrella.path.join('auth')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('directory')}")
-      expect(last_command_output).to include("hi #{umbrella.path.join('finance')}")
+      expect(last_command_output).to include(umbrella.path.join("auth").to_s)
+      expect(last_command_output).to include(umbrella.path.join("directory").to_s)
+      expect(last_command_output).to include(umbrella.path.join("finance").to_s)
     end
   end
 
