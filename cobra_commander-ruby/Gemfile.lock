@@ -1,7 +1,7 @@
 PATH
   remote: ..
   specs:
-    cobra_commander (1.1.0)
+    cobra_commander (1.2.0)
       bundler (>= 2.4.17)
       thor (>= 0.18.1, < 2.0)
       tty-command (~> 0.10.0)
@@ -10,7 +10,7 @@ PATH
 PATH
   remote: .
   specs:
-    cobra_commander-ruby (1.0.0)
+    cobra_commander-ruby (1.1.0)
       bundler (>= 2.4.17)
 
 GEM
