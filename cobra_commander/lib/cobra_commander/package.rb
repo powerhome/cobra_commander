@@ -9,7 +9,7 @@ module CobraCommander
 
     attr_reader :source, :path, :name, :dependencies
 
-    def_delegators :source, :key
+    def_delegators :source, :key, :around_command
 
     def initialize(source, path:, dependencies:, name:)
       @source = source

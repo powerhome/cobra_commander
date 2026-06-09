@@ -22,7 +22,9 @@ module CobraCommander
       # @param component [CobraComander::Component] target component
       # @return [Array<Symbol, String>]
       def call(tty, component)
-        run_many(component.root_paths) { run_script(tty, @script, _1) }
+        component.around_command do |env|
+          run_many(component.root_paths) { run_script(tty, @script, _1, env: env) }
+        end
       end
     end
   end

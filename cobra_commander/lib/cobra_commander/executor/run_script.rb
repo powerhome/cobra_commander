@@ -3,8 +3,8 @@
 module CobraCommander
   module Executor
     module RunScript
-      def run_script(tty, script, path)
-        result = tty.run!(script, chdir: path, err: :out)
+      def run_script(tty, script, path, env: {})
+        result = tty.run!(env, script, chdir: path, err: :out)
 
         return [:error, result.out] if result.failed?
 

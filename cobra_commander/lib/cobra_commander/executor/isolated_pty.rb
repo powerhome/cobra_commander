@@ -3,26 +3,17 @@
 module CobraCommander
   module Executor
     #
-    # Executes commands in a clean environment, without the influence
-    # of the current Bundler env vars.
+    # A PTY-enabled TTY::Command used to execute component scripts.
+    #
+    # Per-execution environment variables are supplied to TTY::Command#run!
+    # (so they are scoped to each subprocess and never mutate the parent
+    # ENV), while environment isolation/enhancement such as Bundler's
+    # `with_unbundled_env` is contributed by the package sources through
+    # their #around_command (see CobraCommander::Ruby::Bundle).
     #
     class IsolatedPTY < ::TTY::Command
       def initialize(**)
         super(pty: true, **)
-      end
-
-      def run!(...)
-        isolate_bundle do
-          super(...)
-        end
-      end
-
-      def isolate_bundle(&)
-        if Bundler.respond_to?(:with_unbundled_env)
-          Bundler.with_unbundled_env(&)
-        else
-          Bundler.with_clean_env(&)
-        end
       end
     end
   end

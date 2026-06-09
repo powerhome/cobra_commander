@@ -19,6 +19,17 @@ module CobraCommander
         end
       end
 
+      # Runs the command with the ambient Bundler environment stripped, so a
+      # nested `bundle` call resolves the package's own bundle rather than
+      # cobra's, and points BUNDLE_APP_CONFIG at the umbrella's .bundle
+      # directory so that bundle config is read from the umbrella. Only the
+      # ruby plugin isolates the bundle this way.
+      def around_command
+        ::Bundler.with_unbundled_env do
+          yield({ "BUNDLE_APP_CONFIG" => path.join(".bundle").to_s })
+        end
+      end
+
     private
 
       def lockfile

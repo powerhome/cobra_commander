@@ -35,4 +35,16 @@ RSpec.describe CobraCommander::Source do
       expect(memory_source.config).to eql "memory config"
     end
   end
+
+  describe "#around_command" do
+    it "yields an empty env and returns the block's value by default" do
+      memory_source, = CobraCommander::Source.load("doesnt_matter", memory: true)
+      yielded = nil
+
+      result = memory_source.around_command { |env| yielded = env and :result }
+
+      expect(yielded).to eql({})
+      expect(result).to eql(:result)
+    end
+  end
 end

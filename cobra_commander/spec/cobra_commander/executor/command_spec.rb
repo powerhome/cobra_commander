@@ -12,6 +12,14 @@ RSpec.describe CobraCommander::Executor::Command do
     CobraCommander::Executor::Command.new(command).call(pty, package)
   end
 
+  # A source double that, like a real Source, yields the given env from
+  # #around_command (the base Source yields {}).
+  def stub_source(name, env: {}, **stubs)
+    double(name, **stubs).tap do |source|
+      allow(source).to receive(:around_command) { |&block| block.call(env) }
+    end
+  end
+
   it "executes the command configured in cobra.yml" do
     result, output = run_command(finance_stub_package, "deps")
 
@@ -27,6 +35,27 @@ RSpec.describe CobraCommander::Executor::Command do
                           "Check your cobra.yml for existing commands in stub."
   end
 
+  describe "package shell env" do
+    let(:source) do
+      stub_source("source", key: "le", env: { "COBRA_TEST" => "from-package" },
+                            config: { "commands" => { "show_env" => "echo $COBRA_TEST" } })
+    end
+    let(:package) { CobraCommander::Package.new(source, path: "./", dependencies: [], name: "management") }
+
+    it "passes the env yielded by the package's around_command to the command" do
+      result, output = run_command(package, "show_env")
+
+      expect(result).to be :success
+      expect(output).to include("from-package")
+    end
+
+    it "runs the command within the package's around_command" do
+      run_command(package, "show_env")
+
+      expect(source).to have_received(:around_command)
+    end
+  end
+
   describe "command criteria" do
     describe "depends_on" do
       let(:command) do
@@ -35,7 +64,7 @@ RSpec.describe CobraCommander::Executor::Command do
           "run" => "echo 'lol'",
         }
       end
-      let(:source) { double("le source", config: { "commands" => { "my_command" => command } }) }
+      let(:source) { stub_source("le source", config: { "commands" => { "my_command" => command } }) }
       let(:package_dependent) do
         CobraCommander::Package.new(source, path: "./", dependencies: %w[directory auth], name: "management")
       end
@@ -70,20 +99,20 @@ RSpec.describe CobraCommander::Executor::Command do
     let(:command_rofl) { "echo 'rofl'" }
     let(:command_lol) { "echo 'lol'" }
     let(:source) do
-      double("le source", key: "le",
-                          config: {
-                            "commands" => {
-                              "skp" => will_skip,
-                              "fail" => failing_command,
-                              "rofl" => command_rofl,
-                              "lol" => command_lol,
-                              "lol_and_fail" => %w[lol fail rofl],
-                              "ltc" => %w[lol rofl],
-                              "ltc_lol" => %w[ltc lol],
-                              "lol_skip_rolf" => %w[lol skp rofl],
-                              "lol_skip" => %w[lol skp],
-                            },
-                          })
+      stub_source("le source", key: "le",
+                               config: {
+                                 "commands" => {
+                                   "skp" => will_skip,
+                                   "fail" => failing_command,
+                                   "rofl" => command_rofl,
+                                   "lol" => command_lol,
+                                   "lol_and_fail" => %w[lol fail rofl],
+                                   "ltc" => %w[lol rofl],
+                                   "ltc_lol" => %w[ltc lol],
+                                   "lol_skip_rolf" => %w[lol skp rofl],
+                                   "lol_skip" => %w[lol skp],
+                                 },
+                               })
     end
     let(:package) { CobraCommander::Package.new(source, path: "./", dependencies: [], name: "management") }
 
