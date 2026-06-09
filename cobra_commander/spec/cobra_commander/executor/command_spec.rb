@@ -101,18 +101,18 @@ RSpec.describe CobraCommander::Executor::Command do
     let(:source) do
       stub_source("le source", key: "le",
                                config: {
-                            "commands" => {
-                              "skp" => will_skip,
-                              "fail" => failing_command,
-                              "rofl" => command_rofl,
-                              "lol" => command_lol,
-                              "lol_and_fail" => %w[lol fail rofl],
-                              "ltc" => %w[lol rofl],
-                              "ltc_lol" => %w[ltc lol],
-                              "lol_skip_rolf" => %w[lol skp rofl],
-                              "lol_skip" => %w[lol skp],
-                            },
-                          })
+                                 "commands" => {
+                                   "skp" => will_skip,
+                                   "fail" => failing_command,
+                                   "rofl" => command_rofl,
+                                   "lol" => command_lol,
+                                   "lol_and_fail" => %w[lol fail rofl],
+                                   "ltc" => %w[lol rofl],
+                                   "ltc_lol" => %w[ltc lol],
+                                   "lol_skip_rolf" => %w[lol skp rofl],
+                                   "lol_skip" => %w[lol skp],
+                                 },
+                               })
     end
     let(:package) { CobraCommander::Package.new(source, path: "./", dependencies: [], name: "management") }
 

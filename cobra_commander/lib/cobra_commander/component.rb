@@ -33,8 +33,8 @@ module CobraCommander
     #
     # @yieldparam env [Hash{String => String}] merged env vars for the command
     # @return the value returned by the block
-    def around_command(&block)
-      nest_sources(@packages.map(&:source).uniq, {}, &block)
+    def around_command(&)
+      nest_sources(@packages.map(&:source).uniq, {}, &)
     end
 
     def inspect
@@ -68,7 +68,7 @@ module CobraCommander
     # Nests each source's #around_command, accumulating the env each yields,
     # and finally yields the merged env to the block.
     def nest_sources(sources, env, &block)
-      return block.call(env) if sources.empty?
+      return yield(env) if sources.empty?
 
       head, *rest = sources
       head.around_command do |source_env|
