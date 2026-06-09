@@ -21,29 +21,31 @@ module CobraCommander
       # @param package [CobraComander::Package] target package to execute the named command
       # @return [Array<Symbol, String>]
       def call(tty, package)
-        run_command tty, package, @command_name
+        package.around_command do |env|
+          run_command tty, package, @command_name, env
+        end
       end
 
     private
 
-      def run_command(tty, package, command_name)
+      def run_command(tty, package, command_name, env)
         definition = package.source.config&.dig("commands", command_name)
         case definition
-        when Array then run_multiple(tty, package, definition)
-        when Hash then run_with_criteria(tty, package, definition)
+        when Array then run_multiple(tty, package, definition, env)
+        when Hash then run_with_criteria(tty, package, definition, env)
         when nil then [:skip, format(SKIP_UNEXISTING, command_name, package.key)]
-        else run_script(tty, definition, package.path)
+        else run_script(tty, definition, package.path, env: env)
         end
       end
 
-      def run_with_criteria(tty, package, command)
+      def run_with_criteria(tty, package, command, env)
         return [:skip, format(SKIP_CRITERIA, package.name)] unless match_criteria?(package, command.fetch("if", {}))
 
-        run_script(tty, command["run"], package.path)
+        run_script(tty, command["run"], package.path, env: env)
       end
 
-      def run_multiple(tty, package, commands)
-        run_many(commands) { run_command(tty, package, _1) }
+      def run_multiple(tty, package, commands, env)
+        run_many(commands) { run_command(tty, package, _1, env) }
       end
     end
   end
