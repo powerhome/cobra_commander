@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+* Add an `around_command` extension point so plugins can enhance the shell used to run `cmd`/`exec`. `Source#around_command` wraps execution (e.g. Bundler isolation) and yields a hash of environment variables for the command (base yields `{}`, scoped per-execution via TTY). Packages delegate to their source; `Component#around_command` nests each distinct source's wrapper and yields their merged env. `exec` applies it once per component (all packages contribute, later sources win); `cmd` applies each package's own. `IsolatedPTY` is now a plain PTY command — isolation comes from the sources.
 * Raise the minimum supported Ruby version to 3.2 and expand CI to cover Ruby 4.0.
 
 ## Version 1.1.0 - 2023-03-09
