@@ -22,6 +22,17 @@ module CobraCommander
       to_a
     end
 
+    # Wraps the execution of commands on this source's packages, letting the
+    # source enhance the surrounding process (e.g. Bundler isolation) and
+    # contribute environment variables to the command. The base implementation
+    # yields an empty env; plugins override it (see CobraCommander::Ruby::Bundle).
+    #
+    # @yieldparam env [Hash{String => String}] env vars to pass to the command
+    # @return the value returned by the block
+    def around_command
+      yield({})
+    end
+
     def each(&)
       packages.each(&)
     rescue Errno::ENOENT => e

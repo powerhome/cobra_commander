@@ -18,6 +18,10 @@ module CobraCommander
       @dependencies = dependencies
     end
 
+    def around_command(&)
+      source.around_command(&)
+    end
+
     def describe
       "#{name} (#{key})"
     end
