@@ -42,7 +42,7 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "aruba", "0.14.14"
   spec.add_development_dependency "guard-rspec", "4.7.3"
-  spec.add_development_dependency "license_finder", "7.1"
+  spec.add_development_dependency "license_finder", "7.2.1"
   spec.add_development_dependency "ostruct", "0.6.3"
   spec.add_development_dependency "pry", "0.14.2"
   spec.add_development_dependency "rake", "13.0.6"
