@@ -39,6 +39,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry", "0.14.2"
   spec.add_development_dependency "rake", "13.0.6"
   spec.add_development_dependency "rspec", "3.13.0"
-  spec.add_development_dependency "rubocop", "1.82.1"
+  spec.add_development_dependency "rubocop", "1.92.2"
   spec.add_development_dependency "rubocop-powerhome", "0.6.1"
 end
